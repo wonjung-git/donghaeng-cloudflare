@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#74202E">
+<title>동행 · AI 외국인 생활·행정 도우미</title>
+<style>
+  /* =========================================================
+     동행(同行) — 색 토큰
+     뿌리 색은 #74202E(와인) 계열. 스트레스 상황용으로 채도는 낮추고
+     여백과 대비를 넉넉하게. 액센트(골드)는 로고/현재단계 딱 한 곳만.
+     ========================================================= */
+  :root{
+    --wine:#74202E;
+    --wine-deep:#5A1824;
+    --wine-tint:#F7EBED;
+    --wine-tint-2:#FCF5F6;
+    --paper:#FBF8F6;
+    --surface:#FFFFFF;
+    --ink:#2A2124;
+    --muted:#7C6E6E;
+    --line:#ECE1DE;
+    --gold:#A9803B;
+    --ok:#3E7C5A;
+    --radius:16px;
+    --radius-sm:11px;
+    --shadow:0 1px 2px rgba(42,33,36,.05), 0 6px 20px rgba(90,24,36,.06);
+    --tap:48px;
+    --font: "Apple SD Gothic Neo","Pretendard",-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic","Noto Sans KR","Noto Sans CJK KR",system-ui,sans-serif;
+  }
+
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:var(--font);
+    background:#EDE6E2;
+    color:var(--ink);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+  :focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:6px;}
+
+  /* 모바일 프레임: 데스크톱에서는 폰처럼 가운데 정렬 */
+  .app{
+    position:relative;
+    max-width:480px;
+    min-height:100dvh;
+    margin:0 auto;
+    background:var(--paper);
+    display:flex;
+    flex-direction:column;
+    box-shadow:0 0 60px rgba(0,0,0,.08);
+    overflow:hidden;
+  }
+
+  /* ---------- 상단 바 ---------- */
+  .topbar{
+    position:sticky;top:0;z-index:20;
+    background:var(--wine);
+    color:#fff;
+    padding:calc(env(safe-area-inset-top) + 14px) 16px 14px;
+    display:flex;align-items:center;gap:10px;
+    min-height:56px;
+  }
+  .topbar .back{
+    width:38px;height:38px;border-radius:50%;
+    display:none;align-items:center;justify-content:center;
+    background:rgba(255,255,255,.12);flex:0 0 auto;
+  }
+  .topbar.has-back .back{display:flex;}
+  .topbar .title{font-size:18px;font-weight:700;letter-spacing:-.01em;flex:1;min-width:0;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .topbar .title .sub{display:block;font-size:11.5px;font-weight:500;opacity:.72;margin-top:1px;}
+  .langbtn{
+    display:flex;align-items:center;gap:6px;
+    background:rgba(255,255,255,.13);color:#fff;
+    padding:8px 12px;border-radius:999px;font-size:13px;font-weight:600;flex:0 0 auto;
+  }
+  .langbtn svg{width:15px;height:15px;}
+
+  /* 로고 마크 */
+  .mark{width:30px;height:30px;flex:0 0 auto;}
+
+  /* ---------- 본문 ---------- */
+  .screen{flex:1;overflow-y:auto;padding:20px 16px 108px;-webkit-overflow-scrolling:touch;}
+  .screen.pad-top{padding-top:24px;}
+
+  /* ---------- 하단 고정 툴바 ---------- */
+  .toolbar{
+    position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+    width:100%;max-width:480px;z-index:20;
+    background:var(--surface);
+    border-top:1px solid var(--line);
+    display:none;
+    padding:8px 8px calc(env(safe-area-inset-bottom) + 8px);
+    box-shadow:0 -6px 24px rgba(90,24,36,.05);
+  }
+  .toolbar.show{display:flex;}
+  .toolbar button{
+    flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;
+    padding:8px 4px;border-radius:12px;color:var(--muted);font-size:12px;font-weight:600;
+    min-height:var(--tap);
+  }
+  .toolbar button svg{width:24px;height:24px;stroke-width:1.8;}
+  .toolbar button.active{color:var(--wine);background:var(--wine-tint);}
+
+  /* ---------- 공통 요소 ---------- */
+  .eyebrow{font-size:13px;color:var(--muted);font-weight:600;margin:0 0 6px;}
+  h1.big{font-size:25px;font-weight:800;letter-spacing:-.02em;margin:0 0 8px;line-height:1.25;}
+  h2.sec{font-size:17px;font-weight:700;letter-spacing:-.01em;margin:26px 2px 12px;}
+  .muted{color:var(--muted);}
+  .card{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);
+  }
+
+  /* 큰 선택 카드 (기관/상황) */
+  .pick{
+    width:100%;display:flex;align-items:center;gap:14px;text-align:left;
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    padding:16px;margin-bottom:12px;box-shadow:var(--shadow);
+    transition:transform .12s ease, border-color .12s ease;
+  }
+  .pick:active{transform:scale(.985);border-color:var(--wine);}
+  .pick .ic{
+    width:52px;height:52px;border-radius:14px;flex:0 0 auto;
+    background:var(--wine-tint);color:var(--wine);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .pick .ic svg{width:27px;height:27px;stroke-width:1.7;}
+  .pick .tx{flex:1;min-width:0;}
+  .pick .tx .t{font-size:16.5px;font-weight:700;letter-spacing:-.01em;}
+  .pick .tx .d{font-size:13.5px;color:var(--muted);margin-top:3px;}
+  .pick .chev{color:#C9BBB6;flex:0 0 auto;}
+
+  /* 버튼 */
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    background:var(--wine);color:#fff;font-size:16px;font-weight:700;
+    padding:15px 20px;border-radius:14px;width:100%;min-height:var(--tap);
+    transition:background .12s ease, transform .1s ease;
+  }
+  .btn:active{background:var(--wine-deep);transform:scale(.99);}
+  .btn.ghost{background:var(--wine-tint);color:var(--wine);}
+  .btn.line{background:transparent;border:1.5px solid var(--line);color:var(--ink);}
+  .btn:disabled{opacity:.45;pointer-events:none;}
+  .btn svg{width:20px;height:20px;}
+
+  /* 알림 배너 */
+  .note{
+    display:flex;gap:10px;align-items:flex-start;
+    background:var(--wine-tint-2);border:1px solid var(--wine-tint);
+    border-radius:var(--radius-sm);padding:12px 14px;font-size:13px;color:#6a4b50;
+    margin-top:16px;line-height:1.55;
+  }
+  .note svg{width:17px;height:17px;flex:0 0 auto;margin-top:1px;color:var(--wine);}
+
+  /* ===================== 언어 선택 화면 ===================== */
+  .lang-hero{
+    background:var(--wine);color:#fff;
+    padding:calc(env(safe-area-inset-top) + 46px) 26px 40px;
+    border-bottom-left-radius:30px;border-bottom-right-radius:30px;
+  }
+  .lang-hero .logo-row{display:flex;align-items:center;gap:10px;margin-bottom:30px;}
+  .lang-hero .logo-row .name{font-size:19px;font-weight:800;letter-spacing:.02em;}
+  .lang-hero .logo-row .name em{font-style:normal;font-weight:500;opacity:.7;font-size:14px;margin-left:6px;}
+  .lang-hero h1{font-size:27px;font-weight:800;line-height:1.3;margin:0;letter-spacing:-.02em;
+    opacity:0;transform:translateY(8px);animation:rise .5s .05s ease forwards;}
+  .lang-hero .rule{width:44px;height:3px;background:var(--gold);border-radius:2px;margin:16px 0 14px;
+    opacity:0;animation:fade .6s .3s ease forwards;}
+  .lang-hero p{margin:0;font-size:14.5px;opacity:0;animation:fade .6s .35s ease forwards;line-height:1.6;}
+  @keyframes rise{to{opacity:1;transform:none;}}
+  @keyframes fade{to{opacity:.88;}}
+
+  .lang-list{padding:22px 16px 40px;}
+  .lang-item{
+    width:100%;display:flex;align-items:center;justify-content:space-between;
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;
+    padding:16px 18px;margin-bottom:10px;box-shadow:var(--shadow);
+    transition:transform .12s ease,border-color .12s ease;
+  }
+  .lang-item:active{transform:scale(.985);border-color:var(--wine);}
+  .lang-item .native{font-size:17px;font-weight:700;}
+  .lang-item .en{font-size:12.5px;color:var(--muted);margin-top:2px;}
+  .lang-item .flag{font-size:24px;}
+
+  /* ===================== 흐름(스텝) 화면 ===================== */
+  .flow-head{margin-bottom:6px;}
+  .flow-head .doc{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:2px 0 4px;}
+  .flow-head .where{font-size:13.5px;color:var(--muted);display:flex;align-items:center;gap:5px;}
+
+  .progress-wrap{margin:16px 0 8px;}
+  .progress-txt{font-size:12.5px;color:var(--muted);font-weight:600;margin-bottom:7px;display:flex;justify-content:space-between;}
+  .progress-bar{height:7px;background:var(--wine-tint);border-radius:99px;overflow:hidden;}
+  .progress-bar i{display:block;height:100%;background:var(--wine);border-radius:99px;transition:width .35s cubic-bezier(.4,0,.2,1);}
+
+  /* 현재 단계 하이라이트 카드 */
+  .now-card{
+    background:var(--wine);color:#fff;border-radius:var(--radius);padding:18px;
+    margin:16px 0;box-shadow:0 8px 24px rgba(90,24,36,.22);
+  }
+  .now-card .lbl{font-size:12px;font-weight:700;letter-spacing:.04em;color:#F2C9A0;display:flex;align-items:center;gap:6px;}
+  .now-card .lbl .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);}
+  .now-card .st{font-size:20px;font-weight:800;margin:8px 0 6px;letter-spacing:-.01em;}
+  .now-card .de{font-size:14.5px;opacity:.9;line-height:1.6;}
+  .now-card .metas{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px;}
+  .now-card .metas .chip{background:rgba(255,255,255,.15);border-radius:8px;padding:6px 10px;font-size:12.5px;font-weight:600;}
+  .now-card .metas .chip b{font-weight:700;color:#F7DFC7;}
+
+  .next-peek{
+    display:flex;align-items:center;gap:10px;background:var(--surface);
+    border:1px solid var(--line);border-radius:var(--radius-sm);padding:13px 14px;margin-bottom:8px;
+  }
+  .next-peek .k{font-size:11.5px;font-weight:700;color:var(--gold);flex:0 0 auto;}
+  .next-peek .v{font-size:14px;font-weight:600;flex:1;min-width:0;}
+  .next-peek svg{color:#C9BBB6;flex:0 0 auto;}
+
+  .flow-actions{display:flex;gap:10px;margin:14px 0 4px;}
+  .flow-actions .btn{width:auto;flex:1;}
+
+  /* 전체 타임라인 */
+  .timeline{margin-top:26px;position:relative;padding-left:6px;}
+  .tl-item{display:flex;gap:14px;padding-bottom:4px;}
+  .tl-rail{display:flex;flex-direction:column;align-items:center;flex:0 0 auto;width:30px;}
+  .tl-node{
+    width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-size:13px;font-weight:700;flex:0 0 auto;border:2px solid var(--line);color:var(--muted);background:var(--surface);
+  }
+  .tl-line{flex:1;width:2px;background:var(--line);margin:2px 0;min-height:14px;}
+  .tl-item:last-child .tl-line{display:none;}
+  .tl-body{flex:1;padding:2px 0 22px;}
+  .tl-body .t{font-size:15.5px;font-weight:700;letter-spacing:-.01em;}
+  .tl-body .d{font-size:13.5px;color:var(--muted);margin-top:4px;line-height:1.55;}
+  .tl-body .metas{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px;}
+  .tl-body .metas .chip{background:var(--wine-tint-2);border:1px solid var(--wine-tint);
+    color:#7a5a5f;border-radius:8px;padding:4px 9px;font-size:12px;font-weight:600;}
+  .tl-body .metas .chip b{color:var(--wine);}
+  /* 상태별 */
+  .tl-item.done .tl-node{background:var(--wine);border-color:var(--wine);color:#fff;}
+  .tl-item.current .tl-node{border-color:var(--wine);color:var(--wine);box-shadow:0 0 0 4px var(--wine-tint);}
+  .tl-item.current .tl-body .t{color:var(--wine);}
+  .tl-item.upcoming{opacity:.72;}
+
+  /* ===================== 통역 화면 ===================== */
+  .seg{display:flex;background:var(--wine-tint);border-radius:12px;padding:4px;margin-bottom:16px;}
+  .seg button{flex:1;padding:10px;border-radius:9px;font-size:13.5px;font-weight:700;color:var(--muted);min-height:44px;}
+  .seg button.on{background:var(--surface);color:var(--wine);box-shadow:0 1px 3px rgba(0,0,0,.08);}
+
+  .convo{display:flex;flex-direction:column;gap:12px;min-height:120px;margin-bottom:6px;}
+  .bubble{max-width:82%;padding:12px 14px;border-radius:16px;font-size:15px;line-height:1.5;}
+  .bubble .orig{font-size:12.5px;opacity:.62;margin-top:5px;}
+  .bubble.staff{align-self:flex-start;background:var(--surface);border:1px solid var(--line);border-bottom-left-radius:5px;}
+  .bubble.me{align-self:flex-end;background:var(--wine);color:#fff;border-bottom-right-radius:5px;}
+  .bubble.me .orig{opacity:.8;}
+  .convo-empty{text-align:center;color:var(--muted);font-size:13.5px;padding:24px 10px;}
+
+  .presets{margin:18px 0 12px;}
+  .presets .lbl{font-size:12.5px;font-weight:700;color:var(--muted);margin-bottom:9px;}
+  .preset-chip{
+    display:inline-block;background:var(--surface);border:1px solid var(--line);
+    border-radius:999px;padding:9px 14px;font-size:14px;margin:0 8px 8px 0;font-weight:500;
+  }
+  .preset-chip:active{background:var(--wine-tint);border-color:var(--wine);}
+
+  .mic-row{position:sticky;bottom:0;padding:12px 0 4px;background:linear-gradient(to top,var(--paper) 70%,transparent);}
+  .mic-btn{
+    width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
+    background:var(--wine);color:#fff;border-radius:14px;padding:15px;font-size:15.5px;font-weight:700;min-height:var(--tap);
+  }
+  .mic-btn.rec{background:var(--wine-deep);animation:pulse 1.2s infinite;}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(116,32,46,.4);}50%{box-shadow:0 0 0 10px rgba(116,32,46,0);}}
+  .mic-btn svg{width:22px;height:22px;}
+
+  /* ===================== 번역 화면 ===================== */
+  .tr-box{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin-bottom:12px;box-shadow:var(--shadow);}
+  .tr-box .cap{font-size:12.5px;font-weight:700;color:var(--muted);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;}
+  .tr-box textarea{width:100%;border:none;resize:none;font-family:inherit;font-size:16px;line-height:1.55;color:var(--ink);background:transparent;min-height:84px;}
+  .tr-box textarea:focus{outline:none;}
+  .tr-out{min-height:84px;font-size:16px;line-height:1.55;white-space:pre-wrap;}
+  .tr-out.empty{color:#BCAFAB;}
+  .swap-row{display:flex;align-items:center;justify-content:center;gap:12px;margin:2px 0 12px;font-size:13.5px;font-weight:700;color:var(--muted);}
+  .swap-row button{width:40px;height:40px;border-radius:50%;background:var(--wine-tint);color:var(--wine);display:flex;align-items:center;justify-content:center;}
+
+  /* ===================== 촬영 화면 ===================== */
+  .scan-drop{
+    border:2px dashed var(--line);border-radius:var(--radius);background:var(--surface);
+    padding:32px 20px;text-align:center;margin-bottom:14px;
+  }
+  .scan-drop .ic{width:60px;height:60px;border-radius:16px;background:var(--wine-tint);color:var(--wine);
+    display:flex;align-items:center;justify-content:center;margin:0 auto 14px;}
+  .scan-drop .ic svg{width:30px;height:30px;}
+  .scan-drop .t{font-size:16px;font-weight:700;}
+  .scan-drop .d{font-size:13.5px;color:var(--muted);margin-top:5px;}
+  .scan-preview{width:100%;border-radius:var(--radius);margin-bottom:14px;border:1px solid var(--line);display:block;}
+  .result-block{margin-bottom:12px;}
+  .result-block .rl{font-size:12.5px;font-weight:700;color:var(--gold);margin-bottom:6px;}
+  .field-row{display:flex;gap:10px;padding:12px 0;border-bottom:1px solid var(--line);}
+  .field-row:last-child{border-bottom:none;}
+  .field-row .fk{flex:0 0 34%;font-size:13.5px;font-weight:700;}
+  .field-row .fk .ko{display:block;font-size:11.5px;color:var(--muted);font-weight:500;margin-top:2px;}
+  .field-row .fv{flex:1;font-size:13.5px;color:var(--muted);line-height:1.5;}
+
+  .spinner{width:22px;height:22px;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .hidden{display:none !important;}
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important;transition:none !important;}
+  }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <!-- 상단 바 -->
+  <header class="topbar" id="topbar">
+    <button class="back" id="backBtn" aria-label="뒤로">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="20" height="20"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <div class="title" id="topTitle">동행</div>
+    <button class="langbtn" id="langBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 010 18M12 3a15 15 0 000 18"/></svg>
+      <span id="langLabel">한국어</span>
+    </button>
+  </header>
+
+  <!-- 본문 (JS로 렌더) -->
+  <main class="screen" id="screen"></main>
+
+  <!-- 하단 고정 툴바 -->
+  <nav class="toolbar" id="toolbar" aria-label="주요 기능">
+    <button data-tool="interpret">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8 12h8M8 8h5"/><path d="M21 12a8 8 0 01-11.6 7.1L3 21l1.9-6.4A8 8 0 1121 12z"/></svg>
+      <span class="tl-label">통역</span>
+    </button>
+    <button data-tool="translate">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 5h9M9 3v2c0 4-2.5 7-5 8"/><path d="M6 9c0 2 2 4.5 6 6"/><path d="M13 19l4-9 4 9M14.5 16h5"/></svg>
+      <span class="tl-label">번역</span>
+    </button>
+    <button data-tool="scan">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 8V6a2 2 0 012-2h2M16 4h2a2 2 0 012 2v2M20 16v2a2 2 0 01-2 2h-2M8 20H6a2 2 0 01-2-2v-2"/><circle cx="12" cy="12" r="3"/></svg>
+      <span class="tl-label">촬영</span>
+    </button>
+  </nav>
+</div>
+
+<!-- 언어 선택 시트용 파일 입력(촬영) -->
+<input type="file" id="fileInput" accept="image/*" capture="environment" class="hidden">
+
+<script>
+/* =========================================================================
+   동행(同行) — AI 외국인 생활·행정 보조 웹  (해커톤 프로토타입)
+
+   [B안 / 보안]  API 키는 이 파일에 절대 넣지 마세요.
+   - 이 웹은 키를 갖지 않습니다. 실제 AI는 "여러분의 백엔드(프록시)"가 호출합니다.
+   - 아래 AI.* 함수만 백엔드 호출로 바꾸고, AI.USE_MOCK = false 로 두면 됩니다.
+   - 현재는 USE_MOCK=true 라 키 없이도 데모가 그대로 동작합니다.
+   ========================================================================= */
+
+const AI = {
+  USE_MOCK: false,                // Cloudflare Pages Functions 사용 (목업 끔)
+  BACKEND_BASE: "",               // 같은 도메인의 /api/* 호출 (동일 출처 → CORS 불필요)
+  endpoints: {
+    translate: "/api/translate",  // 텍스트 번역
+    interpret: "/api/interpret",  // 음성인식(STT) + 번역
+    ocr:       "/api/ocr"         // 이미지 → 텍스트 + 번역 + 설명 + 다음단계
+  },
+
+  // ---- 텍스트 번역 -------------------------------------------------------
+  async translate(text, from, to){
+    if(this.USE_MOCK) return mockTranslate(text, from, to);
+    const r = await fetch(this.BACKEND_BASE + this.endpoints.translate, {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ text, source: from, target: to })
+    });
+    if(!r.ok) throw new Error("번역 요청 실패 ("+r.status+")");
+    const data = await r.json();
+    return data.translation;
+  },
+
+  // ---- (통역) 인식된 텍스트 → 번역 ---------------------------------------
+  // 음성인식(STT)은 브라우저 Web Speech API로 처리하고, 그 텍스트를 번역합니다.
+  async interpret(text, from, to){
+    if(this.USE_MOCK) return mockInterpret(text, from, to);
+    const r = await fetch(this.BACKEND_BASE + this.endpoints.interpret, {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ text, source: from, target: to })
+    });
+    if(!r.ok) throw new Error("통역 요청 실패 ("+r.status+")");
+    return await r.json();   // { recognized, translation }
+  },
+
+  // ---- 서류 이미지 분석 (OCR + 번역 + 설명 + 다음 단계) --------------------
+  async ocr(file, lang){
+    if(this.USE_MOCK || !file) return mockOCR(file, lang);   // 샘플(파일 없음)은 항상 목업 시연
+    const { data, mediaType } = await fileToBase64(file);
+    const r = await fetch(this.BACKEND_BASE + this.endpoints.ocr, {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ image: data, mediaType, lang })
+    });
+    if(!r.ok) throw new Error("서류 분석 실패 ("+r.status+")");
+    return await r.json();   // { docName:{..}, fields:[{ko,label:{..},guide:{..}}], next:{instId,sitId,text:{..}} }
+  }
+};
+
+// File -> base64 (data URL에서 헤더 분리)
+function fileToBase64(file){
+  return new Promise((resolve, reject)=>{
+    const fr = new FileReader();
+    fr.onload = ()=>{
+      const s = String(fr.result);
+      const comma = s.indexOf(",");
+      const meta = s.slice(0, comma);
+      const data = s.slice(comma + 1);
+      const mt = (meta.match(/data:(.*?);/) || [])[1] || "image/jpeg";
+      resolve({ data, mediaType: mt });
+    };
+    fr.onerror = reject;
+    fr.readAsDataURL(file);
+  });
+}
+
+/* =========================================================================
+   언어 (한국어 / English / 中文 / Tiếng Việt)
+   ※ ZH·VI 문구는 데모용 초안입니다. 실서비스 전 원어민 감수 권장.
+   ========================================================================= */
+const LANGS = [
+  { code:"ko", native:"한국어",      en:"Korean",     flag:"🇰🇷" },
+  { code:"en", native:"English",     en:"English",    flag:"🇺🇸" },
+  { code:"zh", native:"中文",        en:"Chinese",    flag:"🇨🇳" },
+  { code:"vi", native:"Tiếng Việt",  en:"Vietnamese", flag:"🇻🇳" }
+];
+
+// UI 문구
+const T = {
+  appSub:      { ko:"AI 행정·생활 도우미", en:"AI admin & living helper", zh:"AI 行政·生活助手", vi:"Trợ lý hành chính & đời sống AI" },
+  selectLang:  { ko:"먼저 언어를\n선택하세요", en:"First, choose\nyour language", zh:"请先选择\n您的语言", vi:"Trước tiên, hãy chọn\nngôn ngữ của bạn" },
+  selectLangSub:{ ko:"병원·행정기관에서 필요한 서류 작성과 대화를 도와드려요.", en:"We help you fill out forms and talk with staff at hospitals and offices.", zh:"我们帮您在医院和政府机关填写表格、与工作人员沟通。", vi:"Chúng tôi giúp bạn điền giấy tờ và trò chuyện với nhân viên tại bệnh viện, cơ quan." },
+  where:       { ko:"어디에 있나요?", en:"Where are you?", zh:"您在哪里?", vi:"Bạn đang ở đâu?" },
+  whereSub:    { ko:"기관을 선택하면 해야 할 일을 순서대로 알려드려요.", en:"Pick a place and we will guide you step by step.", zh:"选择机构后,我们将按顺序告诉您该做什么。", vi:"Chọn nơi bạn đến, chúng tôi hướng dẫn từng bước." },
+  quickHelp:   { ko:"지금 바로 도움받기", en:"Get help right now", zh:"立即获取帮助", vi:"Nhận trợ giúp ngay" },
+  chooseSit:   { ko:"무엇을 하러 오셨나요?", en:"What do you need to do?", zh:"您需要办理什么?", vi:"Bạn cần làm gì?" },
+  interpret:   { ko:"통역", en:"Interpret", zh:"口译", vi:"Phiên dịch" },
+  translate:   { ko:"번역", en:"Translate", zh:"翻译", vi:"Dịch" },
+  scan:        { ko:"촬영", en:"Scan", zh:"拍照", vi:"Chụp" },
+  // 흐름
+  step:        { ko:"단계", en:"Step", zh:"步骤", vi:"Bước" },
+  of:          { ko:"/ 총", en:"of", zh:"/ 共", vi:"/ Tổng" },
+  nowDo:       { ko:"지금 할 일", en:"Do this now", zh:"现在要做", vi:"Làm ngay bây giờ" },
+  nextDo:      { ko:"다음", en:"Next", zh:"下一步", vi:"Tiếp theo" },
+  prev:        { ko:"이전", en:"Back", zh:"上一步", vi:"Quay lại" },
+  doneNext:    { ko:"완료 · 다음 단계", en:"Done · Next step", zh:"完成 · 下一步", vi:"Xong · Bước sau" },
+  allDone:     { ko:"모든 단계를 마쳤어요 🎉", en:"All steps complete 🎉", zh:"全部步骤完成 🎉", vi:"Hoàn tất tất cả 🎉" },
+  restart:     { ko:"처음부터 다시 보기", en:"View from the start", zh:"从头查看", vi:"Xem lại từ đầu" },
+  mCost:       { ko:"비용", en:"Cost", zh:"费用", vi:"Chi phí" },
+  mMethod:     { ko:"방법", en:"How", zh:"方式", vi:"Cách" },
+  mTime:       { ko:"기간", en:"Time", zh:"时间", vi:"Thời gian" },
+  mNeed:       { ko:"준비물", en:"Bring", zh:"需带", vi:"Mang theo" },
+  // 통역
+  interpTitle: { ko:"실시간 통역", en:"Live interpreter", zh:"实时口译", vi:"Phiên dịch trực tiếp" },
+  staffSide:   { ko:"상대방(직원)", en:"Staff", zh:"对方(职员)", vi:"Nhân viên" },
+  meSide:      { ko:"나", en:"Me", zh:"我", vi:"Tôi" },
+  convoEmpty:  { ko:"아래 말하기 버튼을 누르거나\n자주 쓰는 말을 선택하세요.", en:"Tap the speak button below,\nor pick a common phrase.", zh:"点击下方“说话”按钮,\n或选择常用语。", vi:"Nhấn nút nói bên dưới,\nhoặc chọn câu thường dùng." },
+  common:      { ko:"자주 쓰는 말", en:"Common phrases", zh:"常用语", vi:"Câu thường dùng" },
+  speak:       { ko:"말하기", en:"Speak", zh:"说话", vi:"Nói" },
+  listening:   { ko:"듣는 중…", en:"Listening…", zh:"聆听中…", vi:"Đang nghe…" },
+  clear:       { ko:"대화 지우기", en:"Clear", zh:"清除", vi:"Xóa" },
+  // 번역
+  trTitle:     { ko:"번역", en:"Translate", zh:"翻译", vi:"Dịch" },
+  trInput:     { ko:"번역할 내용을 입력하세요", en:"Type text to translate", zh:"输入要翻译的内容", vi:"Nhập nội dung cần dịch" },
+  trResult:    { ko:"번역 결과", en:"Result", zh:"翻译结果", vi:"Kết quả" },
+  trBtn:       { ko:"번역하기", en:"Translate", zh:"翻译", vi:"Dịch" },
+  // 촬영
+  scanTitle:   { ko:"서류 촬영", en:"Scan a document", zh:"拍摄文件", vi:"Chụp giấy tờ" },
+  scanDrop:    { ko:"서류를 촬영하거나 불러오기", en:"Take a photo or upload", zh:"拍照或上传文件", vi:"Chụp ảnh hoặc tải lên" },
+  scanDropSub: { ko:"AI가 내용을 번역하고, 작성 방법과 다음 할 일을 알려드려요.", en:"AI translates it and tells you how to fill it in and what to do next.", zh:"AI 会翻译内容,并告诉您如何填写和下一步该做什么。", vi:"AI dịch nội dung và cho bạn biết cách điền và việc cần làm tiếp theo." },
+  scanSample:  { ko:"샘플 서류로 시연하기", en:"Try with a sample document", zh:"用示例文件演示", vi:"Thử với giấy tờ mẫu" },
+  analyzing:   { ko:"분석 중…", en:"Analyzing…", zh:"分析中…", vi:"Đang phân tích…" },
+  recognized:  { ko:"인식된 서류", en:"Detected document", zh:"识别到的文件", vi:"Giấy tờ nhận diện" },
+  howToFill:   { ko:"항목별 작성 안내", en:"How to fill each field", zh:"各项填写说明", vi:"Cách điền từng mục" },
+  whatsNext:   { ko:"다음에 할 일", en:"What to do next", zh:"下一步要做什么", vi:"Việc tiếp theo" },
+  seeFlow:     { ko:"전체 절차 보기", en:"See the full process", zh:"查看完整流程", vi:"Xem toàn bộ quy trình" },
+  scanAgain:   { ko:"다시 촬영", en:"Scan again", zh:"重新拍摄", vi:"Chụp lại" },
+  // 공통
+  disclaimer:  { ko:"안내 정보는 이해를 돕기 위한 예시이며, 기관·상황에 따라 다를 수 있어요. 중요한 내용은 담당 직원에게 확인하세요.", en:"This guidance is a simplified example and may vary by office and situation. Please confirm important details with staff.", zh:"以上信息为便于理解的示例,可能因机构和情况而异。重要事项请向工作人员确认。", vi:"Hướng dẫn này là ví dụ đơn giản, có thể khác theo cơ quan và tình huống. Vui lòng xác nhận điều quan trọng với nhân viên." },
+  demoNote:    { ko:"데모 모드 — AI 응답은 예시입니다. 백엔드 연결 시 실제 AI가 동작합니다.", en:"Demo mode — AI replies are samples. Real AI runs once the backend is connected.", zh:"演示模式 — AI 回复为示例。连接后端后将由真实 AI 运行。", vi:"Chế độ demo — phản hồi AI là mẫu. AI thật hoạt động khi kết nối backend." }
+};
+
+/* =========================================================================
+   기관 · 상황 · 단계 데이터
+   ========================================================================= */
+const INSTITUTIONS = [
+  {
+    id:"immig",
+    name:{ ko:"출입국·외국인청", en:"Immigration Office", zh:"出入境·外国人厅", vi:"Cục Xuất nhập cảnh" },
+    blurb:{ ko:"체류·등록 관련", en:"Stay & registration", zh:"居留与登记", vi:"Lưu trú & đăng ký" },
+    icon:"passport",
+    situations:[
+      {
+        id:"arc",
+        title:{ ko:"외국인등록증 발급", en:"Alien Registration Card", zh:"办理外国人登录证", vi:"Cấp thẻ đăng ký người nước ngoài" },
+        doc:{ ko:"외국인등록증", en:"Alien Registration Card", zh:"外国人登录证", vi:"Thẻ đăng ký người nước ngoài" },
+        steps:[
+          { title:{ko:"준비물 확인",en:"Check what to bring",zh:"确认所需材料",vi:"Kiểm tra giấy tờ"},
+            detail:{ko:"여권, 여권용 사진 1매(3.5×4.5cm), 통합신청서, 체류자격 증빙서류를 준비하세요.",en:"Bring your passport, one photo (3.5×4.5cm), the application form, and documents proving your visa status.",zh:"请准备护照、一张证件照(3.5×4.5cm)、综合申请表及居留资格证明材料。",vi:"Chuẩn bị hộ chiếu, 1 ảnh (3.5×4.5cm), đơn đăng ký và giấy tờ chứng minh tư cách lưu trú."},
+            meta:{need:{ko:"여권·사진·신청서",en:"Passport, photo, form",zh:"护照·照片·申请表",vi:"Hộ chiếu, ảnh, đơn"}} },
+          { title:{ko:"방문 예약",en:"Book a visit",zh:"预约到访",vi:"Đặt lịch hẹn"},
+            detail:{ko:"하이코리아(hikorea.go.kr)에서 방문을 예약하세요. 예약 없이 가면 오래 기다릴 수 있어요.",en:"Reserve a visit on HiKorea (hikorea.go.kr). Without a reservation the wait can be long.",zh:"请在 HiKorea(hikorea.go.kr)预约。未预约可能等待很久。",vi:"Đặt lịch trên HiKorea (hikorea.go.kr). Không đặt trước có thể phải chờ lâu."},
+            meta:{method:{ko:"온라인 예약",en:"Online booking",zh:"在线预约",vi:"Đặt online"}} },
+          { title:{ko:"접수",en:"Submit at the counter",zh:"窗口受理",vi:"Nộp tại quầy"},
+            detail:{ko:"예약 시간에 방문해 번호표를 뽑고, 통합신청서를 제출하세요.",en:"Come at your booked time, take a number, and hand in your form.",zh:"按预约时间到访,取号并提交申请表。",vi:"Đến đúng giờ hẹn, lấy số và nộp đơn."},
+            meta:{} },
+          { title:{ko:"수수료 결제",en:"Pay the fee",zh:"缴纳费用",vi:"Nộp lệ phí"},
+            detail:{ko:"등록 수수료 30,000원을 결제하세요. 카드 또는 현금/수입인지(기관마다 다름).",en:"Pay the 30,000 won fee. Card or cash/revenue stamp (varies by office).",zh:"缴纳登记费 30,000 韩元。刷卡或现金/印花(视机构而定)。",vi:"Nộp lệ phí 30,000 won. Thẻ hoặc tiền mặt/tem thu (tùy cơ quan)."},
+            meta:{cost:{ko:"30,000원",en:"30,000 KRW",zh:"30,000韩元",vi:"30,000 won"},method:{ko:"카드/현금",en:"Card/cash",zh:"刷卡/现金",vi:"Thẻ/tiền mặt"}} },
+          { title:{ko:"접수증 수령",en:"Get your receipt",zh:"领取受理证",vi:"Nhận biên nhận"},
+            detail:{ko:"접수증을 꼭 받아 보관하세요. 나중에 카드를 받을 때 필요해요.",en:"Keep the receipt safe — you will need it to collect your card later.",zh:"务必领取并保管受理证,日后领卡时需要。",vi:"Giữ kỹ biên nhận — cần khi lấy thẻ sau này."},
+            meta:{need:{ko:"접수증 보관",en:"Keep receipt",zh:"保管受理证",vi:"Giữ biên nhận"}} },
+          { title:{ko:"처리 대기",en:"Wait for processing",zh:"等待处理",vi:"Chờ xử lý"},
+            detail:{ko:"카드 제작에 보통 2~3주가 걸려요.",en:"The card usually takes about 2–3 weeks to be made.",zh:"制卡通常需要约 2~3 周。",vi:"Làm thẻ thường mất khoảng 2–3 tuần."},
+            meta:{time:{ko:"약 2~3주",en:"~2–3 weeks",zh:"约2~3周",vi:"~2–3 tuần"}} },
+          { title:{ko:"등록증 수령",en:"Collect the card",zh:"领取登录证",vi:"Nhận thẻ"},
+            detail:{ko:"등록한 주소로 우편 수령하거나 기관을 방문해 받으세요.",en:"Receive it by post at your address, or pick it up in person.",zh:"可邮寄到登记地址,或亲自到机构领取。",vi:"Nhận qua bưu điện tại địa chỉ đã đăng ký, hoặc đến nhận trực tiếp."},
+            meta:{method:{ko:"우편/방문",en:"Post/pickup",zh:"邮寄/自取",vi:"Bưu điện/tự nhận"},need:{ko:"접수증·여권",en:"Receipt+passport",zh:"受理证·护照",vi:"Biên nhận+hộ chiếu"}} }
+        ]
+      },
+      {
+        id:"ext",
+        title:{ ko:"체류기간 연장", en:"Extend period of stay", zh:"延长居留期限", vi:"Gia hạn lưu trú" },
+        doc:{ ko:"체류기간 연장 신청", en:"Stay extension", zh:"居留延期申请", vi:"Gia hạn lưu trú" },
+        steps:[
+          { title:{ko:"준비물 확인",en:"Check what to bring",zh:"确认材料",vi:"Kiểm tra giấy tờ"},
+            detail:{ko:"여권, 외국인등록증, 신청서, 체류자격별 증빙(재직·재학 등)을 준비하세요.",en:"Bring passport, ARC, application form, and status documents (employment/enrollment).",zh:"准备护照、外国人登录证、申请表及资格证明(在职/在学等)。",vi:"Chuẩn bị hộ chiếu, thẻ ĐKNNN, đơn và giấy chứng minh (việc làm/học tập)."},
+            meta:{need:{ko:"여권·등록증·증빙",en:"Passport, ARC, proof",zh:"护照·登录证·证明",vi:"Hộ chiếu, thẻ, chứng minh"}} },
+          { title:{ko:"만료 전 신청",en:"Apply before it expires",zh:"到期前申请",vi:"Nộp trước khi hết hạn"},
+            detail:{ko:"체류기간 만료 4개월 전부터 만료일 전까지 신청할 수 있어요.",en:"You can apply from 4 months before expiry up to the expiry date.",zh:"可在到期前 4 个月起至到期日之间申请。",vi:"Có thể nộp từ 4 tháng trước hạn cho đến ngày hết hạn."},
+            meta:{time:{ko:"만료 전",en:"Before expiry",zh:"到期前",vi:"Trước hạn"}} },
+          { title:{ko:"하이코리아 예약·접수",en:"Book & submit on HiKorea",zh:"HiKorea预约受理",vi:"Đặt & nộp trên HiKorea"},
+            detail:{ko:"온라인 신청 또는 방문 예약 후 접수하세요.",en:"Apply online, or book a visit and submit in person.",zh:"可在线申请,或预约后到访受理。",vi:"Nộp online, hoặc đặt lịch và nộp trực tiếp."},
+            meta:{method:{ko:"온라인/방문",en:"Online/visit",zh:"在线/到访",vi:"Online/trực tiếp"}} },
+          { title:{ko:"수수료 결제",en:"Pay the fee",zh:"缴纳费用",vi:"Nộp lệ phí"},
+            detail:{ko:"연장 수수료 60,000원을 결제하세요(체류자격에 따라 다를 수 있음).",en:"Pay the 60,000 won extension fee (may vary by status).",zh:"缴纳延期费 60,000 韩元(视资格而异)。",vi:"Nộp lệ phí gia hạn 60,000 won (có thể khác theo tư cách)."},
+            meta:{cost:{ko:"60,000원",en:"60,000 KRW",zh:"60,000韩元",vi:"60,000 won"}} },
+          { title:{ko:"결과 확인",en:"Check the result",zh:"确认结果",vi:"Xác nhận kết quả"},
+            detail:{ko:"허가되면 등록증에 연장 정보가 반영돼요. 결과는 문자·하이코리아로 확인하세요.",en:"Once approved, the new period is recorded on your ARC. Check by SMS or on HiKorea.",zh:"批准后延期信息会更新到登录证。可通过短信或 HiKorea 查询。",vi:"Khi được duyệt, thời hạn mới ghi trên thẻ. Kiểm tra qua SMS hoặc HiKorea."},
+            meta:{} }
+        ]
+      }
+    ]
+  },
+  {
+    id:"gov",
+    name:{ ko:"행정복지센터", en:"Community Center", zh:"行政福祉中心", vi:"Trung tâm hành chính" },
+    blurb:{ ko:"주소·증명 관련", en:"Address & certificates", zh:"地址与证明", vi:"Địa chỉ & giấy tờ" },
+    icon:"building",
+    situations:[
+      {
+        id:"movein",
+        title:{ ko:"전입신고", en:"Report a move-in", zh:"迁入申报", vi:"Khai báo chuyển đến" },
+        doc:{ ko:"전입신고", en:"Move-in report", zh:"迁入申报", vi:"Khai báo chuyển đến" },
+        steps:[
+          { title:{ko:"준비물 확인",en:"Check what to bring",zh:"确认材料",vi:"Kiểm tra giấy tờ"},
+            detail:{ko:"외국인등록증(또는 여권)과 임대차계약서를 챙기세요.",en:"Bring your ARC (or passport) and your rental contract.",zh:"请带外国人登录证(或护照)和租赁合同。",vi:"Mang thẻ ĐKNNN (hoặc hộ chiếu) và hợp đồng thuê nhà."},
+            meta:{need:{ko:"등록증·임대차계약서",en:"ARC + lease",zh:"登录证·租赁合同",vi:"Thẻ + hợp đồng thuê"}} },
+          { title:{ko:"14일 이내 신고",en:"Report within 14 days",zh:"14日内申报",vi:"Khai trong 14 ngày"},
+            detail:{ko:"이사한 날부터 14일 이내에 새 주소지 관할 행정복지센터에서 신고하세요.",en:"Report within 14 days of moving, at the community center for your new address.",zh:"搬家后 14 日内,到新地址所辖行政福祉中心申报。",vi:"Khai trong 14 ngày kể từ khi chuyển, tại trung tâm quản lý địa chỉ mới."},
+            meta:{time:{ko:"14일 이내",en:"Within 14 days",zh:"14日内",vi:"Trong 14 ngày"}} },
+          { title:{ko:"전입신고서 작성",en:"Fill in the form",zh:"填写申报表",vi:"Điền tờ khai"},
+            detail:{ko:"새 주소와 세대 정보를 적어요. 정부24(gov.kr) 온라인 신고도 가능해요.",en:"Enter your new address and household info. You can also report online via Gov24 (gov.kr).",zh:"填写新地址和家庭信息。也可通过 Gov24(gov.kr)在线申报。",vi:"Điền địa chỉ mới và thông tin hộ. Cũng có thể khai online qua Gov24 (gov.kr)."},
+            meta:{method:{ko:"방문/정부24",en:"Visit/Gov24",zh:"到访/Gov24",vi:"Trực tiếp/Gov24"}} },
+          { title:{ko:"접수 (무료·즉시)",en:"Submit (free, instant)",zh:"受理(免费·即时)",vi:"Nộp (miễn phí, ngay)"},
+            detail:{ko:"수수료 없이 즉시 처리돼요.",en:"It is free and processed on the spot.",zh:"免费并当场处理。",vi:"Miễn phí và xử lý ngay tại chỗ."},
+            meta:{cost:{ko:"무료",en:"Free",zh:"免费",vi:"Miễn phí"},time:{ko:"즉시",en:"Instant",zh:"即时",vi:"Ngay"}} },
+          { title:{ko:"확정일자 받기 (권장)",en:"Get a fixed date (recommended)",zh:"办理确定日期(建议)",vi:"Lấy ngày xác định (nên làm)"},
+            detail:{ko:"임대차계약서에 확정일자를 받으면 보증금을 법적으로 보호받을 수 있어요.",en:"Get a fixed date stamped on your lease to legally protect your deposit.",zh:"在租赁合同上办理确定日期,可依法保护押金。",vi:"Đóng dấu ngày xác định lên hợp đồng để bảo vệ tiền cọc theo luật."},
+            meta:{need:{ko:"임대차계약서",en:"Lease",zh:"租赁合同",vi:"Hợp đồng thuê"}} },
+          { title:{ko:"체류지 변경 신고",en:"Report address to Immigration",zh:"申报居留地变更",vi:"Báo đổi nơi lưu trú"},
+            detail:{ko:"외국인은 전입 후 출입국에도 체류지 변경을 신고해야 해요(하이코리아 가능).",en:"Foreign residents must also report the address change to Immigration (via HiKorea).",zh:"外国人搬家后还须向出入境申报居留地变更(可用 HiKorea)。",vi:"Người nước ngoài phải báo đổi nơi lưu trú cho Xuất nhập cảnh (qua HiKorea)."},
+            meta:{time:{ko:"전입 후",en:"After move-in",zh:"迁入后",vi:"Sau khi chuyển"}} }
+        ]
+      },
+      {
+        id:"cert",
+        title:{ ko:"각종 증명서 발급", en:"Get a certificate", zh:"开具各类证明", vi:"Cấp giấy chứng nhận" },
+        doc:{ ko:"증명서 발급", en:"Certificate issuance", zh:"证明开具", vi:"Cấp giấy chứng nhận" },
+        steps:[
+          { title:{ko:"필요한 증명서 확인",en:"Choose the certificate",zh:"确认所需证明",vi:"Chọn loại giấy"},
+            detail:{ko:"외국인등록 사실증명, 체류지 증명 등 필요한 서류를 확인하세요.",en:"Decide which you need — e.g. proof of alien registration or of residence.",zh:"确认所需证明,如外国人登记事实证明、居留地证明等。",vi:"Xác định loại cần — vd. xác nhận đăng ký NNN hoặc nơi cư trú."},
+            meta:{} },
+          { title:{ko:"신분증 지참",en:"Bring your ID",zh:"携带身份证件",vi:"Mang giấy tùy thân"},
+            detail:{ko:"외국인등록증 또는 여권을 가져가세요.",en:"Bring your ARC or passport.",zh:"请携带外国人登录证或护照。",vi:"Mang thẻ ĐKNNN hoặc hộ chiếu."},
+            meta:{need:{ko:"등록증/여권",en:"ARC/passport",zh:"登录证/护照",vi:"Thẻ/hộ chiếu"}} },
+          { title:{ko:"창구 신청·발급",en:"Request at the counter",zh:"窗口申请开具",vi:"Yêu cầu tại quầy"},
+            detail:{ko:"창구에서 신청하면 소액 수수료로 바로 발급돼요.",en:"Request at the counter — issued on the spot for a small fee.",zh:"在窗口申请,缴纳少额费用后当场开具。",vi:"Yêu cầu tại quầy — cấp ngay với phí nhỏ."},
+            meta:{cost:{ko:"소액",en:"Small fee",zh:"少额",vi:"Phí nhỏ"},time:{ko:"즉시",en:"Instant",zh:"即时",vi:"Ngay"}} }
+        ]
+      }
+    ]
+  },
+  {
+    id:"hospital",
+    name:{ ko:"병원", en:"Hospital", zh:"医院", vi:"Bệnh viện" },
+    blurb:{ ko:"진료·처방 관련", en:"Care & prescriptions", zh:"就诊与处方", vi:"Khám & kê đơn" },
+    icon:"cross",
+    situations:[
+      {
+        id:"visit",
+        title:{ ko:"진료 접수 & 문진표", en:"Register & intake form", zh:"挂号与问诊表", vi:"Đăng ký khám & phiếu khai" },
+        doc:{ ko:"진료 접수", en:"Hospital visit", zh:"就诊挂号", vi:"Khám bệnh" },
+        steps:[
+          { title:{ko:"준비물 확인",en:"Check what to bring",zh:"确认材料",vi:"Kiểm tra giấy tờ"},
+            detail:{ko:"신분증(외국인등록증/여권)과 건강보험 정보(있으면)를 준비하세요.",en:"Bring your ID (ARC/passport) and health insurance info (if you have it).",zh:"准备身份证件(登录证/护照)和医保信息(如有)。",vi:"Mang giấy tùy thân (thẻ/hộ chiếu) và thông tin bảo hiểm y tế (nếu có)."},
+            meta:{need:{ko:"신분증·보험정보",en:"ID + insurance",zh:"证件·医保",vi:"Giấy tờ + bảo hiểm"}} },
+          { title:{ko:"접수 창구",en:"Registration desk",zh:"挂号窗口",vi:"Quầy đăng ký"},
+            detail:{ko:"접수 창구에서 초진/재진을 말하고 진료과를 선택하세요.",en:"At the desk, say if it is your first visit, and choose the department.",zh:"在挂号窗口说明初诊/复诊,并选择就诊科室。",vi:"Tại quầy, cho biết khám lần đầu/tái khám và chọn khoa."},
+            meta:{} },
+          { title:{ko:"문진표 작성",en:"Fill the intake form",zh:"填写问诊表",vi:"Điền phiếu khai"},
+            detail:{ko:"증상, 시작 시기, 병력, 알레르기, 복용 중인 약을 적어요. 촬영 기능으로 번역 도움을 받으세요.",en:"Write your symptoms, when they started, history, allergies and medicines. Use Scan for help translating.",zh:"填写症状、起始时间、病史、过敏及在服药物。可用拍照功能协助翻译。",vi:"Ghi triệu chứng, thời điểm bắt đầu, tiền sử, dị ứng và thuốc đang dùng. Dùng Chụp để dịch."},
+            meta:{need:{ko:"증상·병력·알레르기",en:"Symptoms, history",zh:"症状·病史",vi:"Triệu chứng, tiền sử"}} },
+          { title:{ko:"진료 대기",en:"Wait to be called",zh:"候诊",vi:"Chờ gọi"},
+            detail:{ko:"대기실에서 이름이 호명될 때까지 기다리세요.",en:"Wait in the waiting area until your name is called.",zh:"在候诊区等待叫号。",vi:"Chờ ở khu chờ đến khi được gọi tên."},
+            meta:{} },
+          { title:{ko:"진료",en:"See the doctor",zh:"就诊",vi:"Khám bệnh"},
+            detail:{ko:"의사에게 증상을 설명하세요. 통역 기능을 함께 사용하면 편해요.",en:"Explain your symptoms to the doctor. Use the Interpret feature to help.",zh:"向医生说明症状,可配合口译功能。",vi:"Trình bày triệu chứng với bác sĩ. Dùng Phiên dịch để hỗ trợ."},
+            meta:{} },
+          { title:{ko:"수납",en:"Pay at the counter",zh:"缴费",vi:"Thanh toán"},
+            detail:{ko:"진료·검사 내용에 따라 진료비를 결제하세요. 카드/현금 가능.",en:"Pay based on the care and tests. Card or cash accepted.",zh:"根据就诊和检查内容缴费,可刷卡或现金。",vi:"Thanh toán theo dịch vụ và xét nghiệm. Nhận thẻ/tiền mặt."},
+            meta:{cost:{ko:"진료·검사에 따라",en:"Varies",zh:"视项目而定",vi:"Tùy dịch vụ"},method:{ko:"카드/현금",en:"Card/cash",zh:"刷卡/现金",vi:"Thẻ/tiền mặt"}} },
+          { title:{ko:"처방전 → 약국",en:"Prescription → pharmacy",zh:"处方 → 药房",vi:"Đơn thuốc → nhà thuốc"},
+            detail:{ko:"처방전을 받아 가까운 약국에서 약을 받으세요.",en:"Take your prescription to a nearby pharmacy to collect your medicine.",zh:"凭处方到附近药房取药。",vi:"Mang đơn đến nhà thuốc gần đó để lấy thuốc."},
+            meta:{need:{ko:"처방전",en:"Prescription",zh:"处方",vi:"Đơn thuốc"}} }
+        ]
+      },
+      {
+        id:"er",
+        title:{ ko:"응급실 이용", en:"Emergency room", zh:"急诊就诊", vi:"Phòng cấp cứu" },
+        doc:{ ko:"응급실", en:"Emergency room", zh:"急诊室", vi:"Phòng cấp cứu" },
+        steps:[
+          { title:{ko:"위급하면 119",en:"Call 119 if urgent",zh:"危急拨打119",vi:"Gọi 119 nếu khẩn"},
+            detail:{ko:"생명이 위급하면 즉시 119에 전화하세요(무료).",en:"If life is at risk, call 119 immediately (free).",zh:"如有生命危险,请立即拨打 119(免费)。",vi:"Nếu nguy hiểm tính mạng, gọi 119 ngay (miễn phí)."},
+            meta:{method:{ko:"전화 119",en:"Call 119",zh:"拨打119",vi:"Gọi 119"}} },
+          { title:{ko:"응급실 접수",en:"Register at the ER",zh:"急诊挂号",vi:"Đăng ký cấp cứu"},
+            detail:{ko:"신분증을 제시하고 접수하세요. 증상이 급한 순서로 진료해요.",en:"Register with your ID. Patients are seen by severity, not arrival order.",zh:"出示证件挂号,按病情轻重而非到达顺序诊治。",vi:"Đăng ký bằng giấy tờ. Khám theo mức độ nặng, không theo thứ tự đến."},
+            meta:{need:{ko:"신분증",en:"ID",zh:"证件",vi:"Giấy tờ"}} },
+          { title:{ko:"진료·검사",en:"Care & tests",zh:"诊治与检查",vi:"Khám & xét nghiệm"},
+            detail:{ko:"증상을 설명하고 필요한 검사를 받아요. 통역 기능을 사용하세요.",en:"Explain symptoms and get needed tests. Use the Interpret feature.",zh:"说明症状并接受必要检查,可用口译功能。",vi:"Trình bày triệu chứng và làm xét nghiệm. Dùng Phiên dịch."},
+            meta:{} },
+          { title:{ko:"수납",en:"Payment",zh:"缴费",vi:"Thanh toán"},
+            detail:{ko:"응급실 비용은 일반 진료보다 높을 수 있어요.",en:"ER costs can be higher than regular visits.",zh:"急诊费用可能高于普通就诊。",vi:"Chi phí cấp cứu có thể cao hơn khám thường."},
+            meta:{cost:{ko:"일반보다 높음",en:"Higher",zh:"较高",vi:"Cao hơn"}} }
+        ]
+      }
+    ]
+  }
+];
+
+/* =========================================================================
+   목업(MOCK) — 백엔드 없이도 데모가 동작하도록
+   ========================================================================= */
+
+// 자주 쓰는 통역 문장 (직원/나 양방향, 4개 언어)
+const PHRASES = {
+  staff:[ // 직원이 하는 말 (한국어 원문 → 내 언어로 표시)
+    { ko:"신분증을 보여주세요.", tr:{ko:"신분증을 보여주세요.",en:"Please show your ID.",zh:"请出示您的证件。",vi:"Vui lòng cho xem giấy tờ."} },
+    { ko:"여기에 서명해 주세요.", tr:{ko:"여기에 서명해 주세요.",en:"Please sign here.",zh:"请在这里签名。",vi:"Vui lòng ký vào đây."} },
+    { ko:"접수증을 받으세요.", tr:{ko:"접수증을 받으세요.",en:"Please take your receipt.",zh:"请领取受理证。",vi:"Vui lòng nhận biên nhận."} },
+    { ko:"3만원을 결제해 주세요.", tr:{ko:"3만원을 결제해 주세요.",en:"Please pay 30,000 won.",zh:"请缴纳3万韩元。",vi:"Vui lòng thanh toán 30.000 won."} },
+    { ko:"2주 후에 다시 오세요.", tr:{ko:"2주 후에 다시 오세요.",en:"Please come back in 2 weeks.",zh:"请两周后再来。",vi:"Vui lòng quay lại sau 2 tuần."} },
+    { ko:"잠시만 기다려 주세요.", tr:{ko:"잠시만 기다려 주세요.",en:"Please wait a moment.",zh:"请稍等。",vi:"Vui lòng đợi một chút."} }
+  ],
+  me:[ // 내가 하는 말 (내 언어 → 한국어로 표시)
+    { key:"apply", tr:{ko:"외국인등록증을 발급받고 싶어요.",en:"I want to apply for an alien registration card.",zh:"我想办理外国人登录证。",vi:"Tôi muốn làm thẻ đăng ký người nước ngoài."} },
+    { key:"help", tr:{ko:"서류 작성을 도와주세요.",en:"Please help me fill out this form.",zh:"请帮我填写这份表格。",vi:"Vui lòng giúp tôi điền tờ này."} },
+    { key:"how", tr:{ko:"이거 어떻게 해야 하나요?",en:"How do I do this?",zh:"这个该怎么做?",vi:"Cái này làm thế nào?"} },
+    { key:"cost", tr:{ko:"얼마예요?",en:"How much is it?",zh:"多少钱?",vi:"Bao nhiêu tiền?"} },
+    { key:"nokor", tr:{ko:"한국어를 잘 못해요.",en:"I don't speak Korean well.",zh:"我韩语说得不好。",vi:"Tôi không nói giỏi tiếng Hàn."} },
+    { key:"interp", tr:{ko:"통역이 필요해요.",en:"I need an interpreter.",zh:"我需要翻译。",vi:"Tôi cần phiên dịch."} }
+  ]
+};
+
+// 간단 문구 사전(양방향) — 자유 번역 데모용
+const DICT = [
+  { ko:"안녕하세요", en:"Hello", zh:"你好", vi:"Xin chào" },
+  { ko:"감사합니다", en:"Thank you", zh:"谢谢", vi:"Cảm ơn" },
+  { ko:"화장실이 어디예요?", en:"Where is the restroom?", zh:"洗手间在哪里?", vi:"Nhà vệ sinh ở đâu?" },
+  { ko:"도와주세요", en:"Please help me", zh:"请帮帮我", vi:"Xin hãy giúp tôi" },
+  { ko:"여권을 가져왔어요", en:"I brought my passport", zh:"我带了护照", vi:"Tôi đã mang hộ chiếu" }
+];
+
+function mockTranslate(text, from, to){
+  return new Promise(res=>{
+    setTimeout(()=>{
+      const q = text.trim();
+      if(!q) return res("");
+      // 사전에서 찾기
+      for(const row of DICT){
+        for(const k of ["ko","en","zh","vi"]){
+          if(row[k] && row[k].replace(/[?？.!]/g,"") === q.replace(/[?？.!]/g,"")){
+            return res(row[to] || row.en);
+          }
+        }
+      }
+      // 미스 → 데모 표기
+      res(q + "  —  ["+ (LANGS.find(l=>l.code===to)?.native||to) +" 번역 예시 · 백엔드 연결 시 실제 번역]");
+    }, 450);
+  });
+}
+
+function mockInterpret(text, from, to){
+  return new Promise(res=>{
+    setTimeout(()=> res({ recognized:text, translation: null }), 700);
+  });
+}
+
+// 샘플 서류: 외국인 통합신청서 일부
+const SAMPLE_DOC = {
+  docName:{ko:"외국인 통합신청서 (일부)",en:"Foreigner Application Form (excerpt)",zh:"外国人综合申请表(部分)",vi:"Đơn đăng ký NNN (trích)"},
+  fields:[
+    { ko:"성명(영문)", label:{ko:"성명(영문)",en:"Full name (English)",zh:"姓名(英文)",vi:"Họ tên (tiếng Anh)"},
+      guide:{ko:"여권과 똑같이 대문자로 적으세요.",en:"Write in capitals exactly as in your passport.",zh:"请与护照一致,用大写字母填写。",vi:"Viết in hoa đúng như hộ chiếu."} },
+    { ko:"생년월일", label:{ko:"생년월일",en:"Date of birth",zh:"出生日期",vi:"Ngày sinh"},
+      guide:{ko:"연-월-일 순서(예: 1998-05-20).",en:"Year-Month-Day (e.g. 1998-05-20).",zh:"按 年-月-日(如 1998-05-20)。",vi:"Năm-Tháng-Ngày (vd. 1998-05-20)."} },
+    { ko:"체류자격", label:{ko:"체류자격",en:"Status of stay",zh:"居留资格",vi:"Tư cách lưu trú"},
+      guide:{ko:"비자에 적힌 코드를 그대로 쓰세요(예: E-9).",en:"Copy the code from your visa (e.g. E-9).",zh:"照抄签证上的代码(如 E-9)。",vi:"Chép mã trên visa (vd. E-9)."} },
+    { ko:"서명", label:{ko:"서명",en:"Signature",zh:"签名",vi:"Chữ ký"},
+      guide:{ko:"본인이 직접 서명하세요.",en:"Sign it yourself.",zh:"请本人亲自签名。",vi:"Tự bạn ký."} }
+  ],
+  next:{ instId:"immig", sitId:"arc",
+    text:{ko:"이 서류는 외국인등록 신청서예요. 작성 후 창구에 제출하고 수수료 3만원을 결제하세요.",
+          en:"This is the alien registration form. After filling it, submit at the counter and pay the 30,000 won fee.",
+          zh:"这是外国人登记申请表。填好后到窗口提交并缴纳3万韩元费用。",
+          vi:"Đây là đơn đăng ký NNN. Điền xong nộp tại quầy và trả lệ phí 30.000 won."} }
+};
+
+function mockOCR(_img, lang){
+  return new Promise(res=> setTimeout(()=> res(SAMPLE_DOC), 1400));
+}
+
+/* =========================================================================
+   상태 & 헬퍼
+   ========================================================================= */
+const state = {
+  lang:"ko",
+  view:"lang",         // lang | home | institution | flow | interpret | translate | scan
+  instId:null,
+  sitId:null,
+  step:0,
+  interpretDir:"staff",
+  convo:[],
+  trFrom:"ko", trTo:"en",
+  stack:[]             // 뒤로가기용
+};
+
+const $ = s => document.querySelector(s);
+const L = obj => (obj && (obj[state.lang] ?? obj.en ?? obj.ko)) || "";
+const esc = s => (s||"").replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+const ICONS = {
+  passport:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="5" y="3" width="14" height="18" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M9 17h6"/></svg>',
+  building:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 21V5l8-3 8 3v16"/><path d="M4 21h16M9 9h.01M15 9h.01M9 13h.01M15 13h.01M10 21v-4h4v4"/></svg>',
+  cross:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="6" width="18" height="14" rx="3"/><path d="M12 10v6M9 13h6M8 6V4h8v2"/></svg>',
+  chev:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>',
+  arrow:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+  info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>',
+  mic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M6 11a6 6 0 0012 0M12 17v4"/></svg>',
+  cam:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 8V6a2 2 0 012-2h2M16 4h2a2 2 0 012 2v2M20 16v2a2 2 0 01-2 2h-2M8 20H6a2 2 0 01-2-2v-2"/><circle cx="12" cy="12" r="3"/></svg>',
+  swap:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 4v13M4 14l3 3 3-3M17 20V7M14 10l3-3 3 3"/></svg>'
+};
+
+/* =========================================================================
+   렌더링
+   ========================================================================= */
+function push(view){ state.stack.push(view); }
+function go(view, opts={}){
+  if(state.view !== "lang") push(state.view);
+  Object.assign(state, opts);
+  state.view = view;
+  render();
+  $("#screen").scrollTop = 0;
+}
+function back(){
+  const prev = state.stack.pop();
+  state.view = prev || "home";
+  render();
+  $("#screen").scrollTop = 0;
+}
+
+function render(){
+  const topbar = $("#topbar"), toolbar = $("#toolbar");
+  const inst = INSTITUTIONS.find(i=>i.id===state.instId);
+  const sit = inst?.situations.find(s=>s.id===state.sitId);
+
+  // 상단바/툴바 표시 제어
+  if(state.view==="lang"){ topbar.classList.add("hidden"); toolbar.classList.remove("show"); }
+  else { topbar.classList.remove("hidden"); toolbar.classList.add("show"); }
+
+  // 뒤로 버튼
+  topbar.classList.toggle("has-back", state.view!=="home" && state.view!=="lang");
+
+  // 상단 타이틀
+  const titles = {
+    home:`동행<span class="sub">${esc(L(T.appSub))}</span>`,
+    institution:esc(L(inst?.name)),
+    flow:esc(L(sit?.doc)),
+    interpret:esc(L(T.interpTitle)),
+    translate:esc(L(T.trTitle)),
+    scan:esc(L(T.scanTitle))
+  };
+  $("#topTitle").innerHTML = titles[state.view] || "동행";
+  $("#langLabel").textContent = LANGS.find(l=>l.code===state.lang).native;
+
+  // 툴바 active
+  toolbar.querySelectorAll("button").forEach(b=>b.classList.toggle("active", b.dataset.tool===state.view));
+
+  const scr = $("#screen");
+  scr.className = "screen" + (state.view==="lang"?" pad-top":"");
+  if(state.view==="lang") scr.style.padding="0"; else scr.style.padding="";
+
+  const R = {
+    lang:renderLang, home:renderHome, institution:renderInstitution,
+    flow:renderFlow, interpret:renderInterpret, translate:renderTranslate, scan:renderScan
+  };
+  scr.innerHTML = (R[state.view]||renderHome)(inst, sit);
+  wire(state.view);
+}
+
+// ---- 언어 선택 -----------------------------------------------------------
+function renderLang(){
+  const mark = `<svg class="mark" viewBox="0 0 32 32" fill="none"><path d="M9 22c0-5 3-9 7-9s7 4 7 9" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><circle cx="16" cy="8" r="3.4" fill="${'#A9803B'}"/><path d="M6 25h20" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>`;
+  const items = LANGS.map(l=>`
+    <button class="lang-item" data-lang="${l.code}">
+      <div><div class="native">${l.native}</div><div class="en">${l.en}</div></div>
+      <div class="flag">${l.flag}</div>
+    </button>`).join("");
+  return `
+    <div class="lang-hero">
+      <div class="logo-row">${mark}<div class="name">동행<em>同行</em></div></div>
+      <h1>${esc(L(T.selectLang)).replace(/\n/g,"<br>")}</h1>
+      <div class="rule"></div>
+      <p>Select your language · 언어를 선택하세요<br>选择语言 · Chọn ngôn ngữ</p>
+    </div>
+    <div class="lang-list">${items}
+      <div class="note" style="margin-top:18px">${ICONS.info}<div>${esc(L(T.demoNote))}</div></div>
+    </div>`;
+}
+
+// ---- 홈(기관 선택) -------------------------------------------------------
+function renderHome(){
+  const cards = INSTITUTIONS.map(i=>`
+    <button class="pick" data-inst="${i.id}">
+      <div class="ic">${ICONS[i.icon]}</div>
+      <div class="tx"><div class="t">${esc(L(i.name))}</div><div class="d">${esc(L(i.blurb))}</div></div>
+      <div class="chev">${ICONS.chev}</div>
+    </button>`).join("");
+  return `
+    <p class="eyebrow">${esc(L(T.whereSub))}</p>
+    <h1 class="big">${esc(L(T.where))}</h1>
+    ${cards}
+    <div class="note">${ICONS.info}<div>${esc(L(T.disclaimer))}</div></div>`;
+}
+
+// ---- 기관 → 상황 선택 ----------------------------------------------------
+function renderInstitution(inst){
+  const cards = inst.situations.map(s=>`
+    <button class="pick" data-sit="${s.id}">
+      <div class="ic">${ICONS[inst.icon]}</div>
+      <div class="tx"><div class="t">${esc(L(s.title))}</div>
+        <div class="d">${esc(L(T.step))} 1–${s.steps.length}</div></div>
+      <div class="chev">${ICONS.chev}</div>
+    </button>`).join("");
+  return `
+    <p class="eyebrow">${esc(L(inst.blurb))}</p>
+    <h1 class="big">${esc(L(T.chooseSit))}</h1>
+    ${cards}`;
+}
+
+// ---- 흐름(스텝) ----------------------------------------------------------
+function renderFlow(inst, sit){
+  const steps = sit.steps, n = steps.length;
+  const done = state.step >= n;
+  const cur = Math.min(state.step, n-1);
+  const pct = Math.round((Math.min(state.step,n)/n)*100);
+
+  const metaChips = (meta, dark)=> Object.entries(meta||{}).map(([k,v])=>{
+    const label = {cost:T.mCost,method:T.mMethod,time:T.mTime,need:T.mNeed}[k];
+    return `<span class="chip"><b>${esc(L(label))}</b> ${esc(L(v))}</span>`;
+  }).join("");
+
+  // 완료 화면
+  if(done){
+    return `
+      <div class="flow-head"><div class="where">${ICONS[inst.icon]} ${esc(L(inst.name))}</div>
+        <div class="doc">${esc(L(sit.doc))}</div></div>
+      <div class="now-card" style="text-align:center">
+        <div class="st" style="margin-top:4px">${esc(L(T.allDone))}</div>
+      </div>
+      <button class="btn ghost" id="restart">${esc(L(T.restart))}</button>
+      ${timeline(steps, n, metaChips)}
+      <div class="note">${ICONS.info}<div>${esc(L(T.disclaimer))}</div></div>`;
+  }
+
+  const nextStep = steps[cur+1];
+  return `
+    <div class="flow-head"><div class="where">${ICONS[inst.icon]} ${esc(L(inst.name))}</div>
+      <div class="doc">${esc(L(sit.doc))}</div></div>
+
+    <div class="progress-wrap">
+      <div class="progress-txt"><span>${esc(L(T.step))} ${cur+1} ${esc(L(T.of))} ${n}</span><span>${pct}%</span></div>
+      <div class="progress-bar"><i style="width:${pct}%"></i></div>
+    </div>
+
+    <div class="now-card">
+      <div class="lbl"><span class="dot"></span>${esc(L(T.nowDo))}</div>
+      <div class="st">${esc(L(steps[cur].title))}</div>
+      <div class="de">${esc(L(steps[cur].detail))}</div>
+      ${Object.keys(steps[cur].meta||{}).length?`<div class="metas">${metaChips(steps[cur].meta,true)}</div>`:""}
+    </div>
+
+    ${nextStep?`<div class="next-peek"><span class="k">${esc(L(T.nextDo))}</span>
+      <span class="v">${esc(L(nextStep.title))}</span>${ICONS.chev}</div>`:""}
+
+    <div class="flow-actions">
+      ${cur>0?`<button class="btn line" id="prevStep">${esc(L(T.prev))}</button>`:""}
+      <button class="btn" id="nextStep">${esc(L(T.doneNext))} ${ICONS.arrow}</button>
+    </div>
+
+    ${timeline(steps, n, metaChips)}
+    <div class="note">${ICONS.info}<div>${esc(L(T.disclaimer))}</div></div>`;
+}
+
+function timeline(steps, n, metaChips){
+  const cur = Math.min(state.step, n-1);
+  const rows = steps.map((s,i)=>{
+    const cls = state.step>=n ? "done" : (i<cur?"done":(i===cur?"current":"upcoming"));
+    const node = (i<cur||state.step>=n)
+      ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="15" height="15"><path d="M5 12l5 5 9-11"/></svg>'
+      : (i+1);
+    return `
+      <div class="tl-item ${cls}">
+        <div class="tl-rail"><div class="tl-node">${node}</div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <div class="t">${esc(L(s.title))}</div>
+          <div class="d">${esc(L(s.detail))}</div>
+          ${Object.keys(s.meta||{}).length?`<div class="metas">${metaChips(s.meta)}</div>`:""}
+        </div>
+      </div>`;
+  }).join("");
+  return `<div class="timeline">${rows}</div>`;
+}
+
+// ---- 통역 ---------------------------------------------------------------
+function renderInterpret(){
+  const dir = state.interpretDir;
+  const bubbles = state.convo.length ? state.convo.map(m=>`
+    <div class="bubble ${m.side}">
+      <div>${esc(m.show)}</div>${m.orig?`<div class="orig">${esc(m.orig)}</div>`:""}
+    </div>`).join("")
+    : `<div class="convo-empty">${esc(L(T.convoEmpty)).replace(/\n/g,"<br>")}</div>`;
+
+  const list = dir==="staff" ? PHRASES.staff : PHRASES.me;
+  const chips = list.map((p,idx)=>{
+    const show = dir==="staff" ? L(p.tr) : p.tr.ko;      // 상대 표시용
+    return `<button class="preset-chip" data-preset="${idx}">${esc(dir==="staff"?p.ko:L(p.tr))}</button>`;
+  }).join("");
+
+  return `
+    <div class="seg">
+      <button data-dir="staff" class="${dir==="staff"?"on":""}">${esc(L(T.staffSide))}</button>
+      <button data-dir="me" class="${dir==="me"?"on":""}">${esc(L(T.meSide))}</button>
+    </div>
+
+    <div class="convo" id="convo">${bubbles}</div>
+
+    <div class="presets">
+      <div class="lbl">${esc(L(T.common))} · ${dir==="staff"?"🇰🇷 → "+LANGS.find(l=>l.code===state.lang).native : LANGS.find(l=>l.code===state.lang).native+" → 🇰🇷"}</div>
+      ${chips}
+    </div>
+    ${state.convo.length?`<button class="btn line" id="clearConvo" style="margin-bottom:8px">${esc(L(T.clear))}</button>`:""}
+
+    <div class="mic-row">
+      <button class="mic-btn" id="micBtn">${ICONS.mic}<span id="micTxt">${esc(L(T.speak))}</span></button>
+    </div>`;
+}
+
+// ---- 번역 ---------------------------------------------------------------
+function renderTranslate(){
+  const fromL = LANGS.find(l=>l.code===state.trFrom), toL = LANGS.find(l=>l.code===state.trTo);
+  return `
+    <div class="tr-box">
+      <div class="cap"><span>${fromL.native}</span></div>
+      <textarea id="trInput" placeholder="${esc(L(T.trInput))}" rows="3"></textarea>
+    </div>
+    <div class="swap-row"><span>${fromL.native}</span>
+      <button id="swap" aria-label="swap">${ICONS.swap}</button><span>${toL.native}</span></div>
+    <div class="tr-box">
+      <div class="cap"><span>${toL.native} · ${esc(L(T.trResult))}</span></div>
+      <div class="tr-out empty" id="trOut">—</div>
+    </div>
+    <button class="btn" id="trBtn">${esc(L(T.trBtn))}</button>
+    <div class="note">${ICONS.info}<div>${esc(L(T.demoNote))}</div></div>`;
+}
+
+// ---- 촬영 ---------------------------------------------------------------
+function renderScan(){
+  return `
+    <div id="scanStart">
+      <div class="scan-drop" id="scanDrop">
+        <div class="ic">${ICONS.cam}</div>
+        <div class="t">${esc(L(T.scanDrop))}</div>
+        <div class="d">${esc(L(T.scanDropSub))}</div>
+      </div>
+      <button class="btn" id="pickFile">${ICONS.cam} ${esc(L(T.scanDrop))}</button>
+      <button class="btn ghost" id="sampleBtn" style="margin-top:10px">${esc(L(T.scanSample))}</button>
+      <div class="note">${ICONS.info}<div>${esc(L(T.demoNote))}</div></div>
+    </div>
+    <div id="scanResult"></div>`;
+}
+
+/* =========================================================================
+   이벤트 연결
+   ========================================================================= */
+function wire(view){
+  if(view==="lang"){
+    document.querySelectorAll("[data-lang]").forEach(b=>b.onclick=()=>{
+      state.lang=b.dataset.lang; state.trTo = state.lang==="ko"?"en":state.lang;
+      state.stack=[]; go("home");
+    });
+  }
+  if(view==="home"){
+    document.querySelectorAll("[data-inst]").forEach(b=>b.onclick=()=>go("institution",{instId:b.dataset.inst}));
+  }
+  if(view==="institution"){
+    document.querySelectorAll("[data-sit]").forEach(b=>b.onclick=()=>go("flow",{sitId:b.dataset.sit, step:0}));
+  }
+  if(view==="flow"){
+    const nx=$("#nextStep"), pv=$("#prevStep"), rs=$("#restart");
+    if(nx) nx.onclick=()=>{ state.step++; render(); $("#screen").scrollTop=0; };
+    if(pv) pv.onclick=()=>{ state.step=Math.max(0,state.step-1); render(); $("#screen").scrollTop=0; };
+    if(rs) rs.onclick=()=>{ state.step=0; render(); $("#screen").scrollTop=0; };
+  }
+  if(view==="interpret") wireInterpret();
+  if(view==="translate") wireTranslate();
+  if(view==="scan") wireScan();
+}
+
+// 툴바
+$("#toolbar").querySelectorAll("[data-tool]").forEach(b=>{
+  b.onclick=()=>{ if(state.view===b.dataset.tool) return; go(b.dataset.tool); };
+});
+$("#backBtn").onclick=back;
+$("#langBtn").onclick=()=>{ // 언어 재선택
+  const codes=LANGS.map(l=>l.code); const i=codes.indexOf(state.lang);
+  state.lang=codes[(i+1)%codes.length]; state.trTo = state.lang==="ko"?"en":state.lang;
+  render();
+};
+
+// ---- 통역 로직 -----------------------------------------------------------
+function wireInterpret(){
+  document.querySelectorAll("[data-dir]").forEach(b=>b.onclick=()=>{ state.interpretDir=b.dataset.dir; render(); });
+  const clear=$("#clearConvo"); if(clear) clear.onclick=()=>{ state.convo=[]; render(); };
+
+  document.querySelectorAll("[data-preset]").forEach(b=>b.onclick=()=>{
+    const idx=+b.dataset.preset, dir=state.interpretDir;
+    if(dir==="staff"){
+      const p=PHRASES.staff[idx];
+      state.convo.push({ side:"staff", show:L(p.tr), orig:p.ko });   // 직원 원문(한국어) → 내 언어
+    } else {
+      const p=PHRASES.me[idx];
+      state.convo.push({ side:"me", show:p.tr.ko, orig:L(p.tr) });   // 내 말 → 한국어로 직원에게
+    }
+    render(); const c=$("#convo"); if(c) c.scrollTop=c.scrollHeight;
+  });
+
+  // 음성 입력 (Web Speech API — 지원 안되면 안내)
+  const mic=$("#micBtn");
+  if(mic) mic.onclick=()=>startSpeech(mic);
+}
+
+let recog=null;
+function startSpeech(btn){
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const dir=state.interpretDir;
+  if(!SR){
+    // 목업 fallback: 프리셋 첫 문장을 인식한 것처럼 시연
+    const p = dir==="staff"?PHRASES.staff[0]:PHRASES.me[2];
+    if(dir==="staff") state.convo.push({side:"staff",show:L(p.tr),orig:p.ko});
+    else state.convo.push({side:"me",show:p.tr.ko,orig:L(p.tr)});
+    render(); return;
+  }
+  if(recog){ recog.stop(); return; }
+  recog=new SR();
+  recog.lang = dir==="staff" ? "ko-KR" : ({en:"en-US",zh:"zh-CN",vi:"vi-VN",ko:"ko-KR"}[state.lang]);
+  recog.interimResults=false;
+  btn.classList.add("rec"); $("#micTxt").textContent=L(T.listening);
+  recog.onresult = async e=>{
+    const text=e.results[0][0].transcript;
+    const from = dir==="staff"?"ko":state.lang;
+    const to   = dir==="staff"?state.lang:"ko";
+    const tr = await AI.translate(text, from, to);
+    if(dir==="staff") state.convo.push({side:"staff",show:tr,orig:text});
+    else state.convo.push({side:"me",show:tr,orig:text});
+    render();
+  };
+  recog.onerror=()=>{ btn.classList.remove("rec"); $("#micTxt") && ($("#micTxt").textContent=L(T.speak)); recog=null; };
+  recog.onend =()=>{ recog=null; const b=$("#micBtn"); if(b){b.classList.remove("rec"); const t=$("#micTxt"); if(t)t.textContent=L(T.speak);} };
+  recog.start();
+}
+
+// ---- 번역 로직 -----------------------------------------------------------
+function wireTranslate(){
+  const swap=$("#swap"), btn=$("#trBtn");
+  swap.onclick=()=>{ [state.trFrom,state.trTo]=[state.trTo,state.trFrom]; render(); };
+  btn.onclick=async ()=>{
+    const inp=$("#trInput").value; const out=$("#trOut");
+    if(!inp.trim()){ out.textContent="—"; out.classList.add("empty"); return; }
+    out.classList.remove("empty"); out.innerHTML=`<span class="muted">${esc(L(T.demoNote).split("—")[0])}…</span>`;
+    const r=await AI.translate(inp, state.trFrom, state.trTo);
+    out.textContent=r;
+  };
+}
+
+// ---- 촬영 로직 -----------------------------------------------------------
+function wireScan(){
+  const fileInput=$("#fileInput");
+  const pick=$("#pickFile"), sample=$("#sampleBtn");
+  if(pick) pick.onclick=()=>fileInput.click();
+  fileInput.onchange=e=>{
+    const f=e.target.files[0]; if(!f) return;
+    const url=URL.createObjectURL(f); runScan(f, url);
+    fileInput.value="";
+  };
+  if(sample) sample.onclick=()=>runScan(null, null);
+}
+
+async function runScan(file, previewUrl){
+  $("#scanStart").classList.add("hidden");
+  const box=$("#scanResult");
+  box.innerHTML = `
+    ${previewUrl?`<img class="scan-preview" src="${previewUrl}" alt="">`:""}
+    <div class="card" style="padding:24px;text-align:center;display:flex;align-items:center;justify-content:center;gap:12px">
+      <div class="spinner" style="border-color:rgba(116,32,46,.25);border-top-color:var(--wine)"></div>
+      <span class="muted" style="font-weight:600">${esc(L(T.analyzing))}</span>
+    </div>`;
+  let res;
+  try{
+    res = await AI.ocr(file, state.lang);
+  }catch(err){
+    box.innerHTML = `
+      ${previewUrl?`<img class="scan-preview" src="${previewUrl}" alt="">`:""}
+      <div class="note">${ICONS.info}<div>${esc(String(err.message||err))}</div></div>
+      <button class="btn line" id="rescan" style="margin-top:12px">${esc(L(T.scanAgain))}</button>`;
+    $("#rescan").onclick=()=>{ $("#scanResult").innerHTML=""; $("#scanStart").classList.remove("hidden"); };
+    return;
+  }
+  const fields = res.fields.map(f=>`
+    <div class="field-row">
+      <div class="fk">${esc(L(f.label))}<span class="ko">${esc(f.ko)}</span></div>
+      <div class="fv">${esc(L(f.guide))}</div>
+    </div>`).join("");
+
+  box.innerHTML = `
+    ${previewUrl?`<img class="scan-preview" src="${previewUrl}" alt="">`:""}
+    <div class="result-block">
+      <div class="rl">${esc(L(T.recognized))}</div>
+      <div class="card" style="padding:14px 16px;font-weight:700;font-size:16px">${esc(L(res.docName))}</div>
+    </div>
+    <div class="result-block">
+      <div class="rl">${esc(L(T.howToFill))}</div>
+      <div class="card" style="padding:4px 16px">${fields}</div>
+    </div>
+    <div class="result-block">
+      <div class="rl">${esc(L(T.whatsNext))}</div>
+      <div class="now-card" style="margin:0">
+        <div class="de">${esc(L(res.next.text))}</div>
+      </div>
+    </div>
+    <button class="btn" id="goFlow" style="margin-bottom:10px">${esc(L(T.seeFlow))} ${ICONS.arrow}</button>
+    <button class="btn line" id="rescan">${esc(L(T.scanAgain))}</button>`;
+
+  $("#goFlow").onclick=()=>go("flow",{instId:res.next.instId, sitId:res.next.sitId, step:0});
+  $("#rescan").onclick=()=>{ $("#scanResult").innerHTML=""; $("#scanStart").classList.remove("hidden"); };
+}
+
+/* 시작 */
+render();
+</script>
+</body>
+</html>
