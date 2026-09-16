@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#74202E"> 
+<meta name="theme-color" content="#74202E">
 <title>동행 · AI 외국인 생활·행정 도우미</title>
 <style>
   /* =========================================================
@@ -754,6 +754,11 @@ const state = {
 
 const $ = s => document.querySelector(s);
 const L = obj => (obj && (obj[state.lang] ?? obj.en ?? obj.ko)) || "";
+// 데모 배너는 목업 모드(백엔드 미연결)일 때만 표시
+function demoNote(extraStyle){
+  if(!AI.USE_MOCK) return "";
+  return `<div class="note"${extraStyle?` style="${extraStyle}"`:""}>${ICONS.info}<div>${esc(L(T.demoNote))}</div></div>`;
+}
 const esc = s => (s||"").replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
 const ICONS = {
@@ -841,7 +846,7 @@ function renderLang(){
       <p>Select your language · 언어를 선택하세요<br>选择语言 · Chọn ngôn ngữ</p>
     </div>
     <div class="lang-list">${items}
-      <div class="note" style="margin-top:18px">${ICONS.info}<div>${esc(L(T.demoNote))}</div></div>
+      ${demoNote("margin-top:18px")}
     </div>`;
 }
 
@@ -998,7 +1003,7 @@ function renderTranslate(){
       <div class="tr-out empty" id="trOut">—</div>
     </div>
     <button class="btn" id="trBtn">${esc(L(T.trBtn))}</button>
-    <div class="note">${ICONS.info}<div>${esc(L(T.demoNote))}</div></div>`;
+    ${demoNote()}`;
 }
 
 // ---- 촬영 ---------------------------------------------------------------
@@ -1012,7 +1017,7 @@ function renderScan(){
       </div>
       <button class="btn" id="pickFile">${ICONS.cam} ${esc(L(T.scanDrop))}</button>
       <button class="btn ghost" id="sampleBtn" style="margin-top:10px">${esc(L(T.scanSample))}</button>
-      <div class="note">${ICONS.info}<div>${esc(L(T.demoNote))}</div></div>
+      ${demoNote()}
     </div>
     <div id="scanResult"></div>`;
 }
@@ -1114,7 +1119,7 @@ function wireTranslate(){
   btn.onclick=async ()=>{
     const inp=$("#trInput").value; const out=$("#trOut");
     if(!inp.trim()){ out.textContent="—"; out.classList.add("empty"); return; }
-    out.classList.remove("empty"); out.innerHTML=`<span class="muted">${esc(L(T.demoNote).split("—")[0])}…</span>`;
+    out.classList.remove("empty"); out.innerHTML=`<span class="muted">…</span>`;
     const r=await AI.translate(inp, state.trFrom, state.trTo);
     out.textContent=r;
   };
