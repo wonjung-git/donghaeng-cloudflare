@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#74202E">
-<title>동행 · AI 외국인 생활·행정 도우미</title>
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#74202E"><title>동행</title>
 <style>
   /* =========================================================
      동행(同行) — 색 토큰
@@ -150,12 +144,12 @@
 
   /* 알림 배너 */
   .note{
-    display:flex;gap:10px;align-items:flex-start;
+    display:flex;gap:8px;align-items:flex-start;
     background:var(--wine-tint-2);border:1px solid var(--wine-tint);
-    border-radius:var(--radius-sm);padding:12px 14px;font-size:13px;color:#6a4b50;
-    margin-top:16px;line-height:1.55;
+    border-radius:var(--radius-sm);padding:10px 12px;font-size:11.5px;color:#6a4b50;
+    margin-top:16px;line-height:1.5;
   }
-  .note svg{width:17px;height:17px;flex:0 0 auto;margin-top:1px;color:var(--wine);}
+  .note svg{width:14px;height:14px;flex:0 0 auto;margin-top:1px;color:var(--wine);}
 
   /* ===================== 언어 선택 화면 ===================== */
   .lang-hero{
@@ -188,8 +182,9 @@
 
   /* ===================== 흐름(스텝) 화면 ===================== */
   .flow-head{margin-bottom:6px;}
-  .flow-head .doc{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:2px 0 4px;}
-  .flow-head .where{font-size:13.5px;color:var(--muted);display:flex;align-items:center;gap:5px;}
+  .flow-head .doc{font-size:18px;font-weight:700;letter-spacing:-.01em;margin:2px 0 4px;}
+  .flow-head .where{font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:5px;}
+  .flow-head .where svg{width:14px;height:14px;}
 
   .progress-wrap{margin:16px 0 8px;}
   .progress-txt{font-size:12.5px;color:var(--muted);font-weight:600;margin-bottom:7px;display:flex;justify-content:space-between;}
@@ -210,12 +205,11 @@
   .now-card .metas .chip b{font-weight:700;color:#F7DFC7;}
 
   .next-peek{
-    display:flex;align-items:center;gap:10px;background:var(--surface);
-    border:1px solid var(--line);border-radius:var(--radius-sm);padding:13px 14px;margin-bottom:8px;
+    display:flex;align-items:center;gap:9px;background:var(--surface);
+    border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:8px;
   }
-  .next-peek .k{font-size:11.5px;font-weight:700;color:var(--gold);flex:0 0 auto;}
-  .next-peek .v{font-size:14px;font-weight:600;flex:1;min-width:0;}
-  .next-peek svg{color:#C9BBB6;flex:0 0 auto;}
+  .next-peek .k{font-size:11.5px;font-weight:700;color:var(--gold);flex:0 0 auto;white-space:nowrap;}
+  .next-peek .v{font-size:14px;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 
   .flow-actions{display:flex;gap:10px;margin:14px 0 4px;}
   .flow-actions .btn{width:auto;flex:1;}
@@ -309,40 +303,255 @@
   @media (prefers-reduced-motion: reduce){
     *{animation:none !important;transition:none !important;}
   }
+
+  /* ===================== 병합: 위험도 태그 / 핫라인 / 보험토글 / 처방전 배지 ===================== */
+  .risk-tag{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.02em;padding:3px 8px;border-radius:7px;margin-bottom:6px;}
+  .risk-tag.red{background:#FBE7E7;color:#A32D2D;}
+  .risk-tag.amber{background:#FBF0DE;color:#8A5A12;}
+  .risk-tag.gray{background:var(--wine-tint-2);color:var(--muted);}
+  .field-row.risk-red{border-left:3px solid #A32D2D;padding-left:10px;}
+  .field-row.risk-amber{border-left:3px solid #A9803B;padding-left:10px;}
+  .field-row.risk-gray{border-left:3px solid var(--line);padding-left:10px;}
+  .quickfill-btn{display:inline-block;margin-top:8px;border:1px solid var(--wine);background:var(--wine-tint);color:var(--wine);font-size:12px;font-weight:700;padding:6px 10px;border-radius:8px;}
+  .quickfill-btn.done{background:var(--wine);color:#fff;}
+
+  .hotline-row{display:flex;gap:8px;margin-top:14px;}
+  .hotline-btn{flex:1;text-align:center;padding:10px 6px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--wine);font-size:12.5px;font-weight:700;text-decoration:none;box-shadow:var(--shadow);}
+
+  .ins-toggle-row{display:flex;gap:8px;margin:12px 0 8px;}
+  .ins-toggle{flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);font-size:13px;font-weight:700;color:#fff;}
+  .ins-toggle.on{background:#fff;color:var(--wine);border-color:#fff;}
+
+  .rx-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);color:#fff;font-weight:800;font-size:13px;padding:6px 12px;border-radius:10px;margin-top:6px;}
+  .rx-badge svg{width:15px;height:15px;}
+
+  /* ===================== 센터찾기 화면 ===================== */
+  .center-select{width:100%;padding:11px;border:1px solid var(--line);border-radius:11px;font-weight:700;font-size:14px;background:var(--surface);color:var(--ink);margin-bottom:12px;-webkit-appearance:none;appearance:none;}
+  .center-field-label{display:block;font-size:12.5px;font-weight:700;color:var(--muted);margin-bottom:6px;}
+
+  /* ===================== 병합: 홈버튼 ===================== */
+  .topbar .home{
+    width:38px;height:38px;border-radius:50%;
+    display:none;align-items:center;justify-content:center;
+    background:rgba(255,255,255,.12);flex:0 0 auto;
+  }
+  .topbar.has-back .home{display:flex;}
+
+  /* ===================== 병합: 단계별 도구 CTA (가벼운 건 인라인, 무거운 건 버튼) ===================== */
+  .step-action-btn{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    width:100%;margin-top:12px;padding:12px 16px;border-radius:12px;
+    background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);
+    color:#fff;font-size:14px;font-weight:700;
+  }
+  .step-action-btn:active{background:rgba(255,255,255,.22);}
+  .step-action-btn svg{width:18px;height:18px;flex:0 0 auto;}
+
+  /* ===================== 병합: 단계 탭(병원가는길 스타일) + 전체보기 토글 ===================== */
+  .step-tabs{display:flex;gap:3px;margin:14px 0 4px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch;}
+  .step-tabs::-webkit-scrollbar{display:none;}
+  .step-tabs .stab{
+    flex:0 0 auto;min-width:46px;padding:2px 3px 0;border-radius:0;
+    display:flex;flex-direction:column;align-items:center;gap:4px;
+    border:none;background:transparent;font-family:inherit;
+  }
+  .step-tabs .stab .num{
+    width:26px;height:26px;border-radius:50%;flex:0 0 auto;
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;font-weight:700;border:1.5px solid var(--line);color:var(--muted);background:var(--surface);
+  }
+  .step-tabs .stab .nm{font-size:10px;color:var(--muted);white-space:nowrap;letter-spacing:-.01em;max-width:56px;overflow:hidden;text-overflow:ellipsis;}
+  .step-tabs .stab.done .num{background:var(--wine);border-color:var(--wine);color:#fff;}
+  .step-tabs .stab.current .num{border-color:var(--wine);color:var(--wine);box-shadow:0 0 0 3px var(--wine-tint);background:var(--surface);}
+  .step-tabs .stab.current .nm{color:var(--wine);font-weight:700;}
+  .step-tabs .stab .num svg{width:14px;height:14px;}
+
+  /* ===================== 병합: 출입국 — 마감일(D-day) 위젯 ===================== */
+  .deadline-card{margin-top:12px;}
+  .deadline-card input[type="date"]{
+    width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:var(--radius-sm);
+    background:var(--surface);color:var(--ink);font-family:inherit;font-size:14px;margin-bottom:10px;
+  }
+  .deadline-big{
+    display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+    background:var(--wine-tint-2);border:1px solid var(--wine-tint);border-radius:var(--radius-sm);
+    padding:12px 14px;
+  }
+  .deadline-big.warn{background:var(--wine-tint);}
+  .deadline-big .dd{font-size:18px;font-weight:800;color:var(--wine);font-variant-numeric:tabular-nums;}
+  .deadline-big .dt{font-size:12.5px;color:var(--muted);font-weight:600;}
+  .deadline-desc{font-size:12.5px;color:var(--muted);margin-top:7px;line-height:1.55;}
+
+  /* ===================== 병합: 출입국 — 체류자격/현재상황 칩 (출입국 도우미에서 이식) ===================== */
+  .reg-chip-group{margin-bottom:14px;}
+  .reg-chip-group .center-field-label{margin-bottom:8px;}
+  /* now-card(와인 배경) 안에서 쓰이는 필드 라벨은 옅은 흰색으로 대비 확보 */
+  .now-card .center-field-label{color:rgba(255,255,255,.75);}
+
+  /* ===================== 병합: 지도 검색/길찾기 버튼 (병원 근처 찾기, 관할기관 지도 검색, 센터 길찾기) ===================== */
+  .map-search{margin-top:12px;}
+  .map-search-label{font-size:12px;font-weight:700;color:rgba(255,255,255,.8);margin-bottom:7px;}
+  .map-links{display:flex;gap:8px;}
+  .map-links a{
+    flex:1;display:flex;align-items:center;justify-content:center;gap:6px;
+    padding:11px 8px;border-radius:var(--radius-sm);
+    background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);
+    color:#fff;font-size:13px;font-weight:700;text-decoration:none;text-align:center;
+  }
+
+  /* ===================== 병합: 단계 안 관할 센터 찾기(지역→센터 선택) ===================== */
+  .center-finder{margin-top:2px;}
+  .center-picked{
+    background:var(--wine-tint-2);border:1px solid var(--wine-tint);border-radius:var(--radius-sm);
+    padding:11px 13px;margin:2px 0 10px;
+  }
+  .center-picked b{display:block;font-size:14.5px;color:var(--wine);margin-bottom:2px;}
+  .center-picked span{font-size:12px;color:#7a5a5f;}
+  .reg-chip-row{display:flex;flex-wrap:wrap;gap:6px;}
+  .reg-chip{
+    font-family:inherit;cursor:pointer;font-size:12.5px;
+    border:1.5px solid var(--line);background:var(--surface);color:var(--muted);
+    padding:7px 13px;border-radius:20px;
+  }
+  .reg-chip.on{background:var(--wine);border-color:var(--wine);color:#fff;font-weight:700;}
+
+  /* ===================== 병합: 출입국 — 준비물 체크리스트 (출입국 도우미에서 이식) ===================== */
+  .reg-checklist{margin-top:2px;}
+  .reg-checklist label{
+    display:flex;gap:10px;align-items:flex-start;cursor:pointer;
+    padding:10px 0;border-bottom:1px solid rgba(255,255,255,.18);font-size:13.5px;
+  }
+  .reg-checklist label:last-child{border-bottom:none;}
+  .reg-checklist input{width:17px;height:17px;margin-top:2px;accent-color:var(--wine);flex-shrink:0;}
+  .reg-checklist label.done span{color:rgba(255,255,255,.55);text-decoration:line-through;}
+  /* now-card(와인 배경) 위에서만 옅게: 준비물 부연설명(예: 임대차계약서 등) 대비 확보 */
+  .reg-checklist label span span{color:rgba(255,255,255,.68)!important;}
+
+  /* ===================== 병합: 스캔 결과 — 원문(한국어)+번역 함께 표시 ===================== */
+  .guide-ko{margin-top:5px;padding-left:9px;border-left:2px solid var(--line);font-size:12px;color:var(--muted);line-height:1.5;}
+  .docname-ko{font-size:12.5px;font-weight:500;color:var(--muted);margin-top:3px;}
+
+  /* ===================== 병합: 절차 시작 전 '전체 절차' 진입 화면 ===================== */
+  .intro-head{margin:4px 0 16px;}
+  .intro-head h1{font-size:19px;font-weight:800;margin:2px 0 4px;letter-spacing:-.01em;}
+  .intro-head p{font-size:13px;color:var(--muted);margin:0;}
+  .timeline .tl-item{cursor:pointer;}
+
+  /* ===================== 병합: 하이코리아/관할기관 바로가기 링크 (now-card 와인 배경 위) ===================== */
+  .step-link{
+    display:flex;align-items:center;justify-content:space-between;gap:8px;
+    margin-top:12px;padding:12px 14px;border-radius:var(--radius-sm);
+    background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);
+    color:#fff;font-size:13.5px;font-weight:700;text-decoration:none;
+  }
+  .step-link + .step-link{margin-top:8px;}
+  .step-link svg{width:15px;height:15px;flex:0 0 auto;color:#F7DFC7;}
+
+  /* ===================== 병합: 단계 안 무거운 도구 — 바텀시트 ===================== */
+  .sheet-overlay{
+    position:fixed;top:0;bottom:0;left:50%;transform:translateX(-50%);
+    width:100%;max-width:480px;z-index:50;
+    background:rgba(42,33,36,.44);
+    opacity:0;visibility:hidden;
+    transition:opacity .22s ease,visibility 0s linear .22s;
+    display:flex;align-items:flex-end;justify-content:center;
+  }
+  .sheet-overlay.open{opacity:1;visibility:visible;transition:opacity .22s ease;}
+  .sheet{
+    width:100%;background:var(--surface);
+    border-radius:20px 20px 0 0;
+    box-shadow:0 -8px 30px rgba(90,24,36,.18);
+    max-height:86%;display:flex;flex-direction:column;
+    transform:translateY(100%);
+    transition:transform .32s cubic-bezier(.32,.72,0,1);
+  }
+  .sheet-overlay.open .sheet{transform:translateY(0);}
+  .sheet-handle{width:36px;height:4px;border-radius:2px;background:var(--line);margin:10px auto 2px;flex:0 0 auto;}
+  .sheet-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:8px 18px 12px;border-bottom:1px solid var(--line);flex:0 0 auto;}
+  .sheet-head .tt{font-size:16px;font-weight:800;letter-spacing:-.01em;}
+  .sheet-head .sub{font-size:12px;color:var(--muted);margin-top:3px;font-weight:600;}
+  .sheet-close{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--wine-tint);color:var(--wine);flex:0 0 auto;}
+  .sheet-close svg{width:15px;height:15px;}
+  .sheet-body{padding:16px 18px 28px;overflow-y:auto;-webkit-overflow-scrolling:touch;}
 </style>
 </head>
 <body>
 <div class="app" id="app">
   <!-- 상단 바 -->
-  <header class="topbar" id="topbar">
+  <header class="topbar hidden" id="topbar">
     <button class="back" id="backBtn" aria-label="뒤로">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="20" height="20"><path d="M15 18l-6-6 6-6"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="20" height="20"><path d="M15 18l-6-6 6-6"></path></svg>
+    </button>
+    <button class="home" id="homeBtn" aria-label="홈으로">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M3 11l9-8 9 8"></path><path d="M5 10v10a1 1 0 001 1h4v-6h4v6h4a1 1 0 001-1V10"></path></svg>
     </button>
     <div class="title" id="topTitle">동행</div>
     <button class="langbtn" id="langBtn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 010 18M12 3a15 15 0 000 18"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a15 15 0 010 18M12 3a15 15 0 000 18"></path></svg>
       <span id="langLabel">한국어</span>
     </button>
   </header>
 
   <!-- 본문 (JS로 렌더) -->
-  <main class="screen" id="screen"></main>
+  <main class="screen pad-top" id="screen" style="padding: 0px;">
+    <div class="lang-hero">
+      <div class="logo-row"><svg class="mark" viewBox="0 0 32 32" fill="none"><path d="M9 22c0-5 3-9 7-9s7 4 7 9" stroke="#fff" stroke-width="2.2" stroke-linecap="round"></path><circle cx="16" cy="8" r="3.4" fill="#A9803B"></circle><path d="M6 25h20" stroke="#fff" stroke-width="2.2" stroke-linecap="round"></path></svg><div class="name">동행<em>同行</em></div></div>
+      <h1>먼저 언어를<br>선택하세요</h1>
+      <div class="rule"></div>
+      <p>Select your language · 언어를 선택하세요<br>选择语言 · Chọn ngôn ngữ</p>
+    </div>
+    <div class="lang-list">
+    <button class="lang-item" data-lang="ko">
+      <div><div class="native">한국어</div><div class="en">Korean</div></div>
+      <div class="flag">🇰🇷</div>
+    </button>
+    <button class="lang-item" data-lang="en">
+      <div><div class="native">English</div><div class="en">English</div></div>
+      <div class="flag">🇺🇸</div>
+    </button>
+    <button class="lang-item" data-lang="zh">
+      <div><div class="native">中文</div><div class="en">Chinese</div></div>
+      <div class="flag">🇨🇳</div>
+    </button>
+    <button class="lang-item" data-lang="vi">
+      <div><div class="native">Tiếng Việt</div><div class="en">Vietnamese</div></div>
+      <div class="flag">🇻🇳</div>
+    </button>
+      
+    </div></main>
 
   <!-- 하단 고정 툴바 -->
   <nav class="toolbar" id="toolbar" aria-label="주요 기능">
     <button data-tool="interpret">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8 12h8M8 8h5"/><path d="M21 12a8 8 0 01-11.6 7.1L3 21l1.9-6.4A8 8 0 1121 12z"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8 12h8M8 8h5"></path><path d="M21 12a8 8 0 01-11.6 7.1L3 21l1.9-6.4A8 8 0 1121 12z"></path></svg>
       <span class="tl-label">통역</span>
     </button>
     <button data-tool="translate">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 5h9M9 3v2c0 4-2.5 7-5 8"/><path d="M6 9c0 2 2 4.5 6 6"/><path d="M13 19l4-9 4 9M14.5 16h5"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 5h9M9 3v2c0 4-2.5 7-5 8"></path><path d="M6 9c0 2 2 4.5 6 6"></path><path d="M13 19l4-9 4 9M14.5 16h5"></path></svg>
       <span class="tl-label">번역</span>
     </button>
     <button data-tool="scan">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 8V6a2 2 0 012-2h2M16 4h2a2 2 0 012 2v2M20 16v2a2 2 0 01-2 2h-2M8 20H6a2 2 0 01-2-2v-2"/><circle cx="12" cy="12" r="3"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 8V6a2 2 0 012-2h2M16 4h2a2 2 0 012 2v2M20 16v2a2 2 0 01-2 2h-2M8 20H6a2 2 0 01-2-2v-2"></path><circle cx="12" cy="12" r="3"></circle></svg>
       <span class="tl-label">촬영</span>
     </button>
   </nav>
+
+  <!-- 병합: 단계 안 무거운 도구(스캔/통역)를 페이지 이동 없이 열어주는 바텀시트 -->
+  <div class="sheet-overlay" id="sheetOverlay">
+    <div class="sheet" id="sheetPanel" role="dialog" aria-modal="true">
+      <div class="sheet-handle"></div>
+      <div class="sheet-head">
+        <div>
+          <div class="tt" id="sheetTitle"></div>
+          <div class="sub" id="sheetSub"></div>
+        </div>
+        <button class="sheet-close" id="sheetClose" aria-label="닫기">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <div class="sheet-body" id="sheetBody"></div>
+    </div>
+  </div>
 </div>
 
 <!-- 언어 선택 시트용 파일 입력(촬영) -->
@@ -392,8 +601,8 @@ const AI = {
   },
 
   // ---- 서류 이미지 분석 (OCR + 번역 + 설명 + 다음 단계) --------------------
-  async ocr(file, lang){
-    if(this.USE_MOCK || !file) return mockOCR(file, lang);   // 샘플(파일 없음)은 항상 목업 시연
+  async ocr(file, lang, docKey){
+    if(this.USE_MOCK || !file) return mockOCR(file, lang, docKey);   // 샘플(파일 없음)은 항상 목업 시연
     const { data, mediaType } = await fileToBase64(file);
     const r = await fetch(this.BACKEND_BASE + this.endpoints.ocr, {
       method:"POST", headers:{"Content-Type":"application/json"},
@@ -490,7 +699,72 @@ const T = {
   scanAgain:   { ko:"다시 촬영", en:"Scan again", zh:"重新拍摄", vi:"Chụp lại" },
   // 공통
   disclaimer:  { ko:"안내 정보는 이해를 돕기 위한 예시이며, 기관·상황에 따라 다를 수 있어요. 중요한 내용은 담당 직원에게 확인하세요.", en:"This guidance is a simplified example and may vary by office and situation. Please confirm important details with staff.", zh:"以上信息为便于理解的示例,可能因机构和情况而异。重要事项请向工作人员确认。", vi:"Hướng dẫn này là ví dụ đơn giản, có thể khác theo cơ quan và tình huống. Vui lòng xác nhận điều quan trọng với nhân viên." },
-  demoNote:    { ko:"데모 모드 — AI 응답은 예시입니다. 백엔드 연결 시 실제 AI가 동작합니다.", en:"Demo mode — AI replies are samples. Real AI runs once the backend is connected.", zh:"演示模式 — AI 回复为示例。连接后端后将由真实 AI 运行。", vi:"Chế độ demo — phản hồi AI là mẫu. AI thật hoạt động khi kết nối backend." }
+  demoNote:    { ko:"데모 모드 — AI 응답은 예시입니다. 백엔드 연결 시 실제 AI가 동작합니다.", en:"Demo mode — AI replies are samples. Real AI runs once the backend is connected.", zh:"演示模式 — AI 回复为示例。连接后端后将由真实 AI 运行。", vi:"Chế độ demo — phản hồi AI là mẫu. AI thật hoạt động khi kết nối backend." },
+  // ---- 병합: 센터찾기(행정복지센터 길찾기) ----
+  centerTool:  { ko:"센터찾기", en:"Find center", zh:"查找中心", vi:"Tìm trung tâm" },
+  centerTitle: { ko:"방문할 기관 찾기", en:"Find where to go", zh:"查找机构", vi:"Tìm nơi cần đến" },
+  centerSub:   { ko:"지역을 선택하면 가까운 행정복지센터를 안내하고, 지도 앱으로 바로 길찾기를 시작할 수 있어요.", en:"Pick your area to find the nearest community center and get directions right away.", zh:"选择地区,为您查找附近的行政福祉中心,并可直接用地图App导航。", vi:"Chọn khu vực để tìm trung tâm hành chính gần nhất và chỉ đường ngay." },
+  regionLabel: { ko:"1. 시/도 선택", en:"1. Province / City", zh:"1. 市/道", vi:"1. Tỉnh/Thành phố" },
+  districtLabel:{ ko:"2. 시/군/구 선택", en:"2. District", zh:"2. 市/郡/区", vi:"2. Quận/Huyện" },
+  centerLabel: { ko:"3. 관할 센터 선택", en:"3. Center", zh:"3. 管辖中心", vi:"3. Trung tâm" },
+  selectedCenter:{ ko:"선택된 센터", en:"Selected center", zh:"已选中心", vi:"Trung tâm đã chọn" },
+  navToCenter: { ko:"지도 앱으로 길찾기", en:"Get directions", zh:"地图导航", vi:"Chỉ đường" },
+  // ---- 병합: 전화 핫라인 ----
+  hotlineLabel:{ ko:"전화로 바로 도움받기", en:"Call for help right now", zh:"电话即时求助", vi:"Gọi điện trợ giúp ngay" },
+  callTourist: { ko:"관광통역 안내", en:"Tourist interpretation", zh:"旅游翻译热线", vi:"Phiên dịch du lịch" },
+  callForeigner:{ ko:"외국인 종합안내", en:"Foreigner helpline", zh:"外国人综合咨询", vi:"Tổng đài người nước ngoài" },
+  // ---- 병합: 건강보험 유무 토글 ----
+  haveIns:     { ko:"건강보험 있음", en:"Have insurance", zh:"有医保", vi:"Có bảo hiểm" },
+  noIns:       { ko:"건강보험 없음", en:"No insurance", zh:"无医保", vi:"Không có bảo hiểm" },
+  insCostYes:  { ko:"진찰료의 일부만 부담해요. 정확한 금액은 병원마다 달라요.", en:"You pay only part of the fee. The exact amount varies by hospital.", zh:"只需支付部分诊费,具体金额因医院而异。", vi:"Bạn chỉ trả một phần phí khám. Số tiền chính xác tùy bệnh viện." },
+  insCostNo:   { ko:"진찰료 전액을 본인이 부담해요.", en:"You pay the full fee yourself.", zh:"需自付全部诊费。", vi:"Bạn tự trả toàn bộ phí khám." },
+  // ---- 병합: 처방전 사용기한 ----
+  rxLabel:     { ko:"처방전 사용기한 · D-2", en:"Prescription deadline · D-2", zh:"处方有效期 · D-2", vi:"Hạn dùng đơn thuốc · D-2" },
+  rxWarn:      { ko:"기한이 지나면 조제가 안 되고, 재진 후 다시 발급받아야 해요.", en:"After the deadline, pharmacies can't fill it — you'll need to see a doctor again for a new one.", zh:"过期将无法配药,须重新就诊开具。", vi:"Quá hạn sẽ không lấy thuốc được, phải khám lại để được cấp đơn mới." },
+  // ---- 병합: 응급실 경고(병원가는길에서) ----
+  erSevereWarn:{ ko:"경증인데 큰 응급실로 가면 본인부담이 90%까지 올라가요. 야간엔 달빛어린이병원, 다음날 아침엔 동네 의원을 먼저 확인하세요. 위급하면 지체 없이 119예요.", en:"For mild symptoms, a large ER can raise your share to 90%. At night, check a Dalbit Children's Hospital or a local clinic the next morning first. If it's truly urgent, call 119 without delay.", zh:"症状较轻却前往大医院急诊,自付比例可能升至90%。夜间可先查月光儿童医院,次日上午可选社区诊所。情况危急请立即拨打119。", vi:"Nếu triệu chứng nhẹ mà vào cấp cứu bệnh viện lớn, phần tự trả có thể lên tới 90%. Ban đêm hãy kiểm tra bệnh viện nhi Dalbit hoặc phòng khám sáng hôm sau trước. Nếu thực sự nguy cấp, gọi 119 ngay." },
+  // ---- 병합: 위험도 태그(병원가는길 문진표 시스템) ----
+  riskExact:   { ko:"정확히 일치해야 해요", en:"Must match exactly", zh:"必须完全一致", vi:"Phải khớp chính xác" },
+  riskRequired:{ ko:"비워두면 안 돼요", en:"Don't leave this blank", zh:"不可留空", vi:"Không được để trống" },
+  riskFree:    { ko:"자유롭게 작성", en:"Write freely", zh:"可自由填写", vi:"Viết tự do" },
+  noMedFill:   { ko:'"없음"으로 채우기', en:'Fill as "None"', zh:'填写为"无"', vi:'Điền "Không có"' },
+  filled:      { ko:"적용됨 · 없음", en:"Applied · None", zh:"已应用 · 无", vi:"Đã áp dụng · Không" },
+  scanSampleGov:{ ko:"샘플: 외국인등록 신청서", en:"Sample: Registration form", zh:"示例:外国人登记申请表", vi:"Mẫu: Đơn đăng ký NNN" },
+  scanSampleHosp:{ ko:"샘플: 병원 문진표", en:"Sample: Hospital intake form", zh:"示例:医院问诊表", vi:"Mẫu: Phiếu khai bệnh" },
+  // ---- 병합: 단계별 도구 CTA ----
+  actionScanBtn:{ ko:"📷 촬영으로 번역·작성 도움받기", en:"📷 Get help by scanning", zh:"📷 拍照获取翻译与填写帮助", vi:"📷 Chụp ảnh để được hỗ trợ dịch và điền" },
+  actionInterpretBtn:{ ko:"🎙️ 실시간 통역 열기", en:"🎙️ Open live interpreter", zh:"🎙️ 打开实时口译", vi:"🎙️ Mở phiên dịch trực tiếp" },
+  // ---- 병합: 전체 절차 보기 토글 ----
+  // ---- 병합: 출입국 — 마감일(D-day) 위젯 (출입국 도우미에서 이식) ----
+  deadlineLabel:{ ko:"입국일", en:"Entry date", zh:"入境日期", vi:"Ngày nhập cảnh" },
+  deadlineCheck:{ ko:"기한 확인", en:"Deadline", zh:"截止日期确认", vi:"Kiểm tra hạn" },
+  deadlineNeedDate:{ ko:"날짜를 입력해주세요", en:"Please enter a date", zh:"请输入日期", vi:"Vui lòng nhập ngày" },
+  deadlineDesc:{ ko:"입국일로부터 90일 이내에 외국인등록이 필요해요.", en:"Registration is required within 90 days of entry.", zh:"须在入境后90日内完成外国人登记。", vi:"Cần đăng ký trong vòng 90 ngày kể từ ngày nhập cảnh." },
+  deadlineOverdue:{ ko:"등록 기한이 지났어요", en:"The deadline has passed", zh:"登记期限已过", vi:"Đã quá hạn đăng ký" },
+  deadlineOverdueSub:{ ko:"가능한 빨리 관할 출입국·외국인청이나 1345로 문의하세요.", en:"Contact your local immigration office or call 1345 as soon as possible.", zh:"请尽快联系管辖出入境·外国人厅或拨打1345咨询。", vi:"Hãy liên hệ ngay Cục Xuất nhập cảnh phụ trách hoặc gọi 1345." },
+  // ---- 병합: 출입국 — 체류자격/현재상황 칩, 준비물 체크리스트 ----
+  regVisaLabel:{ ko:"체류자격", en:"Visa status", zh:"居留资格", vi:"Tư cách lưu trú" },
+  regStateLabel:{ ko:"현재 상황", en:"Your situation", zh:"当前状况", vi:"Tình trạng hiện tại" },
+  checklistLabel:{ ko:"준비물 체크리스트", en:"Checklist", zh:"材料清单", vi:"Danh sách chuẩn bị" },
+  // ---- 병합: 전체 절차 진입 화면 ----
+  introTitle:{ ko:"전체 절차", en:"Full process", zh:"完整流程", vi:"Toàn bộ quy trình" },
+  introSub:{ ko:"단계를 눌러 바로 시작하거나, 아래 버튼으로 처음부터 시작하세요.", en:"Tap a step to jump in, or start from the beginning below.", zh:"点击某一步骤即可开始,或用下方按钮从头开始。", vi:"Chạm vào một bước để bắt đầu, hoặc dùng nút bên dưới để bắt đầu từ đầu." },
+  startBtn:{ ko:"시작하기", en:"Get started", zh:"开始", vi:"Bắt đầu" },
+  backToIntro:{ ko:"전체 절차 보기", en:"See the full process", zh:"查看完整流程", vi:"Xem toàn bộ quy trình" },
+  hikoreaLink:{ ko:"하이코리아에서 방문 예약하기", en:"Book a visit on HiKorea", zh:"在HiKorea预约到访", vi:"Đặt lịch hẹn trên HiKorea" },
+  jurisdictionLink:{ ko:"관할 기관 찾기", en:"Find your jurisdiction office", zh:"查找管辖机构", vi:"Tìm cơ quan phụ trách" },
+  // ---- 병합: 체류기간연장 — 상황 단계(만료일 기준 D-day) ----
+  extDeadlineLabel:{ ko:"체류기간 만료일", en:"Stay expiry date", zh:"居留期限届满日", vi:"Ngày hết hạn lưu trú" },
+  extDeadlineDesc:{ ko:"만료일 4개월 전부터 만료일 전까지 연장 신청을 할 수 있어요.", en:"You can apply from 4 months before expiry up to the expiry date.", zh:"可在到期前4个月起至到期日之间申请延期。", vi:"Có thể nộp gia hạn từ 4 tháng trước hạn đến trước ngày hết hạn." },
+  extDeadlineOverdue:{ ko:"체류기간이 만료됐어요", en:"Your stay period has expired", zh:"居留期限已届满", vi:"Đã hết hạn lưu trú" },
+  extDeadlineOverdueSub:{ ko:"만료 후에는 불법체류가 될 수 있어요. 가능한 빨리 관할 출입국·외국인청이나 1345로 문의하세요.", en:"Overstaying after expiry can be a violation. Contact your local immigration office or call 1345 as soon as possible.", zh:"届满后逾期停留可能违法。请尽快联系管辖出入境·外国人厅或拨打1345咨询。", vi:"Sau khi hết hạn có thể bị coi là cư trú bất hợp pháp. Hãy liên hệ ngay Cục Xuất nhập cảnh phụ trách hoặc gọi 1345." },
+  extChecklistItems:{ ko:"연장 준비물", en:"What to prepare", zh:"延期材料", vi:"Chuẩn bị gia hạn" },
+  // ---- 병합: 지도 검색/길찾기 ----
+  naverMapBtn:{ ko:"네이버 지도", en:"Naver Map", zh:"Naver 地图", vi:"Naver Map" },
+  kakaoMapBtn:{ ko:"카카오맵", en:"Kakao Map", zh:"Kakao 地图", vi:"Kakao Map" },
+  nearbyHospitalLabel:{ ko:"내 주변 병원 찾기", en:"Find hospitals near me", zh:"查找附近医院", vi:"Tìm bệnh viện gần tôi" },
+  nearbyImmigLabel:{ ko:"지도에서 출입국·외국인청 찾기", en:"Find the immigration office on the map", zh:"在地图上查找出入境·外国人厅", vi:"Tìm Cục Xuất nhập cảnh trên bản đồ" },
+  centerFinderIntro:{ ko:"지역을 선택하면 관할 행정복지센터를 안내해 드려요.", en:"Pick your area to see your community center.", zh:"选择地区即可查看管辖行政福祉中心。", vi:"Chọn khu vực để xem trung tâm hành chính phụ trách." }
 };
 
 /* =========================================================================
@@ -505,30 +779,34 @@ const INSTITUTIONS = [
     situations:[
       {
         id:"arc",
-        title:{ ko:"외국인등록증 발급", en:"Alien Registration Card", zh:"办理外国人登录证", vi:"Cấp thẻ đăng ký người nước ngoài" },
+        title:{ ko:"외국인등록", en:"Foreigner Registration", zh:"外国人登记", vi:"Đăng ký người nước ngoài" },
         doc:{ ko:"외국인등록증", en:"Alien Registration Card", zh:"外国人登录证", vi:"Thẻ đăng ký người nước ngoài" },
         steps:[
-          { title:{ko:"준비물 확인",en:"Check what to bring",zh:"确认所需材料",vi:"Kiểm tra giấy tờ"},
-            detail:{ko:"여권, 여권용 사진 1매(3.5×4.5cm), 통합신청서, 체류자격 증빙서류를 준비하세요.",en:"Bring your passport, one photo (3.5×4.5cm), the application form, and documents proving your visa status.",zh:"请准备护照、一张证件照(3.5×4.5cm)、综合申请表及居留资格证明材料。",vi:"Chuẩn bị hộ chiếu, 1 ảnh (3.5×4.5cm), đơn đăng ký và giấy tờ chứng minh tư cách lưu trú."},
-            meta:{need:{ko:"여권·사진·신청서",en:"Passport, photo, form",zh:"护照·照片·申请表",vi:"Hộ chiếu, ảnh, đơn"}} },
-          { title:{ko:"방문 예약",en:"Book a visit",zh:"预约到访",vi:"Đặt lịch hẹn"},
-            detail:{ko:"하이코리아(hikorea.go.kr)에서 방문을 예약하세요. 예약 없이 가면 오래 기다릴 수 있어요.",en:"Reserve a visit on HiKorea (hikorea.go.kr). Without a reservation the wait can be long.",zh:"请在 HiKorea(hikorea.go.kr)预约。未预约可能等待很久。",vi:"Đặt lịch trên HiKorea (hikorea.go.kr). Không đặt trước có thể phải chờ lâu."},
-            meta:{method:{ko:"온라인 예약",en:"Online booking",zh:"在线预约",vi:"Đặt online"}} },
-          { title:{ko:"접수",en:"Submit at the counter",zh:"窗口受理",vi:"Nộp tại quầy"},
-            detail:{ko:"예약 시간에 방문해 번호표를 뽑고, 통합신청서를 제출하세요.",en:"Come at your booked time, take a number, and hand in your form.",zh:"按预约时间到访,取号并提交申请表。",vi:"Đến đúng giờ hẹn, lấy số và nộp đơn."},
-            meta:{} },
-          { title:{ko:"수수료 결제",en:"Pay the fee",zh:"缴纳费用",vi:"Nộp lệ phí"},
-            detail:{ko:"등록 수수료 30,000원을 결제하세요. 카드 또는 현금/수입인지(기관마다 다름).",en:"Pay the 30,000 won fee. Card or cash/revenue stamp (varies by office).",zh:"缴纳登记费 30,000 韩元。刷卡或现金/印花(视机构而定)。",vi:"Nộp lệ phí 30,000 won. Thẻ hoặc tiền mặt/tem thu (tùy cơ quan)."},
-            meta:{cost:{ko:"30,000원",en:"30,000 KRW",zh:"30,000韩元",vi:"30,000 won"},method:{ko:"카드/현금",en:"Card/cash",zh:"刷卡/现金",vi:"Thẻ/tiền mặt"}} },
-          { title:{ko:"접수증 수령",en:"Get your receipt",zh:"领取受理证",vi:"Nhận biên nhận"},
-            detail:{ko:"접수증을 꼭 받아 보관하세요. 나중에 카드를 받을 때 필요해요.",en:"Keep the receipt safe — you will need it to collect your card later.",zh:"务必领取并保管受理证,日后领卡时需要。",vi:"Giữ kỹ biên nhận — cần khi lấy thẻ sau này."},
-            meta:{need:{ko:"접수증 보관",en:"Keep receipt",zh:"保管受理证",vi:"Giữ biên nhận"}} },
-          { title:{ko:"처리 대기",en:"Wait for processing",zh:"等待处理",vi:"Chờ xử lý"},
-            detail:{ko:"카드 제작에 보통 2~3주가 걸려요.",en:"The card usually takes about 2–3 weeks to be made.",zh:"制卡通常需要约 2~3 周。",vi:"Làm thẻ thường mất khoảng 2–3 tuần."},
-            meta:{time:{ko:"약 2~3주",en:"~2–3 weeks",zh:"约2~3周",vi:"~2–3 tuần"}} },
-          { title:{ko:"등록증 수령",en:"Collect the card",zh:"领取登录证",vi:"Nhận thẻ"},
-            detail:{ko:"등록한 주소로 우편 수령하거나 기관을 방문해 받으세요.",en:"Receive it by post at your address, or pick it up in person.",zh:"可邮寄到登记地址,或亲自到机构领取。",vi:"Nhận qua bưu điện tại địa chỉ đã đăng ký, hoặc đến nhận trực tiếp."},
-            meta:{method:{ko:"우편/방문",en:"Post/pickup",zh:"邮寄/自取",vi:"Bưu điện/tự nhận"},need:{ko:"접수증·여권",en:"Receipt+passport",zh:"受理证·护照",vi:"Biên nhận+hộ chiếu"}} }
+          { tab:{ko:"상황",en:"Status",zh:"状况",vi:"Tình trạng"},
+            title:{ko:"체류 상황 확인",en:"Check your situation",zh:"确认居留状况",vi:"Kiểm tra tình trạng lưu trú"},
+            detail:{ko:"90일을 초과해 체류하려면 입국일로부터 90일 이내에 등록해야 해요. 아래에 입국일을 넣으면 남은 기한을 계산해 드려요.",en:"If you'll stay over 90 days, you must register within 90 days of entry. Enter your entry date below to see how much time is left.",zh:"若停留超过90日,须在入境后90日内完成登记。请在下方输入入境日期以计算剩余期限。",vi:"Nếu lưu trú quá 90 ngày, bạn phải đăng ký trong vòng 90 ngày kể từ ngày nhập cảnh. Nhập ngày nhập cảnh bên dưới để xem thời hạn còn lại."},
+            meta:{},
+            interactive:"regSituation" },
+          { tab:{ko:"준비",en:"Prepare",zh:"准备",vi:"Chuẩn bị"},
+            title:{ko:"준비물 챙기고 예약하기",en:"Gather documents & book a visit",zh:"准备材料并预约",vi:"Chuẩn bị giấy tờ & đặt lịch"},
+            detail:{ko:"여권, 통합신청서, 체류지 입증서류(임대차계약서 등), 여권용 사진 1매를 준비하세요. 방문예약이 필요한 업무라 하이코리아(hikorea.go.kr)에서 먼저 예약하는 걸 권장해요. 예약 없이 가면 오래 기다릴 수 있어요.",en:"Prepare your passport, the application form, proof of address (e.g. lease), and one photo. This task needs a visit reservation — book it first on HiKorea (hikorea.go.kr), or the wait can be long.",zh:"请准备护照、综合申请表、居留地证明(如租赁合同)及一张证件照。该业务需要预约到访,建议先在 HiKorea(hikorea.go.kr)预约,未预约可能等待很久。",vi:"Chuẩn bị hộ chiếu, đơn đăng ký, giấy chứng minh nơi cư trú (vd. hợp đồng thuê) và 1 ảnh. Việc này cần đặt lịch hẹn — nên đặt trước trên HiKorea (hikorea.go.kr), nếu không có thể phải chờ lâu."},
+            meta:{method:{ko:"하이코리아 예약",en:"Book on HiKorea",zh:"HiKorea预约",vi:"Đặt trên HiKorea"}},
+            interactive:"checklist",
+            links:["hikorea","jurisdiction"] },
+          { tab:{ko:"작성",en:"Fill out",zh:"填写",vi:"Điền đơn"},
+            title:{ko:"통합신청서 작성",en:"Fill out the application form",zh:"填写综合申请表",vi:"Điền đơn đăng ký"},
+            detail:{ko:"작성한(또는 빈) 통합신청서를 촬영하면 AI가 항목을 인식해서 번역과 작성 안내를 보여줘요. 체류자격·체류지 주소·서명처럼 실수하면 안 되는 항목은 특히 꼼꼼히 확인하세요.",en:"Scan the form (filled in or blank) and AI will recognize each field with translation and filling guidance. Double-check fields that can't be wrong, like visa status, address, and signature.",zh:"拍摄申请表(已填或空白皆可),AI 会识别各项目并给出翻译与填写指引。体留资格、居留地址、签名等易错项目请务必仔细核对。",vi:"Chụp đơn (đã điền hoặc còn trống), AI sẽ nhận diện từng mục kèm bản dịch và hướng dẫn điền. Kiểm tra kỹ các mục không được sai như tư cách lưu trú, địa chỉ, chữ ký."},
+            meta:{},
+            action:"scan" },
+          { tab:{ko:"방문",en:"Visit",zh:"到访",vi:"Đến nơi"},
+            title:{ko:"관서 방문 · 접수",en:"Visit the office & submit",zh:"到访机构并受理",vi:"Đến cơ quan & nộp hồ sơ"},
+            detail:{ko:"① 접수 — 예약 시간에 도착해 예약 정보를 확인하고 번호표를 받으세요. ② 창구 — 번호가 불리면 준비한 서류를 순서대로 제출하고 등록 수수료 30,000원을 결제하세요. 직원과의 대화가 막히면 실시간 통역을 사용하세요.",en:"① Check-in — arrive at your booked time, confirm your reservation, and take a number. ② Counter — when called, submit your documents in order and pay the 30,000 won fee. Use the live interpreter if the conversation gets stuck.",zh:"① 报到 — 按预约时间到达,确认预约信息并取号。② 窗口 — 叫号后按顺序提交材料并缴纳登记费 30,000 韩元。与职员沟通有困难时请使用实时口译。",vi:"① Tiếp nhận — đến đúng giờ hẹn, xác nhận thông tin đặt lịch và lấy số. ② Quầy — khi được gọi, nộp hồ sơ theo thứ tự và nộp lệ phí 30.000 won. Nếu khó trao đổi với nhân viên, hãy dùng phiên dịch trực tiếp."},
+            meta:{cost:{ko:"30,000원",en:"30,000 KRW",zh:"30,000韩元",vi:"30,000 won"},method:{ko:"카드/현금",en:"Card/cash",zh:"刷卡/现金",vi:"Thẻ/tiền mặt"}},
+            action:"interpret" },
+          { tab:{ko:"완료",en:"Done",zh:"完成",vi:"Hoàn tất"},
+            title:{ko:"접수증 수령 · 처리 대기",en:"Get your receipt & wait",zh:"领取受理证并等待处理",vi:"Nhận biên nhận & chờ xử lý"},
+            detail:{ko:"접수증을 꼭 받아 보관하세요 — 나중에 카드를 받을 때 필요해요. 카드 제작은 보통 2~3주 걸리고, 등록한 주소로 우편 수령하거나 기관을 방문해 받을 수 있어요.",en:"Keep the receipt safe — you'll need it to collect your card later. The card usually takes about 2–3 weeks; you can receive it by post at your registered address or pick it up in person.",zh:"务必领取并保管受理证,日后领卡时需要。制卡通常需2~3周,可邮寄到登记地址或亲自到机构领取。",vi:"Giữ kỹ biên nhận — cần khi lấy thẻ sau này. Làm thẻ thường mất khoảng 2–3 tuần, có thể nhận qua bưu điện tại địa chỉ đã đăng ký hoặc đến nhận trực tiếp."},
+            meta:{time:{ko:"약 2~3주",en:"~2–3 weeks",zh:"约2~3周",vi:"~2–3 tuần"},method:{ko:"우편/방문",en:"Post/pickup",zh:"邮寄/自取",vi:"Bưu điện/tự nhận"}} }
         ]
       },
       {
@@ -536,20 +814,34 @@ const INSTITUTIONS = [
         title:{ ko:"체류기간 연장", en:"Extend period of stay", zh:"延长居留期限", vi:"Gia hạn lưu trú" },
         doc:{ ko:"체류기간 연장 신청", en:"Stay extension", zh:"居留延期申请", vi:"Gia hạn lưu trú" },
         steps:[
-          { title:{ko:"준비물 확인",en:"Check what to bring",zh:"确认材料",vi:"Kiểm tra giấy tờ"},
-            detail:{ko:"여권, 외국인등록증, 신청서, 체류자격별 증빙(재직·재학 등)을 준비하세요.",en:"Bring passport, ARC, application form, and status documents (employment/enrollment).",zh:"准备护照、外国人登录证、申请表及资格证明(在职/在学等)。",vi:"Chuẩn bị hộ chiếu, thẻ ĐKNNN, đơn và giấy chứng minh (việc làm/học tập)."},
-            meta:{need:{ko:"여권·등록증·증빙",en:"Passport, ARC, proof",zh:"护照·登录证·证明",vi:"Hộ chiếu, thẻ, chứng minh"}} },
-          { title:{ko:"만료 전 신청",en:"Apply before it expires",zh:"到期前申请",vi:"Nộp trước khi hết hạn"},
-            detail:{ko:"체류기간 만료 4개월 전부터 만료일 전까지 신청할 수 있어요.",en:"You can apply from 4 months before expiry up to the expiry date.",zh:"可在到期前 4 个月起至到期日之间申请。",vi:"Có thể nộp từ 4 tháng trước hạn cho đến ngày hết hạn."},
-            meta:{time:{ko:"만료 전",en:"Before expiry",zh:"到期前",vi:"Trước hạn"}} },
-          { title:{ko:"하이코리아 예약·접수",en:"Book & submit on HiKorea",zh:"HiKorea预约受理",vi:"Đặt & nộp trên HiKorea"},
+          { tab:{ko:"상황",en:"Status",zh:"状况",vi:"Tình trạng"},
+            title:{ko:"체류 상황 확인",en:"Check your situation",zh:"确认居留状况",vi:"Kiểm tra tình trạng lưu trú"},
+            detail:{ko:"체류기간 만료 4개월 전부터 만료일 전까지 연장 신청을 할 수 있어요. 아래에 만료일을 입력하면 남은 기한을 계산해 드려요.",en:"You can apply from 4 months before expiry up to the expiry date. Enter your expiry date below to see how much time is left.",zh:"可在到期前4个月起至到期日之间申请延期。请在下方输入到期日以计算剩余期限。",vi:"Có thể nộp gia hạn từ 4 tháng trước hạn đến trước ngày hết hạn. Nhập ngày hết hạn bên dưới để xem thời gian còn lại."},
+            meta:{},
+            interactive:"extSituation" },
+          { tab:{ko:"준비",en:"Prepare",zh:"准备",vi:"Chuẩn bị"},
+            title:{ko:"준비물 챙기기",en:"Gather your documents",zh:"准备材料",vi:"Chuẩn bị giấy tờ"},
+            detail:{ko:"여권, 외국인등록증, 신청서, 체류자격별 증빙(재직·재학 등)을 준비하세요. 방문 없이 하이코리아(hikorea.go.kr)에서 온라인으로도 신청할 수 있어요.",en:"Bring your passport, ARC, application form, and status documents (employment/enrollment). You can also apply online on HiKorea (hikorea.go.kr) without visiting.",zh:"请准备护照、外国人登录证、申请表及资格证明(在职/在学等)。也可无需到访,直接在 HiKorea(hikorea.go.kr)在线申请。",vi:"Chuẩn bị hộ chiếu, thẻ ĐKNNN, đơn đăng ký và giấy chứng minh theo tư cách (việc làm/học tập). Cũng có thể nộp online trên HiKorea (hikorea.go.kr) mà không cần đến trực tiếp."},
+            meta:{need:{ko:"여권·등록증·증빙",en:"Passport, ARC, proof",zh:"护照·登录证·证明",vi:"Hộ chiếu, thẻ, chứng minh"}},
+            interactive:"checklist",
+            links:["hikorea","jurisdiction"] },
+          { tab:{ko:"작성",en:"Fill out",zh:"填写",vi:"Điền đơn"},
+            title:{ko:"통합신청서 작성",en:"Fill out the application form",zh:"填写综合申请表",vi:"Điền đơn đăng ký"},
+            detail:{ko:"작성한(또는 빈) 통합신청서를 촬영하면 AI가 항목을 인식해서 번역과 작성 안내를 보여줘요. 체류자격·연장 사유·서명처럼 실수하면 안 되는 항목은 특히 꼼꼼히 확인하세요.",en:"Scan the form (filled in or blank) and AI will recognize each field with translation and filling guidance. Double-check fields that can't be wrong, like visa status, reason for extension, and signature.",zh:"拍摄申请表(已填或空白皆可),AI 会识别各项目并给出翻译与填写指引。体留资格、延期事由、签名等易错项目请务必仔细核对。",vi:"Chụp đơn (đã điền hoặc còn trống), AI sẽ nhận diện từng mục kèm bản dịch và hướng dẫn điền. Kiểm tra kỹ các mục không được sai như tư cách lưu trú, lý do gia hạn, chữ ký."},
+            meta:{},
+            action:"scan" },
+          { tab:{ko:"접수",en:"Submit",zh:"受理",vi:"Nộp hồ sơ"},
+            title:{ko:"하이코리아 예약·접수",en:"Book & submit on HiKorea",zh:"HiKorea预约受理",vi:"Đặt & nộp trên HiKorea"},
             detail:{ko:"온라인 신청 또는 방문 예약 후 접수하세요.",en:"Apply online, or book a visit and submit in person.",zh:"可在线申请,或预约后到访受理。",vi:"Nộp online, hoặc đặt lịch và nộp trực tiếp."},
-            meta:{method:{ko:"온라인/방문",en:"Online/visit",zh:"在线/到访",vi:"Online/trực tiếp"}} },
-          { title:{ko:"수수료 결제",en:"Pay the fee",zh:"缴纳费用",vi:"Nộp lệ phí"},
+            meta:{method:{ko:"온라인/방문",en:"Online/visit",zh:"在线/到访",vi:"Online/trực tiếp"}},
+            links:["hikorea","jurisdiction"] },
+          { tab:{ko:"수수료",en:"Fee",zh:"费用",vi:"Lệ phí"},
+            title:{ko:"수수료 결제",en:"Pay the fee",zh:"缴纳费用",vi:"Nộp lệ phí"},
             detail:{ko:"연장 수수료 60,000원을 결제하세요(체류자격에 따라 다를 수 있음).",en:"Pay the 60,000 won extension fee (may vary by status).",zh:"缴纳延期费 60,000 韩元(视资格而异)。",vi:"Nộp lệ phí gia hạn 60,000 won (có thể khác theo tư cách)."},
             meta:{cost:{ko:"60,000원",en:"60,000 KRW",zh:"60,000韩元",vi:"60,000 won"}} },
-          { title:{ko:"결과 확인",en:"Check the result",zh:"确认结果",vi:"Xác nhận kết quả"},
-            detail:{ko:"허가되면 등록증에 연장 정보가 반영돼요. 결과는 문자·하이코리아로 확인하세요.",en:"Once approved, the new period is recorded on your ARC. Check by SMS or on HiKorea.",zh:"批准后延期信息会更新到登录证。可通过短信或 HiKorea 查询。",vi:"Khi được duyệt, thời hạn mới ghi trên thẻ. Kiểm tra qua SMS hoặc HiKorea."},
+          { tab:{ko:"확인",en:"Confirm",zh:"确认",vi:"Xác nhận"},
+            title:{ko:"결과 확인",en:"Check the result",zh:"确认结果",vi:"Xác nhận kết quả"},
+            detail:{ko:"허가되면 등록증에 연장 정보가 반영돼요. 결과는 문자·하이코리아로 확인하세요.",en:"Once approved, the new period is recorded on your ARC. Check by SMS or on HiKorea.",zh:"批准后延期信息会更新到登录证。可通过短信或 HiKorea 查询。",vi:"Khi được duyệt,thời hạn mới ghi trên thẻ. Kiểm tra qua SMS hoặc HiKorea."},
             meta:{} }
         ]
       }
@@ -570,11 +862,13 @@ const INSTITUTIONS = [
             detail:{ko:"외국인등록증(또는 여권)과 임대차계약서를 챙기세요.",en:"Bring your ARC (or passport) and your rental contract.",zh:"请带外国人登录证(或护照)和租赁合同。",vi:"Mang thẻ ĐKNNN (hoặc hộ chiếu) và hợp đồng thuê nhà."},
             meta:{need:{ko:"등록증·임대차계약서",en:"ARC + lease",zh:"登录证·租赁合同",vi:"Thẻ + hợp đồng thuê"}} },
           { title:{ko:"14일 이내 신고",en:"Report within 14 days",zh:"14日内申报",vi:"Khai trong 14 ngày"},
-            detail:{ko:"이사한 날부터 14일 이내에 새 주소지 관할 행정복지센터에서 신고하세요.",en:"Report within 14 days of moving, at the community center for your new address.",zh:"搬家后 14 日内,到新地址所辖行政福祉中心申报。",vi:"Khai trong 14 ngày kể từ khi chuyển, tại trung tâm quản lý địa chỉ mới."},
-            meta:{time:{ko:"14일 이내",en:"Within 14 days",zh:"14日内",vi:"Trong 14 ngày"}} },
+            detail:{ko:"이사한 날부터 14일 이내에 새 주소지 관할 행정복지센터에서 신고하세요. 아래에서 지역을 선택하면 관할 센터를 안내해 드려요.",en:"Report within 14 days of moving, at the community center for your new address. Pick your area below to see your center.",zh:"搬家后 14 日内,到新地址所辖行政福祉中心申报。请在下方选择地区以查看管辖中心。",vi:"Khai trong 14 ngày kể từ khi chuyển, tại trung tâm quản lý địa chỉ mới. Chọn khu vực bên dưới để xem trung tâm phụ trách."},
+            meta:{time:{ko:"14일 이내",en:"Within 14 days",zh:"14日内",vi:"Trong 14 ngày"}},
+            interactive:"centerFinder" },
           { title:{ko:"전입신고서 작성",en:"Fill in the form",zh:"填写申报表",vi:"Điền tờ khai"},
-            detail:{ko:"새 주소와 세대 정보를 적어요. 정부24(gov.kr) 온라인 신고도 가능해요.",en:"Enter your new address and household info. You can also report online via Gov24 (gov.kr).",zh:"填写新地址和家庭信息。也可通过 Gov24(gov.kr)在线申报。",vi:"Điền địa chỉ mới và thông tin hộ. Cũng có thể khai online qua Gov24 (gov.kr)."},
-            meta:{method:{ko:"방문/정부24",en:"Visit/Gov24",zh:"到访/Gov24",vi:"Trực tiếp/Gov24"}} },
+            detail:{ko:"새 주소와 세대 정보를 적어요. 작성한(또는 빈) 신고서를 촬영하면 AI가 항목을 인식해서 번역과 작성 안내를 보여줘요. 정부24(gov.kr) 온라인 신고도 가능해요.",en:"Enter your new address and household info. Scan the form (filled in or blank) and AI will recognize each field with translation and filling guidance. You can also report online via Gov24 (gov.kr).",zh:"填写新地址和家庭信息。拍摄申报表(已填或空白皆可),AI 会识别各项目并给出翻译与填写指引。也可通过 Gov24(gov.kr)在线申报。",vi:"Điền địa chỉ mới và thông tin hộ. Chụp tờ khai (đã điền hoặc còn trống), AI sẽ nhận diện từng mục kèm bản dịch và hướng dẫn điền. Cũng có thể khai online qua Gov24 (gov.kr)."},
+            meta:{method:{ko:"방문/정부24",en:"Visit/Gov24",zh:"到访/Gov24",vi:"Trực tiếp/Gov24"}},
+            action:"scan" },
           { title:{ko:"접수 (무료·즉시)",en:"Submit (free, instant)",zh:"受理(免费·即时)",vi:"Nộp (miễn phí, ngay)"},
             detail:{ko:"수수료 없이 즉시 처리돼요.",en:"It is free and processed on the spot.",zh:"免费并当场处理。",vi:"Miễn phí và xử lý ngay tại chỗ."},
             meta:{cost:{ko:"무료",en:"Free",zh:"免费",vi:"Miễn phí"},time:{ko:"즉시",en:"Instant",zh:"即时",vi:"Ngay"}} },
@@ -616,26 +910,31 @@ const INSTITUTIONS = [
         doc:{ ko:"진료 접수", en:"Hospital visit", zh:"就诊挂号", vi:"Khám bệnh" },
         steps:[
           { title:{ko:"준비물 확인",en:"Check what to bring",zh:"确认材料",vi:"Kiểm tra giấy tờ"},
-            detail:{ko:"신분증(외국인등록증/여권)과 건강보험 정보(있으면)를 준비하세요.",en:"Bring your ID (ARC/passport) and health insurance info (if you have it).",zh:"准备身份证件(登录证/护照)和医保信息(如有)。",vi:"Mang giấy tùy thân (thẻ/hộ chiếu) và thông tin bảo hiểm y tế (nếu có)."},
-            meta:{need:{ko:"신분증·보험정보",en:"ID + insurance",zh:"证件·医保",vi:"Giấy tờ + bảo hiểm"}} },
+            detail:{ko:"신분증(외국인등록증/여권)과 건강보험 정보(있으면)를 준비하세요. 아직 갈 병원을 못 정했다면 지도에서 가까운 병원을 찾아보세요.",en:"Bring your ID (ARC/passport) and health insurance info (if you have it). If you haven't picked a hospital yet, find one nearby on the map.",zh:"准备身份证件(登录证/护照)和医保信息(如有)。若还没决定医院,可在地图上查找附近医院。",vi:"Mang giấy tùy thân (thẻ/hộ chiếu) và thông tin bảo hiểm y tế (nếu có). Nếu chưa chọn bệnh viện, hãy tìm bệnh viện gần đó trên bản đồ."},
+            meta:{need:{ko:"신분증·보험정보",en:"ID + insurance",zh:"证件·医保",vi:"Giấy tờ + bảo hiểm"}},
+            mapSearch:{label:T.nearbyHospitalLabel, query:"병원"} },
           { title:{ko:"접수 창구",en:"Registration desk",zh:"挂号窗口",vi:"Quầy đăng ký"},
             detail:{ko:"접수 창구에서 초진/재진을 말하고 진료과를 선택하세요.",en:"At the desk, say if it is your first visit, and choose the department.",zh:"在挂号窗口说明初诊/复诊,并选择就诊科室。",vi:"Tại quầy, cho biết khám lần đầu/tái khám và chọn khoa."},
             meta:{} },
           { title:{ko:"문진표 작성",en:"Fill the intake form",zh:"填写问诊表",vi:"Điền phiếu khai"},
             detail:{ko:"증상, 시작 시기, 병력, 알레르기, 복용 중인 약을 적어요. 촬영 기능으로 번역 도움을 받으세요.",en:"Write your symptoms, when they started, history, allergies and medicines. Use Scan for help translating.",zh:"填写症状、起始时间、病史、过敏及在服药物。可用拍照功能协助翻译。",vi:"Ghi triệu chứng, thời điểm bắt đầu, tiền sử, dị ứng và thuốc đang dùng. Dùng Chụp để dịch."},
-            meta:{need:{ko:"증상·병력·알레르기",en:"Symptoms, history",zh:"症状·病史",vi:"Triệu chứng, tiền sử"}} },
+            meta:{need:{ko:"증상·병력·알레르기",en:"Symptoms, history",zh:"症状·病史",vi:"Triệu chứng, tiền sử"}},
+            action:"scan" },
           { title:{ko:"진료 대기",en:"Wait to be called",zh:"候诊",vi:"Chờ gọi"},
             detail:{ko:"대기실에서 이름이 호명될 때까지 기다리세요.",en:"Wait in the waiting area until your name is called.",zh:"在候诊区等待叫号。",vi:"Chờ ở khu chờ đến khi được gọi tên."},
             meta:{} },
           { title:{ko:"진료",en:"See the doctor",zh:"就诊",vi:"Khám bệnh"},
             detail:{ko:"의사에게 증상을 설명하세요. 통역 기능을 함께 사용하면 편해요.",en:"Explain your symptoms to the doctor. Use the Interpret feature to help.",zh:"向医生说明症状,可配合口译功能。",vi:"Trình bày triệu chứng với bác sĩ. Dùng Phiên dịch để hỗ trợ."},
-            meta:{} },
+            meta:{},
+            action:"interpret" },
           { title:{ko:"수납",en:"Pay at the counter",zh:"缴费",vi:"Thanh toán"},
-            detail:{ko:"진료·검사 내용에 따라 진료비를 결제하세요. 카드/현금 가능.",en:"Pay based on the care and tests. Card or cash accepted.",zh:"根据就诊和检查内容缴费,可刷卡或现金。",vi:"Thanh toán theo dịch vụ và xét nghiệm. Nhận thẻ/tiền mặt."},
-            meta:{cost:{ko:"진료·검사에 따라",en:"Varies",zh:"视项目而定",vi:"Tùy dịch vụ"},method:{ko:"카드/현금",en:"Card/cash",zh:"刷卡/现金",vi:"Thẻ/tiền mặt"}} },
+            detail:{ko:"진료·검사 내용에 따라 진료비를 결제하세요. 카드/현금 가능. 건강보험 유무에 따라 본인부담 비율이 달라요 — 아래에서 확인해 보세요.",en:"Pay based on the care and tests. Card or cash accepted. Your share depends on whether you have health insurance — check below.",zh:"根据就诊和检查内容缴费,可刷卡或现金。有无医保会影响自付比例,请见下方说明。",vi:"Thanh toán theo dịch vụ và xét nghiệm. Nhận thẻ/tiền mặt. Mức tự trả khác nhau tùy có bảo hiểm hay không — xem bên dưới."},
+            meta:{cost:{ko:"진료·검사에 따라",en:"Varies",zh:"视项目而定",vi:"Tùy dịch vụ"},method:{ko:"카드/현금",en:"Card/cash",zh:"刷卡/现金",vi:"Thẻ/tiền mặt"}},
+            interactive:"insurance" },
           { title:{ko:"처방전 → 약국",en:"Prescription → pharmacy",zh:"处方 → 药房",vi:"Đơn thuốc → nhà thuốc"},
-            detail:{ko:"처방전을 받아 가까운 약국에서 약을 받으세요.",en:"Take your prescription to a nearby pharmacy to collect your medicine.",zh:"凭处方到附近药房取药。",vi:"Mang đơn đến nhà thuốc gần đó để lấy thuốc."},
-            meta:{need:{ko:"처방전",en:"Prescription",zh:"处方",vi:"Đơn thuốc"}} }
+            detail:{ko:"처방전을 받아 가까운 약국에서 약을 받으세요. 사용기한이 있으니 아래 안내를 확인하세요.",en:"Take your prescription to a nearby pharmacy to collect your medicine. It has a use-by deadline — check below.",zh:"凭处方到附近药房取药。处方有使用期限,请见下方说明。",vi:"Mang đơn đến nhà thuốc gần đó để lấy thuốc. Đơn có hạn sử dụng — xem bên dưới."},
+            meta:{need:{ko:"처방전",en:"Prescription",zh:"处方",vi:"Đơn thuốc"}},
+            interactive:"rx" }
         ]
       },
       {
@@ -651,10 +950,11 @@ const INSTITUTIONS = [
             meta:{need:{ko:"신분증",en:"ID",zh:"证件",vi:"Giấy tờ"}} },
           { title:{ko:"진료·검사",en:"Care & tests",zh:"诊治与检查",vi:"Khám & xét nghiệm"},
             detail:{ko:"증상을 설명하고 필요한 검사를 받아요. 통역 기능을 사용하세요.",en:"Explain symptoms and get needed tests. Use the Interpret feature.",zh:"说明症状并接受必要检查,可用口译功能。",vi:"Trình bày triệu chứng và làm xét nghiệm. Dùng Phiên dịch."},
-            meta:{} },
+            meta:{},
+            action:"interpret" },
           { title:{ko:"수납",en:"Payment",zh:"缴费",vi:"Thanh toán"},
-            detail:{ko:"응급실 비용은 일반 진료보다 높을 수 있어요.",en:"ER costs can be higher than regular visits.",zh:"急诊费用可能高于普通就诊。",vi:"Chi phí cấp cứu có thể cao hơn khám thường."},
-            meta:{cost:{ko:"일반보다 높음",en:"Higher",zh:"较高",vi:"Cao hơn"}} }
+            detail:{ko:"응급실 비용은 일반 진료보다 높을 수 있어요. 경증인데 큰 응급실로 가면 본인부담이 90%까지 올라가니, 야간엔 달빛어린이병원, 다음날 아침엔 동네 의원도 함께 고려하세요. 위급하면 지체 없이 119예요.",en:"ER costs can be higher than regular visits. For mild symptoms, a large ER can raise your share to 90% — at night consider a Dalbit Children's Hospital or a local clinic the next morning. If it's truly urgent, call 119 without delay.",zh:"急诊费用可能高于普通就诊。症状较轻却去大医院急诊,自付比例可能升至90%,夜间可考虑月光儿童医院,次日上午可选社区诊所。危急时请立即拨打119。",vi:"Chi phí cấp cứu có thể cao hơn khám thường. Nếu nhẹ mà vào cấp cứu bệnh viện lớn, phần tự trả có thể lên đến 90% — ban đêm hãy cân nhắc bệnh viện nhi Dalbit hoặc phòng khám sáng hôm sau. Nếu thực sự nguy cấp, gọi 119 ngay."},
+            meta:{cost:{ko:"일반보다 높음(최대 90%)",en:"Higher (up to 90%)",zh:"较高(最高90%)",vi:"Cao hơn (đến 90%)"}} }
         ]
       }
     ]
@@ -692,6 +992,37 @@ const DICT = [
   { ko:"화장실이 어디예요?", en:"Where is the restroom?", zh:"洗手间在哪里?", vi:"Nhà vệ sinh ở đâu?" },
   { ko:"도와주세요", en:"Please help me", zh:"请帮帮我", vi:"Xin hãy giúp tôi" },
   { ko:"여권을 가져왔어요", en:"I brought my passport", zh:"我带了护照", vi:"Tôi đã mang hộ chiếu" }
+];
+
+// ---- 병합: 출입국 — 체류자격/현재상황 칩, 준비물 체크리스트 옵션 (출입국 도우미에서 이식) ----
+const VISA_OPTS = [
+  { id:"E-9", label:{ ko:"E-9", en:"E-9", zh:"E-9", vi:"E-9" } },
+  { id:"H-2", label:{ ko:"H-2", en:"H-2", zh:"H-2", vi:"H-2" } },
+  { id:"F-6", label:{ ko:"F-6", en:"F-6", zh:"F-6", vi:"F-6" } },
+  { id:"D-2", label:{ ko:"D-2", en:"D-2", zh:"D-2", vi:"D-2" } },
+  { id:"unknown", label:{ ko:"잘 모르겠어요", en:"Not sure", zh:"不太清楚", vi:"Không rõ" } }
+];
+const SITUATION_OPTS = [
+  { id:"first", label:{ ko:"처음 입국했어요", en:"First time in Korea", zh:"第一次入境", vi:"Lần đầu nhập cảnh" } },
+  { id:"staying", label:{ ko:"현재 체류 중이에요", en:"Currently staying", zh:"目前正在居留", vi:"Đang lưu trú" } },
+  { id:"jobchange", label:{ ko:"직장을 변경했어요", en:"Changed jobs", zh:"更换了工作", vi:"Đã đổi việc" } },
+  { id:"addresschange", label:{ ko:"주소가 변경됐어요", en:"Address changed", zh:"地址变更了", vi:"Đã đổi địa chỉ" } }
+];
+const REG_CHECKLIST_ITEMS = [
+  { id:"passport", label:{ ko:"여권", en:"Passport", zh:"护照", vi:"Hộ chiếu" } },
+  { id:"form", label:{ ko:"통합신청서", en:"Application form", zh:"综合申请表", vi:"Đơn đăng ký" } },
+  { id:"address", label:{ ko:"체류지 입증서류", en:"Proof of address", zh:"居留地证明", vi:"Giấy chứng minh cư trú" },
+    sub:{ ko:"임대차계약서·체류지 제공 확인서 등", en:"e.g. lease or housing confirmation", zh:"如租赁合同、居住确认书等", vi:"vd. hợp đồng thuê, giấy xác nhận chỗ ở" } },
+  { id:"photo", label:{ ko:"여권용 사진 1매", en:"One passport photo", zh:"一张证件照", vi:"1 ảnh thẻ" } },
+  { id:"fee", label:{ ko:"수수료 (30,000원)", en:"Fee (30,000 KRW)", zh:"费用(30,000韩元)", vi:"Lệ phí (30.000 won)" } }
+];
+// ---- 병합: 체류기간연장 — 준비물 체크리스트 (출입국 도우미 참고) ----
+const EXT_CHECKLIST_ITEMS = [
+  { id:"extCard", label:{ ko:"외국인등록증", en:"Alien Registration Card", zh:"外国人登录证", vi:"Thẻ đăng ký người nước ngoài" } },
+  { id:"extForm", label:{ ko:"통합신청서", en:"Application form", zh:"综合申请表", vi:"Đơn đăng ký" } },
+  { id:"extProof", label:{ ko:"체류자격별 증빙서류", en:"Status proof document", zh:"资格证明材料", vi:"Giấy chứng minh theo tư cách" },
+    sub:{ ko:"재직증명서·재학증명서 등", en:"e.g. employment or enrollment certificate", zh:"如在职证明、在学证明等", vi:"vd. giấy xác nhận việc làm, học tập" } },
+  { id:"extFee", label:{ ko:"수수료 (60,000원)", en:"Fee (60,000 KRW)", zh:"费用(60,000韩元)", vi:"Lệ phí (60.000 won)" } }
 ];
 
 function mockTranslate(text, from, to){
@@ -739,13 +1070,130 @@ const SAMPLE_DOC = {
           vi:"Đây là đơn đăng ký NNN. Điền xong nộp tại quầy và trả lệ phí 30.000 won."} }
 };
 
-function mockOCR(_img, lang){
-  return new Promise(res=> setTimeout(()=> res(SAMPLE_DOC), 1400));
+function mockOCR(_img, lang, docKey){
+  return new Promise(res=> setTimeout(()=> res(docKey==="hospital" ? SAMPLE_DOC_HOSPITAL : SAMPLE_DOC), 1400));
 }
 
 /* =========================================================================
    상태 & 헬퍼
    ========================================================================= */
+// =========================================================================
+//  병합: 전국 행정복지센터 위치 DB + 지도앱 길찾기 (행정복지센터 앱에서 이식)
+// =========================================================================
+const CENTERS = {
+  "서울특별시": {
+    "강남구": [
+      { name:"역삼1동 주민센터", address:"서울특별시 강남구 역삼로7길 16", lat:37.4953, lng:127.0331 },
+      { name:"논현1동 주민센터", address:"서울특별시 강남구 학동로4길 35", lat:37.5115, lng:127.0225 },
+      { name:"삼성1동 주민센터", address:"서울특별시 강남구 영동대로112길 6", lat:37.5142, lng:127.0628 }
+    ],
+    "마포구": [
+      { name:"서교동 주민센터", address:"서울특별시 마포구 동교로15길 5", lat:37.5559, lng:126.9189 },
+      { name:"연남동 주민센터", address:"서울특별시 마포구 성미산로29길 23", lat:37.5647, lng:126.9254 }
+    ],
+    "용산구": [
+      { name:"이태원1동 주민센터", address:"서울특별시 용산구 이태원로22길 19", lat:37.5348, lng:126.9947 },
+      { name:"한남동 주민센터", address:"서울특별시 용산구 대사관로34길 22", lat:37.5332, lng:127.0039 }
+    ]
+  },
+  "경기도": {
+    "수원시": [
+      { name:"인계동 행정복지센터", address:"경기도 수원시 팔달구 인계로108번길 23", lat:37.2631, lng:127.0286 },
+      { name:"행궁동 행정복지센터", address:"경기도 수원시 팔달구 화서문로16번길 19", lat:37.2842, lng:127.0142 }
+    ],
+    "성남시": [
+      { name:"삼평동 행정복지센터", address:"경기도 성남시 분당구 판교역로 249", lat:37.4012, lng:127.1085 },
+      { name:"서현1동 행정복지센터", address:"경기도 성남시 분당구 서현로180번길 27", lat:37.3828, lng:127.1226 }
+    ]
+  },
+  "인천광역시": {
+    "연수구": [
+      { name:"송도1동 행정복지센터", address:"인천광역시 연수구 신송로 118", lat:37.3932, lng:126.6534 },
+      { name:"송도2동 행정복지센터", address:"인천광역시 연수구 신송로 248", lat:37.3895, lng:126.6421 }
+    ]
+  },
+  "부산광역시": {
+    "해운대구": [
+      { name:"우1동 행정복지센터", address:"부산광역시 해운대구 해운대해변로 209번길 26", lat:35.1592, lng:129.1584 }
+    ]
+  }
+};
+
+function openMapNavi(type){
+  const c = state.centerObj; if(!c) return;
+  const encName = encodeURIComponent(c.name);
+  let url = "";
+  if(type === "naver") url = `https://map.naver.com/p/search/${encodeURIComponent(c.address)}`;
+  else if(type === "kakao") url = `https://map.kakao.com/link/to/${encName},${c.lat},${c.lng}`;
+  window.open(url, "_blank");
+}
+// ---- 병합: 키워드 지도 검색(정확한 주소가 없을 때 — 병원/출입국처럼 특정 기관이 정해져 있지 않은 경우) ----
+function mapSearchWidget(cfg){
+  const q = encodeURIComponent(cfg.query);
+  return `
+    <div class="map-search">
+      <div class="map-search-label">${esc(L(cfg.label))}</div>
+      <div class="map-links">
+        <a href="https://map.naver.com/p/search/${q}" target="_blank" rel="noopener">${esc(L(T.naverMapBtn))}</a>
+        <a href="https://map.kakao.com/?q=${q}" target="_blank" rel="noopener">${esc(L(T.kakaoMapBtn))}</a>
+      </div>
+    </div>`;
+}
+// ---- 병합: 단계 안에서 바로 쓰는 관할 센터 찾기(지역→구→센터, 행정복지센터처럼 주소 기반 관할이 있는 경우) ----
+function centerFinderWidget(){
+  const regions = Object.keys(CENTERS);
+  const districts = Object.keys(CENTERS[state.centerRegion] || {});
+  const centers = (CENTERS[state.centerRegion] || {})[state.centerDistrict] || [];
+  const c = state.centerObj;
+  return `
+    <div class="center-finder">
+      <div class="map-search-label">${esc(L(T.centerFinderIntro))}</div>
+      <label class="center-field-label">${esc(L(T.regionLabel))}</label>
+      <select id="regionSel" class="center-select">
+        ${regions.map(r=>`<option value="${esc(r)}" ${state.centerRegion===r?"selected":""}>${esc(r)}</option>`).join("")}
+      </select>
+      <label class="center-field-label">${esc(L(T.districtLabel))}</label>
+      <select id="districtSel" class="center-select">
+        ${districts.map(d=>`<option value="${esc(d)}" ${state.centerDistrict===d?"selected":""}>${esc(d)}</option>`).join("")}
+      </select>
+      <label class="center-field-label" style="margin-bottom:6px">${esc(L(T.centerLabel))}</label>
+      <select id="centerSel" class="center-select">
+        ${centers.map(x=>`<option value="${esc(x.name)}" ${c && c.name===x.name?"selected":""}>${esc(x.name)}</option>`).join("")}
+      </select>
+      ${c?`<div class="center-picked"><b>${esc(c.name)}</b><span>${esc(c.address)}</span></div>`:""}
+      ${c?`<div class="map-links">
+        <a href="https://map.naver.com/p/search/${encodeURIComponent(c.address)}" target="_blank" rel="noopener">${esc(L(T.navToCenter))} · ${esc(L(T.naverMapBtn))}</a>
+        <a href="https://map.kakao.com/link/to/${encodeURIComponent(c.name)},${c.lat},${c.lng}" target="_blank" rel="noopener">${esc(L(T.kakaoMapBtn))}</a>
+      </div>`:""}
+    </div>`;
+}
+
+// =========================================================================
+//  병합: 병원 문진표 샘플 서류 (위험도 태그 포함, 병원가는길 앱에서 이식)
+// =========================================================================
+const SAMPLE_DOC_HOSPITAL = {
+  docName:{ ko:"병원 문진표 (일부)", en:"Hospital intake form (excerpt)", zh:"医院问诊表(部分)", vi:"Phiếu khai bệnh (trích)" },
+  fields:[
+    { ko:"이름(성명)", risk:"red",
+      label:{ ko:"이름(성명)", en:"Full name", zh:"姓名", vi:"Họ tên" },
+      guide:{ ko:"외국인등록증의 로마자 표기와 한 글자도 다르면 안 돼요. 다르면 건강보험 조회가 안 될 수 있어요.", en:"Must match your ARC's romanized name exactly — any mismatch can block your insurance lookup.", zh:"必须与外国人登录证上的罗马字拼写完全一致,不同可能导致无法查询医保。", vi:"Phải khớp hoàn toàn với tên La-tinh trên thẻ ĐKNNN — sai lệch có thể khiến không tra được bảo hiểm." } },
+    { ko:"생년월일", risk:"red",
+      label:{ ko:"생년월일", en:"Date of birth", zh:"出生日期", vi:"Ngày sinh" },
+      guide:{ ko:"예: 1998-04-12 형식으로 적어주세요.", en:"Write as YYYY-MM-DD, e.g. 1998-04-12.", zh:"请按 1998-04-12 的格式填写。", vi:"Viết theo dạng 1998-04-12." } },
+    { ko:"복용 중인 약", risk:"amber", quickfill:true,
+      label:{ ko:"복용 중인 약", en:"Current medication", zh:"在服药物", vi:"Thuốc đang dùng" },
+      guide:{ ko:"없으면 비워두지 말고 아래 버튼으로 바로 채울 수 있어요.", en:"If none, don't leave it blank — use the button below to fill it in.", zh:"如没有,请勿留空,可用下方按钮填写。", vi:"Nếu không có, đừng để trống — dùng nút bên dưới để điền." } },
+    { ko:"증상 설명", risk:"gray",
+      label:{ ko:"증상 설명", en:"Symptom description", zh:"症状说明", vi:"Mô tả triệu chứng" },
+      guide:{ ko:"번역만 참고하고 편하게 적으시면 돼요.", en:"Use the translation as a reference and write it in your own words.", zh:"仅供参考翻译,可自由填写。", vi:"Chỉ tham khảo bản dịch, viết tự nhiên theo ý bạn." } }
+  ],
+  next:{ instId:"hospital", sitId:"visit",
+    text:{ ko:"이 서류는 병원 문진표예요. 작성 후 접수처에 제출하세요.",
+           en:"This is a hospital intake form. Fill it in and submit it at the registration desk.",
+           zh:"这是医院问诊表。填写后请提交至挂号处。",
+           vi:"Đây là phiếu khai bệnh. Điền xong nộp tại quầy đăng ký." } }
+};
+
 const state = {
   lang:"ko",
   view:"lang",         // lang | home | institution | flow | interpret | translate | scan
@@ -755,11 +1203,27 @@ const state = {
   interpretDir:"staff",
   convo:[],
   trFrom:"ko", trTo:"en",
-  stack:[]             // 뒤로가기용
+  stack:[],            // 뒤로가기용
+  // 병합: 센터찾기 + 건강보험 토글 상태
+  centerRegion:"서울특별시",
+  centerDistrict:"강남구",
+  centerObj:CENTERS["서울특별시"]["강남구"][0],
+  insurance:true,
+  sheet:null,            // 병합: 단계 안에서 연 도구(scan|interpret) — null이면 닫힘
+  regBaseDate:"",        // 병합: 출입국 — 마감일(D-day) 계산용 입국일
+  regVisa:"E-9",          // 병합: 출입국 — 체류자격 선택
+  regState:"first",       // 병합: 출입국 — 현재 상황 선택
+  regChecklist:[],        // 병합: 출입국 — 준비물 체크리스트 체크된 항목 id 목록
+  flowIntro:true,          // 병합: 절차 진입 시 전체 절차 화면을 먼저 보여줄지
+  extExpireDate:""         // 병합: 체류기간연장 — 상황단계 만료일(D-day) 계산용
 };
 
 const $ = s => document.querySelector(s);
 const L = obj => (obj && (obj[state.lang] ?? obj.en ?? obj.ko)) || "";
+// 병합: 단계 탭에 쓸 짧은 이름 — 명시된 tab이 없으면 제목의 첫 단어로 대신한다
+const shortTabLabel = title => (title||"").split(/[\s(（·]/)[0].slice(0,6);
+// 병합: 마감일 위젯 — 언어별 날짜 표기
+const fmtDate = d => d.toLocaleDateString(({ko:"ko-KR",en:"en-US",zh:"zh-CN",vi:"vi-VN"})[state.lang]||"en-US", {month:"short", day:"numeric"});
 // 데모 배너는 목업 모드(백엔드 미연결)일 때만 표시
 function demoNote(extraStyle){
   if(!AI.USE_MOCK) return "";
@@ -776,7 +1240,9 @@ const ICONS = {
   info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>',
   mic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M6 11a6 6 0 0012 0M12 17v4"/></svg>',
   cam:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 8V6a2 2 0 012-2h2M16 4h2a2 2 0 012 2v2M20 16v2a2 2 0 01-2 2h-2M8 20H6a2 2 0 01-2-2v-2"/><circle cx="12" cy="12" r="3"/></svg>',
-  swap:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 4v13M4 14l3 3 3-3M17 20V7M14 10l3-3 3 3"/></svg>'
+  swap:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 4v13M4 14l3 3 3-3M17 20V7M14 10l3-3 3 3"/></svg>',
+  pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s7-7.5 7-12a7 7 0 10-14 0c0 4.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>',
+  cal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>'
 };
 
 /* =========================================================================
@@ -784,6 +1250,7 @@ const ICONS = {
    ========================================================================= */
 function push(view){ state.stack.push(view); }
 function go(view, opts={}){
+  closeSheet();
   if(state.view !== "lang") push(state.view);
   Object.assign(state, opts);
   state.view = view;
@@ -791,6 +1258,7 @@ function go(view, opts={}){
   $("#screen").scrollTop = 0;
 }
 function back(){
+  closeSheet();
   const prev = state.stack.pop();
   state.view = prev || "home";
   render();
@@ -816,7 +1284,8 @@ function render(){
     flow:esc(L(sit?.doc)),
     interpret:esc(L(T.interpTitle)),
     translate:esc(L(T.trTitle)),
-    scan:esc(L(T.scanTitle))
+    scan:esc(L(T.scanTitle)),
+    center:esc(L(T.centerTitle))
   };
   $("#topTitle").innerHTML = titles[state.view] || "동행";
   $("#langLabel").textContent = LANGS.find(l=>l.code===state.lang).native;
@@ -830,7 +1299,8 @@ function render(){
 
   const R = {
     lang:renderLang, home:renderHome, institution:renderInstitution,
-    flow:renderFlow, interpret:renderInterpret, translate:renderTranslate, scan:renderScan
+    flow:renderFlow, interpret:renderInterpret, translate:renderTranslate, scan:renderScan,
+    center:renderCenter
   };
   scr.innerHTML = (R[state.view]||renderHome)(inst, sit);
   wire(state.view);
@@ -868,6 +1338,11 @@ function renderHome(){
     <p class="eyebrow">${esc(L(T.whereSub))}</p>
     <h1 class="big">${esc(L(T.where))}</h1>
     ${cards}
+    <h2 class="sec" style="margin-top:22px">${esc(L(T.hotlineLabel))}</h2>
+    <div class="hotline-row">
+      <a class="hotline-btn" href="tel:1330">☎ 1330 · ${esc(L(T.callTourist))}</a>
+      <a class="hotline-btn" href="tel:1345">☎ 1345 · ${esc(L(T.callForeigner))}</a>
+    </div>
     <div class="note">${ICONS.info}<div>${esc(L(T.disclaimer))}</div></div>`;
 }
 
@@ -911,32 +1386,66 @@ function renderFlow(inst, sit){
       <div class="note">${ICONS.info}<div>${esc(L(T.disclaimer))}</div></div>`;
   }
 
+  // 병합: 절차를 처음 시작할 때 — 전체 절차를 먼저 보여주고, 단계를 누르면 그 단계부터 이어간다
+  if(state.flowIntro){
+    return `
+      <div class="flow-head"><div class="where">${ICONS[inst.icon]} ${esc(L(inst.name))}</div>
+        <div class="doc">${esc(L(sit.doc))}</div></div>
+      <div class="intro-head">
+        <h1>${esc(L(T.introTitle))}</h1>
+        <p>${esc(L(T.introSub))}</p>
+      </div>
+      ${timeline(steps, n, metaChips)}
+      <button class="btn" id="introStart">${esc(L(T.startBtn))} ${ICONS.arrow}</button>
+      <div class="note">${ICONS.info}<div>${esc(L(T.disclaimer))}</div></div>`;
+  }
+
   const nextStep = steps[cur+1];
+  const stepTabs = `<div class="step-tabs">${steps.map((s,i)=>{
+    const cls = i<cur ? "done" : (i===cur?"current":"");
+    const node = i<cur
+      ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5 9-11"/></svg>'
+      : (i+1);
+    const label = esc(L(s.tab) || shortTabLabel(L(s.title)));
+    return `<button class="stab ${cls}" data-step-tab="${i}"><span class="num">${node}</span><span class="nm">${label}</span></button>`;
+  }).join("")}</div>
+  <div class="progress-wrap">
+    <div class="progress-txt"><span>${esc(L(T.step))} ${cur+1} ${esc(L(T.of))} ${n}</span><span>${pct}%</span></div>
+    <div class="progress-bar"><i style="width:${pct}%"></i></div>
+  </div>`;
+
   return `
     <div class="flow-head"><div class="where">${ICONS[inst.icon]} ${esc(L(inst.name))}</div>
       <div class="doc">${esc(L(sit.doc))}</div></div>
 
-    <div class="progress-wrap">
-      <div class="progress-txt"><span>${esc(L(T.step))} ${cur+1} ${esc(L(T.of))} ${n}</span><span>${pct}%</span></div>
-      <div class="progress-bar"><i style="width:${pct}%"></i></div>
-    </div>
+    ${stepTabs}
 
     <div class="now-card">
       <div class="lbl"><span class="dot"></span>${esc(L(T.nowDo))}</div>
       <div class="st">${esc(L(steps[cur].title))}</div>
       <div class="de">${esc(L(steps[cur].detail))}</div>
       ${Object.keys(steps[cur].meta||{}).length?`<div class="metas">${metaChips(steps[cur].meta,true)}</div>`:""}
+      ${steps[cur].interactive==="insurance"?insuranceWidget():""}
+      ${steps[cur].interactive==="rx"?rxWidget():""}
+      ${steps[cur].interactive==="regSituation"?regSituationWidget():""}
+      ${steps[cur].interactive==="extSituation"?extSituationWidget():""}
+      ${steps[cur].interactive==="checklist"?checklistWidget():""}
+      ${steps[cur].interactive==="centerFinder"?centerFinderWidget():""}
+      ${steps[cur].links?stepLinksWidget(steps[cur].links):""}
+      ${steps[cur].mapSearch?mapSearchWidget(steps[cur].mapSearch):""}
+      ${steps[cur].action?actionButton(steps[cur].action):""}
     </div>
 
     ${nextStep?`<div class="next-peek"><span class="k">${esc(L(T.nextDo))}</span>
-      <span class="v">${esc(L(nextStep.title))}</span>${ICONS.chev}</div>`:""}
+      <span class="v">${esc(L(nextStep.title))}</span></div>`:""}
 
     <div class="flow-actions">
       ${cur>0?`<button class="btn line" id="prevStep">${esc(L(T.prev))}</button>`:""}
       <button class="btn" id="nextStep">${esc(L(T.doneNext))} ${ICONS.arrow}</button>
     </div>
 
-    ${timeline(steps, n, metaChips)}
+    <button class="btn line" id="toFullView">${esc(L(T.backToIntro))}</button>
+
     <div class="note">${ICONS.info}<div>${esc(L(T.disclaimer))}</div></div>`;
 }
 
@@ -948,7 +1457,7 @@ function timeline(steps, n, metaChips){
       ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="15" height="15"><path d="M5 12l5 5 9-11"/></svg>'
       : (i+1);
     return `
-      <div class="tl-item ${cls}">
+      <div class="tl-item ${cls}" data-step-tab="${i}">
         <div class="tl-rail"><div class="tl-node">${node}</div><div class="tl-line"></div></div>
         <div class="tl-body">
           <div class="t">${esc(L(s.title))}</div>
@@ -958,6 +1467,129 @@ function timeline(steps, n, metaChips){
       </div>`;
   }).join("");
   return `<div class="timeline">${rows}</div>`;
+}
+
+// ---- 병합: 건강보험 유무 토글 (병원가는길에서 이식) ----------------------
+function insuranceWidget(){
+  const yes = state.insurance !== false;
+  return `
+    <div class="ins-toggle-row">
+      <button class="ins-toggle ${yes?"on":""}" data-ins="yes">${esc(L(T.haveIns))}</button>
+      <button class="ins-toggle ${!yes?"on":""}" data-ins="no">${esc(L(T.noIns))}</button>
+    </div>
+    <div style="font-size:13.5px;line-height:1.6">${esc(L(yes?T.insCostYes:T.insCostNo))}</div>`;
+}
+
+// ---- 병합: 처방전 사용기한 배지 (병원가는길에서 이식) --------------------
+function rxWidget(){
+  return `
+    <div class="rx-badge">${ICONS.info}${esc(L(T.rxLabel))}</div>
+    <div style="font-size:13px;opacity:.9;margin-top:6px;line-height:1.55">${esc(L(T.rxWarn))}</div>`;
+}
+
+// ---- 병합: 출입국 — 체류자격/현재상황 + 마감일(D-day) 위젯 (출입국 도우미에서 이식) ----
+function regSituationWidget(){
+  const big = computeDeadline();
+  const visaChips = VISA_OPTS.map(o=>`<button class="reg-chip ${state.regVisa===o.id?"on":""}" data-regvisa="${o.id}">${esc(L(o.label))}</button>`).join("");
+  const stateChips = SITUATION_OPTS.map(o=>`<button class="reg-chip ${state.regState===o.id?"on":""}" data-regstate="${o.id}">${esc(L(o.label))}</button>`).join("");
+  return `
+    <div class="reg-chip-group">
+      <label class="center-field-label">${esc(L(T.regVisaLabel))}</label>
+      <div class="reg-chip-row">${visaChips}</div>
+    </div>
+    <div class="reg-chip-group">
+      <label class="center-field-label">${esc(L(T.regStateLabel))}</label>
+      <div class="reg-chip-row">${stateChips}</div>
+    </div>
+    <div class="deadline-card">
+      <label class="center-field-label">${esc(L(T.deadlineLabel))}</label>
+      <input type="date" id="regBaseDate" value="${esc(state.regBaseDate)}">
+      <div class="deadline-big ${big.warn?"warn":""}">
+        <span class="dd">${esc(big.headline)}</span>
+        ${big.sub?`<span class="dt">${esc(big.sub)}</span>`:""}
+      </div>
+      <div class="deadline-desc">${esc(big.desc)}</div>
+    </div>`;
+}
+// ---- 병합: 출입국 — 준비물 체크리스트 (출입국 도우미에서 이식) ----
+function checklistWidget(){
+  const source = state.sitId==="ext" ? EXT_CHECKLIST_ITEMS : REG_CHECKLIST_ITEMS;
+  const items = source.map(it=>{
+    const done = state.regChecklist.includes(it.id);
+    return `
+    <label class="${done?"done":""}">
+      <input type="checkbox" data-cl="${it.id}" ${done?"checked":""}>
+      <span>${esc(L(it.label))}${it.sub?`<br><span style="font-size:11.5px;color:var(--muted)">${esc(L(it.sub))}</span>`:""}</span>
+    </label>`;
+  }).join("");
+  return `<div class="reg-checklist">${items}</div>`;
+}
+// ---- 병합: 체류기간연장 — 상황 단계(체류자격 + 만료일 D-day) ----
+function extSituationWidget(){
+  const big = computeExtDeadline();
+  const visaChips = VISA_OPTS.map(o=>`<button class="reg-chip ${state.regVisa===o.id?"on":""}" data-regvisa="${o.id}">${esc(L(o.label))}</button>`).join("");
+  return `
+    <div class="reg-chip-group">
+      <label class="center-field-label">${esc(L(T.regVisaLabel))}</label>
+      <div class="reg-chip-row">${visaChips}</div>
+    </div>
+    <div class="deadline-card">
+      <label class="center-field-label">${esc(L(T.extDeadlineLabel))}</label>
+      <input type="date" id="extExpireDate" value="${esc(state.extExpireDate)}">
+      <div class="deadline-big ${big.warn?"warn":""}">
+        <span class="dd">${esc(big.headline)}</span>
+        ${big.sub?`<span class="dt">${esc(big.sub)}</span>`:""}
+      </div>
+      <div class="deadline-desc">${esc(big.desc)}</div>
+    </div>`;
+}
+function computeExtDeadline(){
+  if(!state.extExpireDate){
+    return { headline:L(T.deadlineNeedDate), sub:"", desc:L(T.extDeadlineDesc), warn:false };
+  }
+  const due = new Date(state.extExpireDate+"T00:00:00");
+  const today = new Date(); today.setHours(0,0,0,0);
+  const left = Math.round((due-today)/86400000);
+  if(left>=0){
+    return { headline:`D-${left}`, sub:fmtDate(due), desc:L(T.extDeadlineDesc), warn: left<=30 };
+  }
+  return { headline:L(T.extDeadlineOverdue), sub:"", desc:L(T.extDeadlineOverdueSub), warn:true };
+}
+// ---- 병합: 단계별 바로가기 링크(하이코리아 예약, 관할기관 찾기 등) — 어떤 단계에도 붙일 수 있게 분리 ----
+const STEP_LINK_DEFS = {
+  hikorea:      { href:"https://www.hikorea.go.kr", label:T.hikoreaLink },
+  jurisdiction: { href:"https://www.immigration.go.kr", label:T.jurisdictionLink }
+};
+function stepLinksWidget(keys){
+  return keys.map(k=>{
+    const def = STEP_LINK_DEFS[k];
+    if(!def) return "";
+    return `<a class="step-link" href="${def.href}" target="_blank" rel="noopener">${esc(L(def.label))}${ICONS.chev}</a>`;
+  }).join("");
+}
+function computeDeadline(){
+  if(!state.regBaseDate){
+    return { headline:L(T.deadlineNeedDate), sub:"", desc:L(T.deadlineDesc), warn:false };
+  }
+  const base = new Date(state.regBaseDate+"T00:00:00");
+  const today = new Date(); today.setHours(0,0,0,0);
+  const due = new Date(base.getTime()); due.setDate(due.getDate()+90);
+  const left = Math.round((due-today)/86400000);
+  if(left>=0){
+    return { headline:`D-${left}`, sub:fmtDate(due), desc:L(T.deadlineDesc), warn: left<=14 };
+  }
+  return { headline:L(T.deadlineOverdue), sub:"", desc:L(T.deadlineOverdueSub), warn:true };
+}
+
+// ---- 병합: 단계별 도구 CTA (가벼운 건 인라인, 무거운 건 버튼으로 화면 이동) ----------
+function actionButton(kind){
+  if(kind==="scan"){
+    return `<button class="step-action-btn" data-step-action="scan">${ICONS.cam}${esc(L(T.actionScanBtn))}</button>`;
+  }
+  if(kind==="interpret"){
+    return `<button class="step-action-btn" data-step-action="interpret">${ICONS.mic}${esc(L(T.actionInterpretBtn))}</button>`;
+  }
+  return "";
 }
 
 // ---- 통역 ---------------------------------------------------------------
@@ -1022,10 +1654,67 @@ function renderScan(){
         <div class="d">${esc(L(T.scanDropSub))}</div>
       </div>
       <button class="btn" id="pickFile">${ICONS.cam} ${esc(L(T.scanDrop))}</button>
-      <button class="btn ghost" id="sampleBtn" style="margin-top:10px">${esc(L(T.scanSample))}</button>
+      <button class="btn ghost" id="sampleGovBtn" style="margin-top:10px">${esc(L(T.scanSampleGov))}</button>
+      <button class="btn ghost" id="sampleHospBtn" style="margin-top:8px">${esc(L(T.scanSampleHosp))}</button>
       ${demoNote()}
     </div>
     <div id="scanResult"></div>`;
+}
+
+// ---- 병합: 센터찾기(행정복지센터 앱에서 이식) -----------------------------
+function renderCenter(){
+  const regions = Object.keys(CENTERS);
+  const districts = Object.keys(CENTERS[state.centerRegion] || {});
+  const centers = (CENTERS[state.centerRegion] || {})[state.centerDistrict] || [];
+  const c = state.centerObj;
+  return `
+    <p class="eyebrow">${esc(L(T.centerSub))}</p>
+    <h1 class="big">${esc(L(T.centerTitle))}</h1>
+    <div class="card" style="padding:16px;margin-bottom:14px">
+      <label class="center-field-label">${esc(L(T.regionLabel))}</label>
+      <select id="regionSel" class="center-select">
+        ${regions.map(r=>`<option value="${esc(r)}" ${state.centerRegion===r?"selected":""}>${esc(r)}</option>`).join("")}
+      </select>
+      <label class="center-field-label">${esc(L(T.districtLabel))}</label>
+      <select id="districtSel" class="center-select">
+        ${districts.map(d=>`<option value="${esc(d)}" ${state.centerDistrict===d?"selected":""}>${esc(d)}</option>`).join("")}
+      </select>
+      <label class="center-field-label" style="margin-bottom:6px">${esc(L(T.centerLabel))}</label>
+      <select id="centerSel" class="center-select" style="margin-bottom:0">
+        ${centers.map(x=>`<option value="${esc(x.name)}" ${c && c.name===x.name?"selected":""}>${esc(x.name)}</option>`).join("")}
+      </select>
+    </div>
+    <div class="now-card">
+      <div class="lbl"><span class="dot"></span>${esc(L(T.selectedCenter))}</div>
+      <div class="st">${esc(c ? c.name : "")}</div>
+      <div class="de">${esc(c ? c.address : "")}</div>
+    </div>
+    <div class="flow-actions" style="flex-wrap:wrap">
+      <button class="btn" data-navi="naver">${esc(L(T.navToCenter))} · 네이버</button>
+      <button class="btn ghost" data-navi="kakao">카카오</button>
+      <button class="btn line" data-navi="tmap">Tmap</button>
+    </div>
+    <div class="note">${ICONS.info}<div>${esc(L(T.disclaimer))}</div></div>`;
+}
+
+function wireCenter(){
+  const regionSel=$("#regionSel"), districtSel=$("#districtSel"), centerSel=$("#centerSel");
+  if(regionSel) regionSel.onchange=()=>{
+    const reg = regionSel.value;
+    const firstDist = Object.keys(CENTERS[reg])[0];
+    state.centerRegion = reg; state.centerDistrict = firstDist; state.centerObj = CENTERS[reg][firstDist][0];
+    render();
+  };
+  if(districtSel) districtSel.onchange=()=>{
+    const dist = districtSel.value;
+    state.centerDistrict = dist; state.centerObj = CENTERS[state.centerRegion][dist][0];
+    render();
+  };
+  if(centerSel) centerSel.onchange=()=>{
+    const found = CENTERS[state.centerRegion][state.centerDistrict].find(x=>x.name===centerSel.value);
+    state.centerObj = found; render();
+  };
+  document.querySelectorAll("[data-navi]").forEach(b=>b.onclick=()=>openMapNavi(b.dataset.navi));
 }
 
 /* =========================================================================
@@ -1042,17 +1731,61 @@ function wire(view){
     document.querySelectorAll("[data-inst]").forEach(b=>b.onclick=()=>go("institution",{instId:b.dataset.inst}));
   }
   if(view==="institution"){
-    document.querySelectorAll("[data-sit]").forEach(b=>b.onclick=()=>go("flow",{sitId:b.dataset.sit, step:0}));
+    document.querySelectorAll("[data-sit]").forEach(b=>b.onclick=()=>go("flow",{sitId:b.dataset.sit, step:0, flowIntro:true}));
   }
   if(view==="flow"){
     const nx=$("#nextStep"), pv=$("#prevStep"), rs=$("#restart");
     if(nx) nx.onclick=()=>{ state.step++; render(); $("#screen").scrollTop=0; };
     if(pv) pv.onclick=()=>{ state.step=Math.max(0,state.step-1); render(); $("#screen").scrollTop=0; };
     if(rs) rs.onclick=()=>{ state.step=0; render(); $("#screen").scrollTop=0; };
+    // 병합: 건강보험 유무 토글
+    document.querySelectorAll("[data-ins]").forEach(b=>b.onclick=()=>{ state.insurance = (b.dataset.ins==="yes"); render(); });
+    // 병합: 출입국 — 입국일 입력 시 D-day 재계산
+    const regDate = $("#regBaseDate");
+    if(regDate) regDate.onchange=()=>{ state.regBaseDate = regDate.value; render(); };
+    const extDate = $("#extExpireDate");
+    if(extDate) extDate.onchange=()=>{ state.extExpireDate = extDate.value; render(); };
+    // 병합: 출입국 — 체류자격/현재상황 칩
+    document.querySelectorAll("[data-regvisa]").forEach(b=>b.onclick=()=>{ state.regVisa=b.dataset.regvisa; render(); });
+    document.querySelectorAll("[data-regstate]").forEach(b=>b.onclick=()=>{ state.regState=b.dataset.regstate; render(); });
+    // 병합: 출입국 — 준비물 체크리스트
+    document.querySelectorAll("[data-cl]").forEach(b=>b.onchange=()=>{
+      const id=b.dataset.cl;
+      state.regChecklist = b.checked ? [...state.regChecklist, id] : state.regChecklist.filter(x=>x!==id);
+      render();
+    });
+    // 병합: 단계 안 센터 찾기(지역→구→센터) + 길찾기
+    const cfRegionSel=$("#regionSel"), cfDistrictSel=$("#districtSel"), cfCenterSel=$("#centerSel");
+    if(cfRegionSel) cfRegionSel.onchange=()=>{
+      const reg = cfRegionSel.value;
+      const firstDist = Object.keys(CENTERS[reg])[0];
+      state.centerRegion = reg; state.centerDistrict = firstDist; state.centerObj = CENTERS[reg][firstDist][0];
+      render();
+    };
+    if(cfDistrictSel) cfDistrictSel.onchange=()=>{
+      const dist = cfDistrictSel.value;
+      state.centerDistrict = dist; state.centerObj = CENTERS[state.centerRegion][dist][0];
+      render();
+    };
+    if(cfCenterSel) cfCenterSel.onchange=()=>{
+      const found = CENTERS[state.centerRegion][state.centerDistrict].find(x=>x.name===cfCenterSel.value);
+      state.centerObj = found; render();
+    };
+    // 병합: 단계별 도구 CTA — 페이지 이동 대신 지금 단계 위에 바텀시트로 연다
+    const stepAction = $("[data-step-action]");
+    if(stepAction) stepAction.onclick=()=>openSheet(stepAction.dataset.stepAction);
+    // 병합: 상단 단계 탭 — 원하는 단계로 바로 이동 (병원가는길 스타일)
+    document.querySelectorAll("[data-step-tab]").forEach(b=>b.onclick=()=>{ state.step=+b.dataset.stepTab; state.flowIntro=false; render(); $("#screen").scrollTop=0; });
+    // 병합: 전체 절차 화면 ↔ 단계별 화면 전환
+    const introStart = $("#introStart");
+    if(introStart) introStart.onclick=()=>{ state.step=0; state.flowIntro=false; render(); $("#screen").scrollTop=0; };
+    const toFullView = $("#toFullView");
+    if(toFullView) toFullView.onclick=()=>{ state.flowIntro=true; render(); $("#screen").scrollTop=0; };
   }
   if(view==="interpret") wireInterpret();
   if(view==="translate") wireTranslate();
   if(view==="scan") wireScan();
+  if(view==="center") wireCenter();
 }
 
 // 툴바
@@ -1060,11 +1793,37 @@ $("#toolbar").querySelectorAll("[data-tool]").forEach(b=>{
   b.onclick=()=>{ if(state.view===b.dataset.tool) return; go(b.dataset.tool); };
 });
 $("#backBtn").onclick=back;
+// 병합: 홈버튼 — 스택을 비우고 바로 기관 선택 화면으로
+function goHome(){ closeSheet(); state.stack=[]; state.view="home"; render(); $("#screen").scrollTop=0; }
+$("#homeBtn").onclick=goHome;
 $("#langBtn").onclick=()=>{ // 언어 재선택
   const codes=LANGS.map(l=>l.code); const i=codes.indexOf(state.lang);
   state.lang=codes[(i+1)%codes.length]; state.trTo = state.lang==="ko"?"en":state.lang;
   render();
 };
+
+// ---- 병합: 단계 안 도구 바텀시트 (스캔/통역을 화면 이동 없이 지금 단계 위에 띄운다) --------
+function openSheet(kind){
+  state.sheet = kind;
+  const inst = INSTITUTIONS.find(i=>i.id===state.instId);
+  const sit  = inst?.situations.find(s=>s.id===state.sitId);
+  const stepTitle = sit && sit.steps[state.step] ? L(sit.steps[state.step].title) : "";
+  const titles = { scan:L(T.scanTitle), interpret:L(T.interpTitle) };
+  $("#sheetTitle").textContent = titles[kind] || "";
+  $("#sheetSub").textContent = stepTitle ? `${L(T.nowDo)} · ${stepTitle}` : "";
+  $("#sheetBody").innerHTML = kind==="scan" ? renderScan() : kind==="interpret" ? renderInterpret() : "";
+  if(kind==="scan") wireScan();
+  if(kind==="interpret") wireInterpret();
+  $("#sheetOverlay").classList.add("open");
+  $("#sheetPanel").scrollTop = 0;
+}
+function closeSheet(){
+  if(!state.sheet) return;
+  state.sheet = null;
+  $("#sheetOverlay").classList.remove("open");
+}
+$("#sheetClose").onclick = closeSheet;
+$("#sheetOverlay").onclick = e=>{ if(e.target.id==="sheetOverlay") closeSheet(); };
 
 // ---- 통역 로직 -----------------------------------------------------------
 function wireInterpret(){
@@ -1140,17 +1899,18 @@ function wireTranslate(){
 // ---- 촬영 로직 -----------------------------------------------------------
 function wireScan(){
   const fileInput=$("#fileInput");
-  const pick=$("#pickFile"), sample=$("#sampleBtn");
+  const pick=$("#pickFile"), sampleGov=$("#sampleGovBtn"), sampleHosp=$("#sampleHospBtn");
   if(pick) pick.onclick=()=>fileInput.click();
   fileInput.onchange=e=>{
     const f=e.target.files[0]; if(!f) return;
     const url=URL.createObjectURL(f); runScan(f, url);
     fileInput.value="";
   };
-  if(sample) sample.onclick=()=>runScan(null, null);
+  if(sampleGov) sampleGov.onclick=()=>runScan(null, null, "gov");
+  if(sampleHosp) sampleHosp.onclick=()=>runScan(null, null, "hospital");
 }
 
-async function runScan(file, previewUrl){
+async function runScan(file, previewUrl, docKey){
   $("#scanStart").classList.add("hidden");
   const box=$("#scanResult");
   box.innerHTML = `
@@ -1161,7 +1921,7 @@ async function runScan(file, previewUrl){
     </div>`;
   let res;
   try{
-    res = await AI.ocr(file, state.lang);
+    res = await AI.ocr(file, state.lang, docKey);
   }catch(err){
     box.innerHTML = `
       ${previewUrl?`<img class="scan-preview" src="${previewUrl}" alt="">`:""}
@@ -1170,17 +1930,31 @@ async function runScan(file, previewUrl){
     $("#rescan").onclick=()=>{ $("#scanResult").innerHTML=""; $("#scanStart").classList.remove("hidden"); };
     return;
   }
-  const fields = res.fields.map(f=>`
-    <div class="field-row">
+  const fields = res.fields.map((f,idx)=>{
+    const riskCls = f.risk || "";
+    const riskLbl = f.risk==="red" ? T.riskExact : f.risk==="amber" ? T.riskRequired : f.risk==="gray" ? T.riskFree : null;
+    const qf = f.quickfill ? `<button class="quickfill-btn" data-qf="${idx}">${esc(L(T.noMedFill))}</button>` : "";
+    // 병합: 안내 문구는 사용자 언어로, 그 아래 한국어 원문도 함께 보여준다(직원에게 보여줄 때 필요)
+    const guideKo = (state.lang!=="ko" && f.guide && f.guide.ko) ? `<div class="guide-ko">${esc(f.guide.ko)}</div>` : "";
+    return `
+    <div class="field-row ${riskCls?("risk-"+riskCls):""}">
       <div class="fk">${esc(L(f.label))}<span class="ko">${esc(f.ko)}</span></div>
-      <div class="fv">${esc(L(f.guide))}</div>
-    </div>`).join("");
+      <div class="fv">
+        ${riskLbl?`<span class="risk-tag ${riskCls}">${esc(L(riskLbl))}</span><br>`:""}
+        ${esc(L(f.guide))}
+        ${guideKo}
+        ${qf}
+      </div>
+    </div>`;
+  }).join("");
 
   box.innerHTML = `
     ${previewUrl?`<img class="scan-preview" src="${previewUrl}" alt="">`:""}
     <div class="result-block">
       <div class="rl">${esc(L(T.recognized))}</div>
-      <div class="card" style="padding:14px 16px;font-weight:700;font-size:16px">${esc(L(res.docName))}</div>
+      <div class="card" style="padding:14px 16px;font-weight:700;font-size:16px">${esc(L(res.docName))}
+        ${(state.lang!=="ko" && res.docName && res.docName.ko) ? `<div class="docname-ko">${esc(res.docName.ko)}</div>` : ""}
+      </div>
     </div>
     <div class="result-block">
       <div class="rl">${esc(L(T.howToFill))}</div>
@@ -1192,10 +1966,14 @@ async function runScan(file, previewUrl){
         <div class="de">${esc(L(res.next.text))}</div>
       </div>
     </div>
-    <button class="btn" id="goFlow" style="margin-bottom:10px">${esc(L(T.seeFlow))} ${ICONS.arrow}</button>
+    ${state.view!=="flow"?`<button class="btn" id="goFlow" style="margin-bottom:10px">${esc(L(T.seeFlow))} ${ICONS.arrow}</button>`:""}
     <button class="btn line" id="rescan">${esc(L(T.scanAgain))}</button>`;
 
-  $("#goFlow").onclick=()=>go("flow",{instId:res.next.instId, sitId:res.next.sitId, step:0});
+  box.querySelectorAll("[data-qf]").forEach(b=>{
+    b.onclick=()=>{ b.textContent = L(T.filled); b.classList.add("done"); b.disabled = true; };
+  });
+  const goFlowBtn = $("#goFlow");
+  if(goFlowBtn) goFlowBtn.onclick=()=>go("flow",{instId:res.next.instId, sitId:res.next.sitId, step:0, flowIntro:true});
   $("#rescan").onclick=()=>{ $("#scanResult").innerHTML=""; $("#scanStart").classList.remove("hidden"); };
 }
 
