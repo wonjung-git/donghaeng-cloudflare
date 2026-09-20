@@ -319,6 +319,8 @@
   .tr-out.empty{color:#BCAFAB;}
   .swap-row{display:flex;align-items:center;justify-content:center;gap:12px;margin:2px 0 12px;font-size:13.5px;font-weight:700;color:var(--muted);}
   .swap-row button{width:40px;height:40px;border-radius:50%;background:var(--wine-tint);color:var(--wine);display:flex;align-items:center;justify-content:center;}
+  /* iOS 사파리는 width/height 없는 인라인 SVG를 flex 안에서 0으로 계산해 아이콘이 사라진다 — 다른 아이콘처럼 명시적으로 크기 지정 */
+  .swap-row button svg{width:20px;height:20px;flex:0 0 auto;}
 
   /* ===================== 촬영 화면 ===================== */
   .scan-drop{
