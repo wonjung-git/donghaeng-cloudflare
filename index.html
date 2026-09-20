@@ -518,11 +518,14 @@
   <main class="screen pad-top" id="screen" style="padding: 0px;">
     <div class="lang-hero">
       <div class="logo-row"><svg class="mark" viewBox="0 0 32 32" fill="none"><path d="M9 22c0-5 3-9 7-9s7 4 7 9" stroke="#fff" stroke-width="2.2" stroke-linecap="round"></path><circle cx="16" cy="8" r="3.4" fill="#A9803B"></circle><path d="M6 25h20" stroke="#fff" stroke-width="2.2" stroke-linecap="round"></path></svg><div class="name">동행<em>同行</em></div></div>
-      <h1>먼저 언어를<br>선택하세요</h1>
       <div class="rule"></div>
       <p>Select your language · 언어를 선택하세요<br>选择语言 · Chọn ngôn ngữ</p>
     </div>
     <div class="lang-list">
+    <div class="assistant-wrap">
+      <div class="assistant-figure"><img src="웃는 자세.png" alt="동행 캐릭터" /></div>
+      <div class="assistant-bubble">먼저 언어를 선택하세요</div>
+    </div>
     <button class="lang-item" data-lang="ko">
       <div><div class="native">한국어</div><div class="en">Korean</div></div>
       <div class="flag">🇰🇷</div>
@@ -674,10 +677,15 @@ const T = {
   appSub:      { ko:"AI 행정·생활 도우미", en:"AI admin & living helper", zh:"AI 行政·生活助手", vi:"Trợ lý hành chính & đời sống AI" },
   selectLang:  { ko:"먼저 언어를\n선택하세요", en:"First, choose\nyour language", zh:"请先选择\n您的语言", vi:"Trước tiên, hãy chọn\nngôn ngữ của bạn" },
   selectLangSub:{ ko:"병원·행정기관에서 필요한 서류 작성과 대화를 도와드려요.", en:"We help you fill out forms and talk with staff at hospitals and offices.", zh:"我们帮您在医院和政府机关填写表格、与工作人员沟通。", vi:"Chúng tôi giúp bạn điền giấy tờ và trò chuyện với nhân viên tại bệnh viện, cơ quan." },
-  where:       { ko:"어디에 있나요?", en:"Where are you?", zh:"您在哪里?", vi:"Bạn đang ở đâu?" },
+  langGreeting:{ ko:"먼저 언어를 선택하세요", en:"First, choose your language", zh:"请先选择您的语言", vi:"Trước tiên, hãy chọn ngôn ngữ của bạn" },
+  where:       { ko:"어느 기관에 있으세요?", en:"Which office are you at?", zh:"您在什么机构？", vi:"Bạn đang ở cơ quan nào?" },
   whereSub:    { ko:"기관을 선택하면 해야 할 일을 순서대로 알려드려요.", en:"Pick a place and we will guide you step by step.", zh:"选择机构后,我们将按顺序告诉您该做什么。", vi:"Chọn nơi bạn đến, chúng tôi hướng dẫn từng bước." },
   quickHelp:   { ko:"지금 바로 도움받기", en:"Get help right now", zh:"立即获取帮助", vi:"Nhận trợ giúp ngay" },
-  chooseSit:   { ko:"무엇을 하러 오셨나요?", en:"What do you need to do?", zh:"您需要办理什么?", vi:"Bạn cần làm gì?" },
+  chooseSit:   { ko:"무엇을 도와드릴까요?", en:"How can I help you?", zh:"我可以为您做什么？", vi:"Tôi có thể giúp gì cho bạn?" },
+  officeGreeting:{ ko:"어느 기관에 있으세요?", en:"Which office are you at?", zh:"您在什么机构？", vi:"Bạn đang ở cơ quan nào?" },
+  helpGreeting:{ ko:"무엇을 도와드릴까요?", en:"How can I help you?", zh:"我可以为您做什么？", vi:"Tôi có thể giúp gì cho bạn?" },
+  stepGuide:   { ko:"이 단계만 차근히 따라오시면 돼요!", en:"Just take this one step at a time — I’m with you.", zh:"按照这一步慢慢来就可以了！", vi:"Bạn chỉ cần làm theo bước này thôi!" },
+  processIntro:{ ko:"안녕하세요! 필요한 절차를 차근히 안내해드릴게요!", en:"Hello! I’ll walk you through the steps carefully.", zh:"您好！我会按步骤为您详细说明。", vi:"Xin chào! Tôi sẽ hướng dẫn bạn từng bước một." },
   interpret:   { ko:"통역", en:"Interpret", zh:"口译", vi:"Phiên dịch" },
   translate:   { ko:"번역", en:"Translate", zh:"翻译", vi:"Dịch" },
   scan:        { ko:"촬영", en:"Scan", zh:"拍照", vi:"Chụp" },
@@ -1349,12 +1357,11 @@ function renderLang(){
   return `
     <div class="lang-hero">
       <div class="logo-row">${mark}<div class="name">동행<em>同行</em></div></div>
-      <h1>${esc(L(T.selectLang)).replace(/\n/g,"<br>")}</h1>
       <div class="rule"></div>
       <p>Select your language · 언어를 선택하세요<br>选择语言 · Chọn ngôn ngữ</p>
     </div>
     <div class="lang-list">
-      ${helperPanel("안녕하세요! 무엇을 도와드릴까요?","smile")}
+      ${helperPanel(L(T.langGreeting),"smile")}
       ${items}
       ${demoNote("margin-top:18px")}
     </div>`;
@@ -1369,9 +1376,8 @@ function renderHome(){
       <div class="chev">${ICONS.chev}</div>
     </button>`).join("");
   return `
-    ${helperPanel("안녕하세요! 무엇을 도와드릴까요?","smile")}
+    ${helperPanel(L(T.officeGreeting),"smile")}
     <p class="eyebrow">${esc(L(T.whereSub))}</p>
-    <h1 class="big">${esc(L(T.where))}</h1>
     ${cards}
     <h2 class="sec" style="margin-top:22px">${esc(L(T.hotlineLabel))}</h2>
     <div class="hotline-row">
@@ -1391,9 +1397,8 @@ function renderInstitution(inst){
       <div class="chev">${ICONS.chev}</div>
     </button>`).join("");
   return `
-    ${helperPanel("어느 기관을 도와드릴까요?","default")}
+    ${helperPanel(L(T.helpGreeting),"smile")}
     <p class="eyebrow">${esc(L(inst.blurb))}</p>
-    <h1 class="big">${esc(L(T.chooseSit))}</h1>
     ${cards}`;
 }
 
@@ -1427,7 +1432,7 @@ function renderFlow(inst, sit){
     return `
       <div class="flow-head"><div class="where">${ICONS[inst.icon]} ${esc(L(inst.name))}</div>
         <div class="doc">${esc(L(sit.doc))}</div></div>
-      ${helperPanel("안녕하세요! 필요한 절차를 차근히 안내해드릴게요.","smile")}
+      ${helperPanel(L(T.processIntro),"smile")}
       <div class="intro-head">
         <h1>${esc(L(T.introTitle))}</h1>
         <p>${esc(L(T.introSub))}</p>
@@ -1455,7 +1460,7 @@ function renderFlow(inst, sit){
     <div class="flow-head"><div class="where">${ICONS[inst.icon]} ${esc(L(inst.name))}</div>
       <div class="doc">${esc(L(sit.doc))}</div></div>
 
-    ${helperPanel("지금 필요한 단계만 바로 확인해볼까요?","default")}
+    ${helperPanel(L(T.stepGuide),"default")}
     ${stepTabs}
 
     <div class="now-card">
