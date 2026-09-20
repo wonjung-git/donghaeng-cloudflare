@@ -1242,6 +1242,16 @@ const state = {
 
 const $ = s => document.querySelector(s);
 const L = obj => (obj && (obj[state.lang] ?? obj.en ?? obj.ko)) || "";
+
+function helperPanel(text, pose = "default") {
+  const src = pose === "smile" ? "웃는 자세.png" : "기본자세.png";
+  return `
+    <div class="assistant-wrap">
+      <div class="assistant-figure"><img src="${src}" alt="동행 캐릭터" /></div>
+      <div class="assistant-bubble">${esc(text)}</div>
+    </div>`;
+}
+
 // 병합: 단계 탭에 쓸 짧은 이름 — 명시된 tab이 없으면 제목의 첫 단어로 대신한다
 const shortTabLabel = title => (title||"").split(/[\s(（·]/)[0].slice(0,6);
 // 병합: 마감일 위젯 — 언어별 날짜 표기
