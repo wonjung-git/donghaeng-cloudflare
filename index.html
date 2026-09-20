@@ -318,6 +318,58 @@
   .field-row .fk .ko{display:block;font-size:11.5px;color:var(--muted);font-weight:500;margin-top:2px;}
   .field-row .fv{flex:1;font-size:13.5px;color:var(--muted);line-height:1.5;}
 
+  /* ===================== 서류 위 번역 오버레이 ===================== */
+  .doc-stage{margin-bottom:14px;}
+  .doc-tools{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap;}
+  .doc-toggle{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);
+    color:var(--muted);font-size:12.5px;font-weight:700;padding:7px 12px;border-radius:999px;}
+  .doc-toggle.on{background:var(--wine);border-color:var(--wine);color:#fff;}
+  .doc-hint{flex:1;min-width:150px;font-size:11.5px;color:var(--muted);line-height:1.4;}
+  .doc-canvas{position:relative;width:100%;border-radius:var(--radius);overflow:hidden;
+    border:1px solid var(--line);background:#fff;box-shadow:var(--shadow);}
+  .doc-canvas .doc-img{display:block;width:100%;}
+
+  /* 샘플 서류: 이미지가 없을 때 종이 느낌으로 그려서 그 위에 번역을 얹는다 */
+  .doc-paper{position:relative;width:100%;aspect-ratio:1/1.35;background:#FFFDFB;
+    background-image:linear-gradient(180deg,#fff,#FCF9F7);}
+  .dp-title{position:absolute;left:8%;right:8%;top:6%;text-align:center;font-size:15px;font-weight:800;
+    letter-spacing:-.01em;color:#3A3033;padding-bottom:9px;border-bottom:2px solid #E3D8D4;}
+  .dp-title small{display:block;font-size:11px;font-weight:600;color:var(--muted);margin-top:4px;}
+  .dp-k{position:absolute;display:flex;align-items:center;font-size:12.5px;font-weight:700;
+    color:#453A3D;white-space:nowrap;}
+  .dp-line{position:absolute;border-bottom:1px solid #DED3CF;}
+
+  /* 항목 위에 얹히는 번역 태그 */
+  .doc-tag{position:absolute;transform:translateY(-50%);display:inline-flex;align-items:center;gap:6px;
+    padding:4px 9px;border-radius:9px;background:var(--wine);color:#fff;text-align:left;
+    font-size:12px;font-weight:700;line-height:1.25;border:1.5px solid rgba(255,255,255,.75);
+    box-shadow:0 3px 10px rgba(90,24,36,.3);max-width:88%;}
+  .doc-tag .n{flex:0 0 auto;width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,.22);
+    display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;}
+  .doc-tag .tx{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .doc-tag.red{background:#A32D2D;}
+  .doc-tag.amber{background:#8A5A12;}
+  .doc-tag.gray{background:#6E5F5F;}
+  .doc-tag.on{outline:3px solid var(--gold);outline-offset:1px;}
+  .doc-canvas.raw .doc-tag{display:none;}
+
+  /* 서류 위에 뜨는 작성법 말풍선 */
+  .doc-pop{position:absolute;left:10px;right:10px;z-index:5;background:rgba(255,255,255,.985);
+    border:1px solid var(--line);border-radius:13px;padding:12px 34px 12px 13px;
+    box-shadow:0 12px 30px rgba(42,33,36,.22);}
+  .doc-pop-x{position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:50%;
+    color:var(--muted);font-size:17px;line-height:1;display:flex;align-items:center;justify-content:center;}
+  .dpop-k{display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:800;flex-wrap:wrap;}
+  .dpop-k .n{width:17px;height:17px;border-radius:50%;background:var(--wine);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;}
+  .dpop-k .ko{font-size:11.5px;font-weight:600;color:var(--muted);}
+  .dpop-g{font-size:12.5px;color:var(--muted);line-height:1.55;margin-top:6px;}
+  .dpop-g .guide-ko{margin-top:5px;}
+  .fields-more{border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);
+    padding:0 16px;margin-bottom:12px;}
+  .fields-more>summary{list-style:none;cursor:pointer;padding:13px 0;font-size:13.5px;font-weight:700;color:var(--wine);}
+  .fields-more>summary::-webkit-details-marker{display:none;}
+
   .spinner{width:22px;height:22px;border:2.5px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;}
   @keyframes spin{to{transform:rotate(360deg);}}
 
@@ -754,6 +806,11 @@ const T = {
   // ---- 병합: 응급실 경고(병원가는길에서) ----
   erSevereWarn:{ ko:"경증인데 큰 응급실로 가면 본인부담이 90%까지 올라가요. 야간엔 달빛어린이병원, 다음날 아침엔 동네 의원을 먼저 확인하세요. 위급하면 지체 없이 119예요.", en:"For mild symptoms, a large ER can raise your share to 90%. At night, check a Dalbit Children's Hospital or a local clinic the next morning first. If it's truly urgent, call 119 without delay.", zh:"症状较轻却前往大医院急诊,自付比例可能升至90%。夜间可先查月光儿童医院,次日上午可选社区诊所。情况危急请立即拨打119。", vi:"Nếu triệu chứng nhẹ mà vào cấp cứu bệnh viện lớn, phần tự trả có thể lên tới 90%. Ban đêm hãy kiểm tra bệnh viện nhi Dalbit hoặc phòng khám sáng hôm sau trước. Nếu thực sự nguy cấp, gọi 119 ngay." },
   // ---- 병합: 위험도 태그(병원가는길 문진표 시스템) ----
+  docOverlayOn:{ ko:"번역 겹쳐보기", en:"Show translation", zh:"显示翻译", vi:"Hiện bản dịch" },
+  docOverlayOff:{ ko:"원본 보기", en:"Show original", zh:"查看原件", vi:"Xem bản gốc" },
+  docTapHint:  { ko:"서류 위 번역을 누르면 작성법을 알려드려요.", en:"Tap a translation on the document to see how to fill it in.", zh:"点击文件上的译文即可查看填写方法。", vi:"Chạm vào bản dịch trên giấy tờ để xem cách điền." },
+  docFieldsAll:{ ko:"항목별 작성 안내 전체 보기", en:"See all field instructions", zh:"查看全部项目填写说明", vi:"Xem hướng dẫn tất cả các mục" },
+  docNoBox:    { ko:"이 사진에서는 항목 위치를 찾지 못해 아래 목록으로 안내해드려요.", en:"We could not locate the fields in this photo, so here is a list instead.", zh:"未能在这张照片中定位各项目，改以下方列表说明。", vi:"Không xác định được vị trí các mục trong ảnh này, nên hướng dẫn theo danh sách bên dưới." },
   riskExact:   { ko:"정확히 일치해야 해요", en:"Must match exactly", zh:"必须完全一致", vi:"Phải khớp chính xác" },
   riskRequired:{ ko:"비워두면 안 돼요", en:"Don't leave this blank", zh:"不可留空", vi:"Không được để trống" },
   riskFree:    { ko:"자유롭게 작성", en:"Write freely", zh:"可自由填写", vi:"Viết tự do" },
@@ -1084,13 +1141,13 @@ function mockInterpret(text, from, to){
 const SAMPLE_DOC = {
   docName:{ko:"외국인 통합신청서 (일부)",en:"Foreigner Application Form (excerpt)",zh:"外国人综合申请表(部分)",vi:"Đơn đăng ký NNN (trích)"},
   fields:[
-    { ko:"성명(영문)", label:{ko:"성명(영문)",en:"Full name (English)",zh:"姓名(英文)",vi:"Họ tên (tiếng Anh)"},
+    { ko:"성명(영문)", box:{x:.09,y:.235,w:.33,h:.05}, label:{ko:"성명(영문)",en:"Full name (English)",zh:"姓名(英文)",vi:"Họ tên (tiếng Anh)"},
       guide:{ko:"여권과 똑같이 대문자로 적으세요.",en:"Write in capitals exactly as in your passport.",zh:"请与护照一致,用大写字母填写。",vi:"Viết in hoa đúng như hộ chiếu."} },
-    { ko:"생년월일", label:{ko:"생년월일",en:"Date of birth",zh:"出生日期",vi:"Ngày sinh"},
+    { ko:"생년월일", box:{x:.09,y:.355,w:.28,h:.05}, label:{ko:"생년월일",en:"Date of birth",zh:"出生日期",vi:"Ngày sinh"},
       guide:{ko:"연-월-일 순서(예: 1998-05-20).",en:"Year-Month-Day (e.g. 1998-05-20).",zh:"按 年-月-日(如 1998-05-20)。",vi:"Năm-Tháng-Ngày (vd. 1998-05-20)."} },
-    { ko:"체류자격", label:{ko:"체류자격",en:"Status of stay",zh:"居留资格",vi:"Tư cách lưu trú"},
+    { ko:"체류자격", box:{x:.09,y:.475,w:.28,h:.05}, label:{ko:"체류자격",en:"Status of stay",zh:"居留资格",vi:"Tư cách lưu trú"},
       guide:{ko:"비자에 적힌 코드를 그대로 쓰세요(예: E-9).",en:"Copy the code from your visa (e.g. E-9).",zh:"照抄签证上的代码(如 E-9)。",vi:"Chép mã trên visa (vd. E-9)."} },
-    { ko:"서명", label:{ko:"서명",en:"Signature",zh:"签名",vi:"Chữ ký"},
+    { ko:"서명", box:{x:.09,y:.70,w:.22,h:.05}, label:{ko:"서명",en:"Signature",zh:"签名",vi:"Chữ ký"},
       guide:{ko:"본인이 직접 서명하세요.",en:"Sign it yourself.",zh:"请本人亲自签名。",vi:"Tự bạn ký."} }
   ],
   next:{ instId:"immig", sitId:"arc",
@@ -1204,16 +1261,16 @@ function centerFinderWidget(){
 const SAMPLE_DOC_HOSPITAL = {
   docName:{ ko:"병원 문진표 (일부)", en:"Hospital intake form (excerpt)", zh:"医院问诊表(部分)", vi:"Phiếu khai bệnh (trích)" },
   fields:[
-    { ko:"이름(성명)", risk:"red",
+    { ko:"이름(성명)", risk:"red", box:{x:.09,y:.235,w:.30,h:.05},
       label:{ ko:"이름(성명)", en:"Full name", zh:"姓名", vi:"Họ tên" },
       guide:{ ko:"외국인등록증의 로마자 표기와 한 글자도 다르면 안 돼요. 다르면 건강보험 조회가 안 될 수 있어요.", en:"Must match your ARC's romanized name exactly — any mismatch can block your insurance lookup.", zh:"必须与外国人登录证上的罗马字拼写完全一致,不同可能导致无法查询医保。", vi:"Phải khớp hoàn toàn với tên La-tinh trên thẻ ĐKNNN — sai lệch có thể khiến không tra được bảo hiểm." } },
-    { ko:"생년월일", risk:"red",
+    { ko:"생년월일", risk:"red", box:{x:.09,y:.355,w:.28,h:.05},
       label:{ ko:"생년월일", en:"Date of birth", zh:"出生日期", vi:"Ngày sinh" },
       guide:{ ko:"예: 1998-04-12 형식으로 적어주세요.", en:"Write as YYYY-MM-DD, e.g. 1998-04-12.", zh:"请按 1998-04-12 的格式填写。", vi:"Viết theo dạng 1998-04-12." } },
-    { ko:"복용 중인 약", risk:"amber", quickfill:true,
+    { ko:"복용 중인 약", risk:"amber", quickfill:true, box:{x:.09,y:.475,w:.34,h:.05},
       label:{ ko:"복용 중인 약", en:"Current medication", zh:"在服药物", vi:"Thuốc đang dùng" },
       guide:{ ko:"없으면 비워두지 말고 아래 버튼으로 바로 채울 수 있어요.", en:"If none, don't leave it blank — use the button below to fill it in.", zh:"如没有,请勿留空,可用下方按钮填写。", vi:"Nếu không có, đừng để trống — dùng nút bên dưới để điền." } },
-    { ko:"증상 설명", risk:"gray",
+    { ko:"증상 설명", risk:"gray", box:{x:.09,y:.595,w:.30,h:.05},
       label:{ ko:"증상 설명", en:"Symptom description", zh:"症状说明", vi:"Mô tả triệu chứng" },
       guide:{ ko:"번역만 참고하고 편하게 적으시면 돼요.", en:"Use the translation as a reference and write it in your own words.", zh:"仅供参考翻译,可自由填写。", vi:"Chỉ tham khảo bản dịch, viết tự nhiên theo ý bạn." } }
   ],
@@ -1953,6 +2010,128 @@ function wireScan(){
   if(sampleHosp) sampleHosp.onclick=()=>runScan(null, null, "hospital");
 }
 
+// ---- 서류 위 번역 오버레이 ------------------------------------------------
+// OCR 결과의 box{x,y,w,h}(0~1 비율)를 그대로 써서 서류 이미지 위에 번역을 얹는다.
+const pctOf = v => (Math.max(0, Math.min(1, Number(v)||0))*100).toFixed(2) + "%";
+const riskLabelOf = f => f.risk==="red" ? T.riskExact : f.risk==="amber" ? T.riskRequired : f.risk==="gray" ? T.riskFree : null;
+
+// 목록용 한 줄
+function fieldRowHTML(f, idx){
+  const riskCls = f.risk || "";
+  const riskLbl = riskLabelOf(f);
+  const qf = f.quickfill ? `<button class="quickfill-btn" data-qf="${idx}">${esc(L(T.noMedFill))}</button>` : "";
+  // 병합: 안내 문구는 사용자 언어로, 그 아래 한국어 원문도 함께 보여준다(직원에게 보여줄 때 필요)
+  const guideKo = (state.lang!=="ko" && f.guide && f.guide.ko) ? `<div class="guide-ko">${esc(f.guide.ko)}</div>` : "";
+  return `
+    <div class="field-row ${riskCls?("risk-"+riskCls):""}">
+      <div class="fk">${esc(L(f.label))}<span class="ko">${esc(f.ko)}</span></div>
+      <div class="fv">
+        ${riskLbl?`<span class="risk-tag ${riskCls}">${esc(L(riskLbl))}</span><br>`:""}
+        ${esc(L(f.guide))}
+        ${guideKo}
+        ${qf}
+      </div>
+    </div>`;
+}
+
+// 서류 위 말풍선(선택한 항목의 작성법)
+function fieldDetailHTML(f, idx){
+  const riskLbl = riskLabelOf(f);
+  const qf = f.quickfill ? `<button class="quickfill-btn" data-qf="${idx}">${esc(L(T.noMedFill))}</button>` : "";
+  const guideKo = (state.lang!=="ko" && f.guide && f.guide.ko) ? `<div class="guide-ko">${esc(f.guide.ko)}</div>` : "";
+  return `
+    <button class="doc-pop-x" data-popclose aria-label="close">&times;</button>
+    <div class="dpop-k"><span class="n">${idx+1}</span>${esc(L(f.label))}
+      ${f.ko?`<span class="ko">${esc(f.ko)}</span>`:""}</div>
+    ${riskLbl?`<span class="risk-tag ${f.risk}" style="margin-top:6px">${esc(L(riskLbl))}</span>`:""}
+    <div class="dpop-g">${esc(L(f.guide))}${guideKo}</div>
+    ${qf}`;
+}
+
+// 사진이 없는 샘플은 종이를 그려서 그 위에 번역을 얹는다
+function paperHTML(res, boxed){
+  const rows = boxed.map(({f})=>{
+    const b=f.box, h=b.h||0.05, w=b.w||0.2;
+    return `
+      <div class="dp-k" style="left:${pctOf(b.x)};top:${pctOf(b.y)};height:${pctOf(h)}">${esc(f.ko || L(f.label))}</div>
+      <div class="dp-line" style="left:${pctOf(b.x+w+0.02)};right:8%;top:${pctOf(b.y+h*0.85)}"></div>`;
+  }).join("");
+  const ko = (res.docName && res.docName.ko) || L(res.docName);
+  const sub = state.lang!=="ko" ? `<small>${esc(L(res.docName))}</small>` : "";
+  return `<div class="doc-paper"><div class="dp-title">${esc(ko)}${sub}</div>${rows}</div>`;
+}
+
+function docStageHTML(res, previewUrl, boxed){
+  const tags = boxed.map(({f,idx})=>{
+    const b=f.box, h=b.h||0.05, w=b.w||0.2;
+    return `<button class="doc-tag ${f.risk||""}" data-tag="${idx}"
+      style="left:${pctOf(b.x)};top:${pctOf(b.y+h/2)};min-width:${pctOf(w)};max-width:${pctOf(0.96-b.x)}">
+      <span class="n">${idx+1}</span><span class="tx">${esc(L(f.label))}</span></button>`;
+  }).join("");
+  const base = previewUrl
+    ? `<img class="doc-img" src="${previewUrl}" alt="">`
+    : paperHTML(res, boxed);
+  return `
+    <div class="doc-stage">
+      <div class="doc-tools">
+        <button class="doc-toggle on" id="docToggle">${esc(L(T.docOverlayOff))}</button>
+        <span class="doc-hint">${esc(L(T.docTapHint))}</span>
+      </div>
+      <div class="doc-canvas" id="docCanvas">
+        ${base}
+        ${tags}
+        <div class="doc-pop hidden" id="docPop"></div>
+      </div>
+    </div>`;
+}
+
+function wireQuickfill(root){
+  if(!root) return;
+  root.querySelectorAll("[data-qf]").forEach(b=>{
+    b.onclick=()=>{ b.textContent = L(T.filled); b.classList.add("done"); b.disabled = true; };
+  });
+}
+
+function wireDocStage(res){
+  const canvas=$("#docCanvas"); if(!canvas) return;
+  const pop=$("#docPop"), toggle=$("#docToggle");
+  let openIdx=null;
+
+  const closePop=()=>{
+    pop.classList.add("hidden");
+    canvas.querySelectorAll(".doc-tag.on").forEach(t=>t.classList.remove("on"));
+    openIdx=null;
+  };
+
+  toggle.onclick=()=>{
+    const raw = canvas.classList.toggle("raw");     // raw = 번역 숨김(원본)
+    toggle.classList.toggle("on", !raw);
+    toggle.textContent = raw ? L(T.docOverlayOn) : L(T.docOverlayOff);
+    if(raw) closePop();
+  };
+
+  canvas.querySelectorAll("[data-tag]").forEach(btn=>{
+    btn.onclick=e=>{
+      e.stopPropagation();
+      const idx = Number(btn.dataset.tag);
+      if(openIdx===idx){ closePop(); return; }
+      closePop();
+      const f = res.fields[idx], b = f.box, h = b.h||0.05;
+      const below = (b.y + h) < 0.6;               // 아래쪽 항목이면 말풍선을 위로 띄운다
+      pop.style.top    = below ? `calc(${pctOf(b.y+h)} + 10px)` : "auto";
+      pop.style.bottom = below ? "auto" : `calc(${pctOf(1-b.y)} + 10px)`;
+      pop.innerHTML = fieldDetailHTML(f, idx);
+      pop.classList.remove("hidden");
+      btn.classList.add("on");
+      openIdx = idx;
+      wireQuickfill(pop);
+      pop.querySelector("[data-popclose]").onclick=ev=>{ ev.stopPropagation(); closePop(); };
+    };
+  });
+
+  canvas.onclick=()=>closePop();
+}
+
 async function runScan(file, previewUrl, docKey){
   $("#scanStart").classList.add("hidden");
   const box=$("#scanResult");
@@ -1973,36 +2152,28 @@ async function runScan(file, previewUrl, docKey){
     $("#rescan").onclick=()=>{ $("#scanResult").innerHTML=""; $("#scanStart").classList.remove("hidden"); };
     return;
   }
-  const fields = res.fields.map((f,idx)=>{
-    const riskCls = f.risk || "";
-    const riskLbl = f.risk==="red" ? T.riskExact : f.risk==="amber" ? T.riskRequired : f.risk==="gray" ? T.riskFree : null;
-    const qf = f.quickfill ? `<button class="quickfill-btn" data-qf="${idx}">${esc(L(T.noMedFill))}</button>` : "";
-    // 병합: 안내 문구는 사용자 언어로, 그 아래 한국어 원문도 함께 보여준다(직원에게 보여줄 때 필요)
-    const guideKo = (state.lang!=="ko" && f.guide && f.guide.ko) ? `<div class="guide-ko">${esc(f.guide.ko)}</div>` : "";
-    return `
-    <div class="field-row ${riskCls?("risk-"+riskCls):""}">
-      <div class="fk">${esc(L(f.label))}<span class="ko">${esc(f.ko)}</span></div>
-      <div class="fv">
-        ${riskLbl?`<span class="risk-tag ${riskCls}">${esc(L(riskLbl))}</span><br>`:""}
-        ${esc(L(f.guide))}
-        ${guideKo}
-        ${qf}
-      </div>
-    </div>`;
-  }).join("");
+  // 박스 좌표가 있는 항목만 서류 위에 번역을 얹을 수 있다
+  const boxed = res.fields.map((f,idx)=>({f,idx})).filter(x=>x.f.box && isFinite(x.f.box.x) && isFinite(x.f.box.y));
+  const fields = res.fields.map((f,idx)=>fieldRowHTML(f,idx)).join("");
 
   box.innerHTML = `
-    ${previewUrl?`<img class="scan-preview" src="${previewUrl}" alt="">`:""}
+    ${boxed.length
+      ? docStageHTML(res, previewUrl, boxed)
+      : `${previewUrl?`<img class="scan-preview" src="${previewUrl}" alt="">`:""}
+         ${previewUrl?`<div class="note">${ICONS.info}<div>${esc(L(T.docNoBox))}</div></div>`:""}`}
     <div class="result-block">
       <div class="rl">${esc(L(T.recognized))}</div>
       <div class="card" style="padding:14px 16px;font-weight:700;font-size:16px">${esc(L(res.docName))}
         ${(state.lang!=="ko" && res.docName && res.docName.ko) ? `<div class="docname-ko">${esc(res.docName.ko)}</div>` : ""}
       </div>
     </div>
-    <div class="result-block">
-      <div class="rl">${esc(L(T.howToFill))}</div>
-      <div class="card" style="padding:4px 16px">${fields}</div>
-    </div>
+    ${boxed.length
+      ? `<details class="fields-more"><summary>${esc(L(T.docFieldsAll))}</summary>
+           <div style="padding-bottom:6px">${fields}</div></details>`
+      : `<div class="result-block">
+           <div class="rl">${esc(L(T.howToFill))}</div>
+           <div class="card" style="padding:4px 16px">${fields}</div>
+         </div>`}
     <div class="result-block">
       <div class="rl">${esc(L(T.whatsNext))}</div>
       <div class="now-card" style="margin:0">
@@ -2012,9 +2183,8 @@ async function runScan(file, previewUrl, docKey){
     ${state.view!=="flow"?`<button class="btn" id="goFlow" style="margin-bottom:10px">${esc(L(T.seeFlow))} ${ICONS.arrow}</button>`:""}
     <button class="btn line" id="rescan">${esc(L(T.scanAgain))}</button>`;
 
-  box.querySelectorAll("[data-qf]").forEach(b=>{
-    b.onclick=()=>{ b.textContent = L(T.filled); b.classList.add("done"); b.disabled = true; };
-  });
+  wireQuickfill(box);
+  wireDocStage(res);
   const goFlowBtn = $("#goFlow");
   if(goFlowBtn) goFlowBtn.onclick=()=>go("flow",{instId:res.next.instId, sitId:res.next.sitId, step:0, flowIntro:true});
   $("#rescan").onclick=()=>{ $("#scanResult").innerHTML=""; $("#scanStart").classList.remove("hidden"); };

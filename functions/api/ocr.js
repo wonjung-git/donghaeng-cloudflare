@@ -66,7 +66,8 @@ JSON shape:
   "fields": [
     { "ko":"성명(영문)",
       "label": {"ko":"","en":"","zh":"","vi":""},
-      "guide": {"ko":"","en":"","zh":"","vi":""} }
+      "guide": {"ko":"","en":"","zh":"","vi":""},
+      "box": {"x":0.09,"y":0.24,"w":0.30,"h":0.05} }
   ],
   "next": {
     "instId": "",
@@ -76,6 +77,11 @@ JSON shape:
 }
 
 "fields": up to 6 key fields the user must fill; "guide" is a short practical tip.
+"box" is where that field's PRINTED KOREAN LABEL sits in the photo, as fractions of the
+image width/height (0=left/top, 1=right/bottom): x,y = top-left corner, w,h = size.
+The app draws the translated label directly on top of this box, so cover the Korean label
+text itself — not the blank line the user writes on. Always include "box" for every field,
+estimated as accurately as you can from the image.
 For "next", choose the single best match from these options (use the id BEFORE and AFTER the slash):
 ${catalogList}
 If unsure, use "immig"/"arc". Keep guidance concise and accurate for real Korean procedures.`;
@@ -94,6 +100,13 @@ If unsure, use "immig"/"arc". Keep guidance concise and accurate for real Korean
     });
 
     const data = parseJSON(raw);
+    // box 는 0~1 비율만 허용 — 값이 이상하면 버려서 프런트가 목록 방식으로 넘어가게 한다
+    for (const f of data?.fields || []) {
+      const b = f.box;
+      const ok = b && ["x", "y", "w", "h"].every(k => typeof b[k] === "number" && b[k] >= 0 && b[k] <= 1)
+        && b.w > 0 && b.h > 0;
+      if (!ok) delete f.box;
+    }
     const pair = `${data?.next?.instId}/${data?.next?.sitId}`;
     if (!CATALOG_KEYS.includes(pair)) {
       data.next = data.next || {};
