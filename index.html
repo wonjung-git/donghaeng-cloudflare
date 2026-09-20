@@ -73,6 +73,27 @@
     padding:8px 12px;border-radius:999px;font-size:13px;font-weight:600;flex:0 0 auto;
   }
   .langbtn svg{width:15px;height:15px;}
+  .langbtn .caret{width:13px;height:13px;opacity:.85;transition:transform .16s ease;}
+  .lang-wrap{position:relative;flex:0 0 auto;}
+  .lang-wrap.open .langbtn{background:rgba(255,255,255,.24);}
+  .lang-wrap.open .langbtn .caret{transform:rotate(180deg);}
+  .lang-menu{
+    position:absolute;top:calc(100% + 8px);right:0;z-index:40;min-width:186px;
+    background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:14px;
+    padding:6px;box-shadow:0 16px 36px rgba(42,33,36,.24);
+  }
+  .lang-menu button{
+    display:flex;align-items:center;gap:10px;width:100%;min-height:46px;
+    padding:8px 10px;border-radius:10px;font-size:14px;font-weight:700;text-align:left;color:var(--ink);
+  }
+  .lang-menu button+button{margin-top:2px;}
+  .lang-menu button .fl{font-size:18px;line-height:1;flex:0 0 auto;}
+  .lang-menu button .nm{flex:1;min-width:0;}
+  .lang-menu button .nm .en{display:block;font-size:11.5px;font-weight:500;color:var(--muted);margin-top:1px;}
+  .lang-menu button .ck{width:16px;height:16px;flex:0 0 auto;opacity:0;}
+  .lang-menu button.on{background:var(--wine-tint);color:var(--wine);}
+  .lang-menu button.on .nm .en{color:var(--wine);opacity:.7;}
+  .lang-menu button.on .ck{opacity:1;}
 
   /* 로고 마크 */
   .mark{width:30px;height:30px;flex:0 0 auto;}
@@ -442,10 +463,18 @@
 
   /* ===================== 병합: 출입국 — 마감일(D-day) 위젯 ===================== */
   .deadline-card{margin-top:12px;}
+  /* iOS Safari 는 date 입력칸에 기본 고유 너비를 주기 때문에 width:100% 를 줘도
+     칸이 카드 밖으로 삐져나간다. appearance 를 끄고 min-width 를 0 으로 풀어야 줄어든다. */
   .deadline-card input[type="date"]{
-    width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:var(--radius-sm);
-    background:var(--surface);color:var(--ink);font-family:inherit;font-size:14px;margin-bottom:10px;
+    -webkit-appearance:none;appearance:none;
+    display:block;width:100%;max-width:100%;min-width:0;min-height:46px;
+    padding:11px 12px;border:1.5px solid var(--line);border-radius:var(--radius-sm);
+    background:var(--surface);color:var(--ink);font-family:inherit;font-size:16px;
+    line-height:1.2;text-align:left;margin-bottom:10px;
   }
+  .deadline-card input[type="date"]::-webkit-date-and-time-value{text-align:left;margin:0;min-width:0;}
+  .deadline-card input[type="date"]::-webkit-datetime-edit{padding:0;}
+  .deadline-card{min-width:0;max-width:100%;}
   .deadline-big{
     display:flex;align-items:baseline;justify-content:space-between;gap:10px;
     background:var(--wine-tint-2);border:1px solid var(--wine-tint);border-radius:var(--radius-sm);
@@ -560,10 +589,14 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M3 11l9-8 9 8"></path><path d="M5 10v10a1 1 0 001 1h4v-6h4v6h4a1 1 0 001-1V10"></path></svg>
     </button>
     <div class="title" id="topTitle">동행</div>
-    <button class="langbtn" id="langBtn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a15 15 0 010 18M12 3a15 15 0 000 18"></path></svg>
-      <span id="langLabel">한국어</span>
-    </button>
+    <div class="lang-wrap" id="langWrap">
+      <button class="langbtn" id="langBtn" aria-haspopup="listbox" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a15 15 0 010 18M12 3a15 15 0 000 18"></path></svg>
+        <span id="langLabel">한국어</span>
+        <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"></path></svg>
+      </button>
+      <div class="lang-menu hidden" id="langMenu" role="listbox" aria-label="Language"></div>
+    </div>
   </header>
 
   <!-- 본문 (JS로 렌더) -->
@@ -1896,11 +1929,43 @@ $("#backBtn").onclick=back;
 // 병합: 홈버튼 — 스택을 비우고 바로 기관 선택 화면으로
 function goHome(){ closeSheet(); state.stack=[]; state.view="home"; render(); $("#screen").scrollTop=0; }
 $("#homeBtn").onclick=goHome;
-$("#langBtn").onclick=()=>{ // 언어 재선택
-  const codes=LANGS.map(l=>l.code); const i=codes.indexOf(state.lang);
-  state.lang=codes[(i+1)%codes.length]; state.trTo = state.lang==="ko"?"en":state.lang;
-  render();
+// ---- 언어 재선택 드롭다운 --------------------------------------------------
+const langWrap=$("#langWrap"), langMenu=$("#langMenu"), langBtn=$("#langBtn");
+function renderLangMenu(){
+  langMenu.innerHTML = LANGS.map(l=>`
+    <button role="option" aria-selected="${l.code===state.lang}" class="${l.code===state.lang?"on":""}" data-langpick="${l.code}">
+      <span class="fl">${l.flag}</span>
+      <span class="nm">${esc(l.native)}<span class="en">${esc(l.en)}</span></span>
+      <svg class="ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12l5 5 9-11"/></svg>
+    </button>`).join("");
+  langMenu.querySelectorAll("[data-langpick]").forEach(b=>{
+    b.onclick=e=>{
+      e.stopPropagation();
+      closeLangMenu();
+      if(b.dataset.langpick===state.lang) return;
+      state.lang = b.dataset.langpick;
+      state.trTo = state.lang==="ko" ? "en" : state.lang;
+      render();
+    };
+  });
+}
+function openLangMenu(){
+  renderLangMenu();
+  langWrap.classList.add("open");
+  langMenu.classList.remove("hidden");
+  langBtn.setAttribute("aria-expanded","true");
+}
+function closeLangMenu(){
+  langWrap.classList.remove("open");
+  langMenu.classList.add("hidden");
+  langBtn.setAttribute("aria-expanded","false");
+}
+langBtn.onclick=e=>{
+  e.stopPropagation();
+  if(langWrap.classList.contains("open")) closeLangMenu(); else openLangMenu();
 };
+document.addEventListener("click", closeLangMenu);
+document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeLangMenu(); });
 
 // ---- 병합: 단계 안 도구 바텀시트 (스캔/통역을 화면 이동 없이 지금 단계 위에 띄운다) --------
 function openSheet(kind){
