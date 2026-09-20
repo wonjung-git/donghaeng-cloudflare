@@ -151,6 +151,28 @@
   }
   .note svg{width:14px;height:14px;flex:0 0 auto;margin-top:1px;color:var(--wine);}
 
+  .assistant-wrap{
+    display:flex;align-items:flex-end;gap:12px;
+    margin:2px 0 18px;
+  }
+  .assistant-figure{
+    width:102px;flex:0 0 auto;
+  }
+  .assistant-figure img{
+    width:100%;display:block;filter:drop-shadow(0 6px 10px rgba(90,24,36,.08));
+  }
+  .assistant-bubble{
+    position:relative;flex:1;min-width:0;
+    background:var(--surface);border:1px solid var(--line);border-radius:16px;
+    padding:12px 14px;box-shadow:var(--shadow);
+    font-size:15px;font-weight:600;line-height:1.5;color:var(--ink);
+  }
+  .assistant-bubble::before{
+    content:"";position:absolute;left:-8px;bottom:18px;width:14px;height:14px;
+    background:var(--surface);border-left:1px solid var(--line);border-bottom:1px solid var(--line);
+    transform:rotate(45deg);
+  }
+
   /* ===================== 언어 선택 화면 ===================== */
   .lang-hero{
     background:var(--wine);color:#fff;
@@ -1321,7 +1343,9 @@ function renderLang(){
       <div class="rule"></div>
       <p>Select your language · 언어를 선택하세요<br>选择语言 · Chọn ngôn ngữ</p>
     </div>
-    <div class="lang-list">${items}
+    <div class="lang-list">
+      ${helperPanel("안녕하세요! 무엇을 도와드릴까요?","smile")}
+      ${items}
       ${demoNote("margin-top:18px")}
     </div>`;
 }
@@ -1335,6 +1359,7 @@ function renderHome(){
       <div class="chev">${ICONS.chev}</div>
     </button>`).join("");
   return `
+    ${helperPanel("안녕하세요! 무엇을 도와드릴까요?","smile")}
     <p class="eyebrow">${esc(L(T.whereSub))}</p>
     <h1 class="big">${esc(L(T.where))}</h1>
     ${cards}
@@ -1356,6 +1381,7 @@ function renderInstitution(inst){
       <div class="chev">${ICONS.chev}</div>
     </button>`).join("");
   return `
+    ${helperPanel("어느 기관을 도와드릴까요?","default")}
     <p class="eyebrow">${esc(L(inst.blurb))}</p>
     <h1 class="big">${esc(L(T.chooseSit))}</h1>
     ${cards}`;
@@ -1391,6 +1417,7 @@ function renderFlow(inst, sit){
     return `
       <div class="flow-head"><div class="where">${ICONS[inst.icon]} ${esc(L(inst.name))}</div>
         <div class="doc">${esc(L(sit.doc))}</div></div>
+      ${helperPanel("안녕하세요! 필요한 절차를 차근히 안내해드릴게요.","smile")}
       <div class="intro-head">
         <h1>${esc(L(T.introTitle))}</h1>
         <p>${esc(L(T.introSub))}</p>
@@ -1418,6 +1445,7 @@ function renderFlow(inst, sit){
     <div class="flow-head"><div class="where">${ICONS[inst.icon]} ${esc(L(inst.name))}</div>
       <div class="doc">${esc(L(sit.doc))}</div></div>
 
+    ${helperPanel("지금 필요한 단계만 바로 확인해볼까요?","default")}
     ${stepTabs}
 
     <div class="now-card">
